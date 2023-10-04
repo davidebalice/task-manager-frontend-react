@@ -1378,11 +1378,16 @@ div#global-loader,
 
 .btn-primary {
   color: #fff;
-  background-color: #ff9f43 !important;
-  border-color: #ff9f43 !important;
+  background-color: #17b0e9 !important;
+  border-color: #17b0e9 !important;
 }
 
-/****** LAYOUT ******/
+.btn-primary:hover {
+  color: #fff;
+  background-color: #1b98c7 !important;
+  border-color: #1b98c7 !important;
+}
+
 .avatar {
   background-color: transparent;
   color: #fff;
@@ -9529,6 +9534,14 @@ span.select2-container.select2-container--default.select2-container--open {
   background: #336699;
   width: 0%;
   transition: width 0.3s;
+}
+
+.btnTask {
+  gap: 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

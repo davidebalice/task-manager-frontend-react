@@ -39,15 +39,9 @@ const Tasks = () => {
       });
   }, [token]);
 
-  const [apistate, setApiState] = useState([]);
-  const [apicol, setApiCol] = useState([]);
   const [selectVal, setSelectval] = useState([]);
-  // pass status model render
   const [openModal, setOpenModal] = useState(true);
-  const [selectVal_details, setSelectVal_details] = useState([]);
-  const [details_modal_show, set_details_modal_Show] = useState(false);
   const [rerendarApi, setRerendarApi] = useState(false);
-  // open add data modal
   const [open_add_modal, setOpen_add_modal] = useState({
     render: true,
     modal_open: false,
@@ -79,7 +73,6 @@ const Tasks = () => {
     setOpenModal((openModal) => !openModal);
     setSelectval(row);
   };
-
 
   const setStoreBtn = () => {
     setOpen_add_modal({ render: !open_add_modal.render, modal_open: true });
@@ -201,20 +194,15 @@ const Tasks = () => {
                         <td>{task.formattedDeadline}</td>
                         <td>
                           <Link to={`/project/task/${task._id}`}>
-                            <button className=" btn btn-primary btn-sm ms-1">
+                            <button className=" btn btn-primary btn-sm ms-1 btnTask">
                               <FontAwesomeIcon icon={faPenToSquare} />
-                              Activities
+                              Detail of Task
                             </button>
                           </Link>
 
-                          <button className=" btn btn-success btn-sm">
-                            <FontAwesomeIcon icon={faCopy} />
-                            Members
-                          </button>
-
                           <button
                             onClick={() => emailSender(task._id)}
-                            className=" btn btn-primary btn-sm ms-1"
+                            className="btn btn-primary btn-sm ms-1"
                           >
                             <FontAwesomeIcon icon={faEnvelope} />
                           </button>

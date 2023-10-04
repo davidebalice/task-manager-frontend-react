@@ -15,6 +15,7 @@ const Project = () => {
   const [progress, setProgress] = useState(0);
   const [activities, setActivities] = useState([]);
   const [comments, setComments] = useState([]);
+  const [files, setFiles] = useState([]);
   const [members, setMembers] = useState([]);
   const [task, setTask] = useState([]);
   const [project, setProject] = useState([]);
@@ -29,7 +30,6 @@ const Project = () => {
     setActivities(newActivities);
   }
 
-  
   const handleStatus = async (event, id) => {
     const isChecked = event.target.checked;
     try {
@@ -77,6 +77,7 @@ const Project = () => {
       .then((response) => {
         setComments(response.data.comments);
         setActivities(response.data.activities);
+        setFiles(response.data.files);
         setTask(response.data.task);
         setMembers(response.data.task.members);
         setProject(response.data.task.project_id);
@@ -117,6 +118,7 @@ const Project = () => {
   ];
   return (
     <>
+    
       <div className="container-fluid">
         id: {id}
         <Breadcrumb title={title} brad={brad} />
@@ -184,7 +186,12 @@ const Project = () => {
                             taskId={task._id}
                           />
                         ) : tab === "file" ? (
-                          <File />
+                          <File
+                            files={files}
+                            onUpdateComments={updateComments}
+                            projectId={project._id}
+                            taskId={task._id}
+                          />
                         ) : (
                           <></>
                         )}
