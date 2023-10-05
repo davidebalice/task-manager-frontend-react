@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
 
 const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
+  const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
   const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
@@ -21,7 +22,6 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    //formDataToSend.append("name", formData.name);
   };
 
   const handleFile = (e) => {
@@ -65,13 +65,6 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
           .then((response) => {
             console.log("response.data.files");
             console.log(response.data.files);
-            /*
-            const owner = data.owner;
-            setFormData({
-              ...formData,
-              owner: owner,
-            });
-    */
             handleUpdateFiles(response.data.files);
           })
           .catch((error) => {
@@ -92,42 +85,6 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData(formUpload);
-    console.log("formDataToSend");
-    console.log(formDataToSend);
-
-    formDataToSend.append("name", "asdasdasd");
-    console.log(formDataToSend);
-    console.log(formDataToSend.name);
-
-    const dataToSend = {
-      name: formData.name,
-      file: formData.files, // Estrai i file dalla FormData
-    };
-
-    formDataToSend.append("name", formData.name);
-    console.log("formData.files.length");
-    console.log(formData.files.length);
-    // Aggiungi tutti i file all'oggetto FormData
-    for (let i = 0; i < formData.files.length; i++) {
-      formDataToSend.append("files", formData.files[i]);
-    }
-    console.log("formData.files.length");
-    console.log(formData.files.length);
-
-    console.log("formDataToSend.files");
-    console.log(formDataToSend.files);
-    console.log(formDataToSend.name);
-    console.log(formDataToSend.name8);
-
-    console.log("formDataToSend");
-    console.log(formDataToSend);
-
-    console.log("dataToSend");
-    console.log(dataToSend);
-
-    console.log(formData.taskId);
-
     axios
       .post(process.env.REACT_APP_API_BASE_URL + "/api/add/file/", formData, {
         headers: {
@@ -142,7 +99,12 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
         setFormData({
           ...formData,
           file: "",
+          name: "",
         });
+
+        if (inputFileRef.current) {
+          inputFileRef.current.value = "";
+        }
 
         handleUpdateFiles(response.data.files);
       })
@@ -158,8 +120,15 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
       {Array.isArray(files) && files.length > 0 ? (
         files.map((file) => (
           <div key={file._id}>
-            {file.name} {file.file}
-            <div onClick={() => openEditModal(file.name, file._id)}>edit</div>
+            <a
+              href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${file.file}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {" "}
+              {file.name}
+            </a>
+            <div onClick={() => openEditModal(file.name, file._id)}>edit text</div>
             <div onClick={() => removeFile(file._id)}>remove</div>
           </div>
         ))
@@ -190,6 +159,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
           <input
             type="file"
             className="form-control"
+            ref={inputFileRef}
             name="file"
             required
             onChange={handleFile}

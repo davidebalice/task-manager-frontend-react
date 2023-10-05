@@ -46,13 +46,11 @@ const Tasks = () => {
     render: true,
     modal_open: false,
   });
-  // open email sender modal
   const [open_email_sender_modal, setOpen_email_sender_modal] = useState({
     render: true,
     modal_open: false,
   });
   const [email_sender_modal_data, setEmail_sender_modal_data] = useState("");
-  // open update data modal
   const [open_update_modal, setOpen_update_modal] = useState({
     render: true,
     modal_open: false,
@@ -100,7 +98,6 @@ const Tasks = () => {
       showCancelButton: true,
       confirmButtonText: "Yes",
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       setRerendarApi(!rerendarApi);
       if (result.isConfirmed) {
         Swal.fire("Saved!. id:" + row.id, "", "success");

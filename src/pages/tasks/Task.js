@@ -26,6 +26,10 @@ const Project = () => {
     setComments(newComments);
   }
 
+  function updateFiles(newFiles) {
+    setFiles(newFiles);
+  }
+
   function updateActivities(newActivities) {
     setActivities(newActivities);
   }
@@ -101,12 +105,7 @@ const Project = () => {
     console.log(percentage);
   }, [activities]);
 
-  const themeBuyHandle = () => {
-    Swal.fire("Theme Buy Success", "", "success");
-  };
-  const themeInstallHandle = () => {
-    Swal.fire("Theme Install Success", "", "success");
-  };
+
   const title = "Task";
   const brad = [
     {
@@ -118,7 +117,6 @@ const Project = () => {
   ];
   return (
     <>
-    
       <div className="container-fluid">
         id: {id}
         <Breadcrumb title={title} brad={brad} />
@@ -188,7 +186,7 @@ const Project = () => {
                         ) : tab === "file" ? (
                           <File
                             files={files}
-                            onUpdateComments={updateComments}
+                            onUpdateFiles={updateFiles}
                             projectId={project._id}
                             taskId={task._id}
                           />

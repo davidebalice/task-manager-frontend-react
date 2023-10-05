@@ -38,6 +38,9 @@ const EditModal = ({
         } else if (type === "comments") {
           console.log(response.data.comments);
           handleUpdateActivities(response.data.comments);
+        } else if (type === "files") {
+          console.log(response.data.files);
+          handleUpdateActivities(response.data.files);
         }
 
         closeEditModal();
