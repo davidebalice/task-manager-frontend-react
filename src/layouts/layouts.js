@@ -40,18 +40,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Layouts() {
-  const [plus, setPlus] = useState(true);
-  const [plus2, setPlus2] = useState(true);
-  const [plus3, setPlus3] = useState(true);
-  const [plus4, setPlus4] = useState(true);
-  const [plus5, setPlus5] = useState(true);
-  const [plus6, setPlus6] = useState(true);
   const pathname = window.location.pathname;
-  // const [pathName, setPathName] = useState('/')
   const [render, setRender] = useState(true);
   const [headerToggle, setHeaderToggle] = useState(false);
   const [sidebar, setSidebar] = useState("");
   const [headerNavManu, setheaderNavManu] = useState(true);
+
+  const defaultOpenSidebar = localStorage.getItem("defaultOpenSidebar");
 
   useEffect(() => {
     if (
@@ -65,23 +60,39 @@ export default function Layouts() {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    if (defaultOpenSidebar === "open") {
+      setHeaderToggle(true);
+      setheaderNavManu(false);
+    } else if (defaultOpenSidebar === "close") {
+      setHeaderToggle(false);
+      setheaderNavManu(true);
+    }
+  }, []);
+
   const headerTogglehandle = () => {
     setHeaderToggle(!headerToggle);
     setheaderNavManu(!headerNavManu);
+    if (headerToggle === true) {
+      localStorage.setItem("defaultOpenSidebar", "close");
+    }
+    if (headerToggle === false) {
+      localStorage.setItem("defaultOpenSidebar", "open");
+    }
   };
-  var body_pd = document.getElementById("body-pd");
+  var mainBody = document.getElementById("mainBody");
   useEffect(() => {
     window.innerWidth >= 768 &&
       (headerToggle
-        ? body_pd.classList.add("body-pd")
-        : body_pd.classList.remove("body-pd"));
+        ? mainBody.classList.add("mainBody")
+        : mainBody.classList.remove("mainBody"));
     if (document.getElementById("header") !== null) {
       headerToggle &&
-        document.getElementById("header").classList.add("body-pd");
+        document.getElementById("header").classList.add("mainBody");
       headerToggle !== true &&
-        document.getElementById("header").classList.remove("body-pd");
+        document.getElementById("header").classList.remove("mainBody");
     }
-  }, [body_pd.classList, headerToggle]);
+  }, [mainBody.classList, headerToggle]);
 
   const updateActive = () => {
     setRender(!render);
@@ -125,7 +136,7 @@ export default function Layouts() {
             {" "}
             <img src={Admin_icon} alt="admin icon" />{" "}
           </span>{" "}
-          <span className="ms-1">Mobashir</span>{" "}
+          <span className="ms-1">Name surname</span>{" "}
         </div>
 
         <ul

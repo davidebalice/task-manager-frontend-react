@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 
-const AddProject = () => {
+const EditProject = () => {
   const token = localStorage.getItem("authToken");
-  const title = "Add project";
+  const title = "Edit project";
   const brad = [
     {
       name: "home",
@@ -14,8 +15,8 @@ const AddProject = () => {
       name: title,
     },
   ];
-  const [responseData, setResponseData] = useState(null);
-  const [data, setData] = useState([]);
+  const { id } = useParams();
+  const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     budget: "",
@@ -35,7 +36,7 @@ const AddProject = () => {
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_BASE_URL + "/api/add/project", {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -43,12 +44,9 @@ const AddProject = () => {
         },
       })
       .then((response) => {
-        setData(response.data);
-        const owner = response.data.owner;
-        setFormData({
-          ...formData,
-          owner: owner,
-        });
+        setFormData(response.data.project);
+        setClients(response.data.clients);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -59,26 +57,35 @@ const AddProject = () => {
 
   const submitForm = () => {
     axios
-      .post(process.env.REACT_APP_API_BASE_URL + "/api/add/project", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log("response.data");
         console.log(response.data);
-        setResponseData(response.data.message);
-        const owner = data.owner;
-        setFormData({
-          ...formData,
-          owner: owner,
-        });
 
-        if (response.data.create === "success") {
-          window.location.href = "/projects";
-        }
+        Swal.fire({
+          title: "Project updated",
+          text: "",
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "Back to projects",
+          cancelButtonText: "Close",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (response.data.create === "success") {
+              window.location.href = "/projects";
+            }
+          }
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -89,7 +96,6 @@ const AddProject = () => {
     <>
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        {responseData}
         <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
           <div className="card-header d-flex justify-content-between border-bottom pb-1">
             <div className="">{title} </div>
@@ -132,8 +138,8 @@ const AddProject = () => {
                   required
                   onChange={handleInput}
                 >
-                  {data.clients ? (
-                    data.clients.map((client) => (
+                  {clients ? (
+                    clients.map((client) => (
                       <option key={client._id} value={client._id}>
                         {client.companyName}
                       </option>
@@ -174,7 +180,7 @@ const AddProject = () => {
               onClick={submitForm}
               className="btn btn-primary btn-sm mt-3"
             >
-              Add project
+              Save
             </button>
           </div>
         </div>
@@ -183,4 +189,4 @@ const AddProject = () => {
   );
 };
 
-export default AddProject;
+export default EditProject;

@@ -69,6 +69,9 @@ const Projects = () => {
                 />
                 <div class="card-body d-flex px-1 justify-content-between">
                   <Link to={`/project/members/${data._id}`}>members</Link>
+                  <Link to={`/edit/project/${data._id}`}>
+                    <button className="btn btn-primary btn-sm ">edit</button>
+                  </Link>
                   <Link to={`/project/${data._id}`}>
                     <button className="btn btn-primary btn-sm ">detail</button>
                   </Link>

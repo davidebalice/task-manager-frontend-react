@@ -105,7 +105,6 @@ const Project = () => {
     console.log(percentage);
   }, [activities]);
 
-
   const title = "Task";
   const brad = [
     {
@@ -118,9 +117,10 @@ const Project = () => {
   return (
     <>
       <div className="container-fluid">
-        id: {id}
+        id project: {id}
+        id task: {id}
         <Breadcrumb title={title} brad={brad} />
-        <ButtonGroup projectId={id} />
+        <ButtonGroup projectId={project._id} />
         <div className="row my-3">
           <div className="col-12">
             <div
