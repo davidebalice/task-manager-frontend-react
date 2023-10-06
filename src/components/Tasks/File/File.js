@@ -6,10 +6,7 @@ import EditModal from "../../../components/Modal/EditModal";
 const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
-  const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
-
-  const formUpload = document.getElementById("formUpload");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +25,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
     const files = e.target.files;
     setFormData({ ...formData, files: files });
   };
+
   useEffect(() => {
     setFormData({
       ...formData,
@@ -84,7 +82,6 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-
     axios
       .post(process.env.REACT_APP_API_BASE_URL + "/api/add/file/", formData, {
         headers: {

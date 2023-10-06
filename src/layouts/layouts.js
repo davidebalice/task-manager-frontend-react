@@ -35,6 +35,7 @@ import {
   faCircleInfo,
   faPeopleGroup,
   faVideo,
+  faUser,
   faBars,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
@@ -179,13 +180,32 @@ export default function Layouts() {
                   <i className="bx bx-grid-alt nav_icon"></i>
                   <span className="nav_name">Dashboard</span>
                 </Link>
+
                 <Link
                   to="/projects"
                   onClick={updateActive}
                   className={`nav_link ${pathname === "/projects" && "active"}`}
                 >
-                  <FontAwesomeIcon icon={faListUl} />
+                  <FontAwesomeIcon icon={faBars} />
                   <span className="nav_name">Projects</span>
+                </Link>
+
+                <Link
+                  to="/users"
+                  onClick={updateActive}
+                  className={`nav_link ${pathname === "/users" && "active"}`}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  <span className="nav_name">Users</span>
+                </Link>
+
+                <Link
+                  to="/clients"
+                  onClick={updateActive}
+                  className={`nav_link ${pathname === "/clients" && "active"}`}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  <span className="nav_name">Clients</span>
                 </Link>
 
                 <Link

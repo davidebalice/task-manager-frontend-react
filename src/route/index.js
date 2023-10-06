@@ -10,6 +10,12 @@ import EditProject from "../pages/projects/EditProject";
 import AddTask from "../pages/tasks/AddTask";
 import EditTask from "../pages/tasks/EditTask";
 import ProjectMembers from "../pages/projects/ProjectMembers";
+import Users from "../pages/users/Users";
+import AddUser from "../pages/users/AddUser";
+import EditUser from "../pages/users/EditUser";
+//import Clients from "../pages/clients/Clients";
+//import AddClient from "../pages/tasks/Add//";
+//import Edit// from "../pages/tasks/Edit//";
 
 import Tasks from "../pages/tasks/Tasks";
 import Task from "../pages/tasks/Task";
@@ -37,6 +43,9 @@ export function AdminRoutes() {
         <Route path="/project/add/task/:id" element={<AddTask />} />
         <Route path="/project/edit/task/:id" element={<EditTask />} />
 
+        <Route path="/users" element={<Users />} />
+        <Route path="/add/user/" element={<AddUser />} />
+        <Route path="/edit/user/:id" element={<EditUser />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
