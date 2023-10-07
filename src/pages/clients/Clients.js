@@ -15,7 +15,7 @@ import {
   faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Users = () => {
+const Clients = () => {
   const { id } = useParams();
   const token = localStorage.getItem("authToken");
   const [data, setData] = useState([]);
@@ -36,7 +36,7 @@ const Users = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/users`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/clients`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -44,15 +44,15 @@ const Users = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.users);
-        setData(response.data.users);
+        console.log(response.data.clients);
+        setData(response.data.clients);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
       });
   }, [token]);
 
-  function deleteUser(id) {
+  function deleteClient(id) {
     Swal.fire({
       title: "Confirm delete?",
       text: "Questa azione non può essere annullata!",
@@ -64,7 +64,7 @@ const Users = () => {
       if (result.isConfirmed) {
         axios
           .post(
-            `${process.env.REACT_APP_API_BASE_URL}/api/user/delete/${id}`,
+            `${process.env.REACT_APP_API_BASE_URL}/api/client/delete/${id}`,
             { id: id },
             {
               headers: {
@@ -75,10 +75,10 @@ const Users = () => {
             }
           )
           .then((response) => {
-            console.log("response.data.user");
-            console.log(response.data.user);
+            console.log("response.data.client");
+            console.log(response.data.client);
             if (response.data.status === "success") {
-              window.location.href = `/users`;
+              window.location.href = `/clients`;
             }
           })
           .catch((error) => {
@@ -88,7 +88,7 @@ const Users = () => {
     });
   }
 
-  const title = "Users";
+  const title = "Clients";
   const brad = [
     {
       name: "home",
@@ -108,8 +108,8 @@ const Users = () => {
       />
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        <Link to={`/add/user/`}>
-          <div className="btn btn-info btn-sm text-white">+ Add User</div>
+        <Link to={`/add/client/`}>
+          <div className="btn btn-info btn-sm text-white">+ Add Client</div>
         </Link>
         <div className="row my-3">
           <div className="col-12">
@@ -130,32 +130,32 @@ const Users = () => {
                   </thead>
 
                   <tbody>
-                    {data.map((user) => (
+                    {data.map((client) => (
                       <tr>
                         <td>
                           <img
-                            src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${user.photo}`}
+                            src={`${process.env.REACT_APP_API_BASE_URL}/api/client/img/${client.photo}`}
                             class="userImg"
                             alt=""
                           />
                         </td>
                         <td>
-                          {user.surname} {user.name} {user.createdAt}
+                          {client.surname} {client.name} {client.createdAt}
                         </td>
-                        <td>{user.email}</td>
-                        <td>{user.role}</td>
+                        <td>{client.email}</td>
+                        <td>{client.role}</td>
                         <td>
                           <button
                             onClick={() => null}
                             className={`btn p-0 px-1 btn-success btn-sm`}
                           >
-                            {user.label}
+                            {client.label}
                           </button>
                         </td>
                         <td>progress</td>
-                        <td>{user.formattedDeadline}</td>
+                        <td>{client.formattedDeadline}</td>
                         <td>
-                          <Link to={`/edit/user/${user._id}`}>
+                          <Link to={`/edit/client/${client._id}`}>
                             <button
                               onClick={() => null}
                               className="btn btn-primary btn-sm ms-1"
@@ -164,7 +164,7 @@ const Users = () => {
                             </button>
                           </Link>
 
-                          <Link to={`/photo/user/${user._id}`}>
+                          <Link to={`/photo/client/${client._id}`}>
                             <button
                               onClick={() => null}
                               className="btn btn-primary btn-sm ms-1"
@@ -176,9 +176,9 @@ const Users = () => {
                           <button
                             onClick={() =>
                               openEmailModal(
-                                user.email,
-                                user.name,
-                                user.surname
+                                client.email,
+                                client.name,
+                                client.surname
                               )
                             }
                             className="btn btn-primary btn-sm ms-1"
@@ -187,7 +187,7 @@ const Users = () => {
                           </button>
 
                           <button
-                            onClick={() => deleteUser(user._id)}
+                            onClick={() => deleteClient(client._id)}
                             className=" btn btn-danger btn-sm ms-1"
                           >
                             <FontAwesomeIcon icon={faTrash} />
@@ -205,4 +205,4 @@ const Users = () => {
     </>
   );
 };
-export default Users;
+export default Clients;

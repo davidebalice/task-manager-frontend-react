@@ -14,10 +14,10 @@ import Users from "../pages/users/Users";
 import AddUser from "../pages/users/AddUser";
 import EditUser from "../pages/users/EditUser";
 import PhotoUser from "../pages/users/PhotoUser";
-//import Clients from "../pages/clients/Clients";
-//import AddClient from "../pages/clients/AddClient//";
-//import EditClient// from "../pages/clients/EditClient//";
-//import PhotoClient// from "../pages/clients/PhotoClient//";
+import Clients from "../pages/clients/Clients";
+import AddClient from "../pages/clients/AddClient";
+import EditClient from "../pages/clients/EditClient";
+import PhotoClient from "../pages/clients/PhotoClient";
 
 import Tasks from "../pages/tasks/Tasks";
 import Task from "../pages/tasks/Task";
@@ -49,6 +49,11 @@ export function AdminRoutes() {
         <Route path="/add/user/" element={<AddUser />} />
         <Route path="/edit/user/:id" element={<EditUser />} />
         <Route path="/photo/user/:id" element={<PhotoUser />} />
+
+        <Route path="/clients" element={<Clients />} />
+        <Route path="/add/client/" element={<AddClient />} />
+        <Route path="/edit/client/:id" element={<EditClient />} />
+        <Route path="/photo/client/:id" element={<PhotoClient />} />
 
         <Route path="/profile" element={<Profile />} />
       </Routes>
