@@ -15,9 +15,7 @@ const AddUser = () => {
       name: title,
     },
   ];
-  const { id } = useParams();
   const [responseData, setResponseData] = useState(null);
-  const [data, setData] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -35,32 +33,6 @@ const AddUser = () => {
     });
   };
 
-  /*
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_BASE_URL + "/api/add/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        setData(response.data);
-        const owner = response.data.owner;
-        setFormData({
-          ...formData,
-          owner: owner,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-
-        Swal.fire("Error", error, "error");
-      });
-  }, []);
-*/
-
   const submitForm = () => {
     axios
       .post(process.env.REACT_APP_API_BASE_URL + "/api/add/user", formData, {
@@ -71,10 +43,7 @@ const AddUser = () => {
         },
       })
       .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
         setResponseData(response.data.message);
-        console.log(response.data.message);
 
         if (response.data.message === "success") {
           window.location.href = `/users/`;

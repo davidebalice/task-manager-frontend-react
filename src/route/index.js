@@ -13,9 +13,11 @@ import ProjectMembers from "../pages/projects/ProjectMembers";
 import Users from "../pages/users/Users";
 import AddUser from "../pages/users/AddUser";
 import EditUser from "../pages/users/EditUser";
+import PhotoUser from "../pages/users/PhotoUser";
 //import Clients from "../pages/clients/Clients";
-//import AddClient from "../pages/tasks/Add//";
-//import Edit// from "../pages/tasks/Edit//";
+//import AddClient from "../pages/clients/AddClient//";
+//import EditClient// from "../pages/clients/EditClient//";
+//import PhotoClient// from "../pages/clients/PhotoClient//";
 
 import Tasks from "../pages/tasks/Tasks";
 import Task from "../pages/tasks/Task";
@@ -46,6 +48,8 @@ export function AdminRoutes() {
         <Route path="/users" element={<Users />} />
         <Route path="/add/user/" element={<AddUser />} />
         <Route path="/edit/user/:id" element={<EditUser />} />
+        <Route path="/photo/user/:id" element={<PhotoUser />} />
+
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </>

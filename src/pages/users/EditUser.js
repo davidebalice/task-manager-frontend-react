@@ -4,9 +4,9 @@ import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { Link, useParams } from "react-router-dom";
 
-const EditTask = () => {
+const EditUser = () => {
   const token = localStorage.getItem("authToken");
-  const title = "Edit task";
+  const title = "Edit user";
   const brad = [
     {
       name: "home",
@@ -16,16 +16,16 @@ const EditTask = () => {
     },
   ];
   const { id } = useParams();
-  const [projectId, setProjectId] = useState(null);
   const [responseData, setResponseData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    status: "",
-    priority: "",
-    label: "",
-    description: "",
-    deadline: "",
-    owner: "",
+    surname: "",
+    email: "",
+    role: "",
+  });
+  const [passwordData, setPasswordData] = useState({
+    password: "",
+    passwordConfirm: "",
   });
 
   const handleInput = (event) => {
@@ -36,9 +36,17 @@ const EditTask = () => {
     });
   };
 
+  const handleInputPassword = (event) => {
+    const { name, value } = event.target;
+    setPasswordData({
+      ...passwordData,
+      [name]: value,
+    });
+  };
+
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/edit/task/${id}`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -46,11 +54,7 @@ const EditTask = () => {
         },
       })
       .then((response) => {
-        setFormData({
-          ...response.data.task,
-          deadline: response.data.deadline,
-        });
-        setProjectId(response.data.projectId._id);
+        setFormData(response.data.user);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -58,11 +62,46 @@ const EditTask = () => {
       });
   }, []);
 
-  const submitForm = () => {
+  const submitForm = (e) => {
+    e.preventDefault();
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/api/user/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("response.data");
+        console.log(response.data);
+        setResponseData(response.data.message);
+
+        Swal.fire({
+          title: "User updated",
+          text: "",
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "Back to users",
+          cancelButtonText: "Close",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (response.data.status === "success") {
+              window.location.href = `/users/`;
+            }
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const submitPassword = (e) => {
+    e.preventDefault();
     axios
       .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/edit/task/${id}`,
-        formData,
+        `${process.env.REACT_APP_API_BASE_URL}/api/user/password/${id}`,
+        passwordData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -75,21 +114,22 @@ const EditTask = () => {
         console.log("response.data");
         console.log(response.data);
         setResponseData(response.data.message);
-
-        Swal.fire({
-          title: "Taks updated",
-          text: "",
-          icon: "success",
-          showCancelButton: true,
-          confirmButtonText: "Back to tasks",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            if (response.data.status === "success") {
-              window.location.href = `/project/tasks/${projectId}`;
+        if (response.data.message === "success") {
+          Swal.fire({
+            title: "Password updated",
+            text: "",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Back to users",
+            cancelButtonText: "Close",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (response.data.status === "success") {
+                window.location.href = `/users/`;
+              }
             }
-          }
-        });
+          });
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -107,10 +147,23 @@ const EditTask = () => {
             <div className="">{title}</div>
           </div>
           <div className="card-body">
-            <div className="row justify-content-center">
+            <form className="row justify-content-center">
               <div className="col-md-6 mt-3">
                 <label for="name">
-                  <b>Name of task</b>
+                  <b>Surname</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="surname"
+                  required
+                  value={formData.surname}
+                  onChange={handleInput}
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Name</b>
                 </label>
                 <input
                   type="text"
@@ -122,92 +175,78 @@ const EditTask = () => {
                 />
               </div>
               <div className="col-md-6 mt-3">
-                <label for="status">
-                  <b>Status</b>
-                </label>
-                <select
-                  className="form-control"
-                  name="status"
-                  value={formData.status}
-                  required
-                  onChange={handleInput}
-                >
-                  <option value=""> - Select status - </option>
-                  <option value="Open">Open</option>
-                  <option value="Close">Close</option>
-                </select>
-              </div>
-              <div className="col-md-6 mt-3">
                 <label for="priority">
-                  <b>Priority</b>
-                </label>
-                <select
-                  className="form-control"
-                  name="priority"
-                  value={formData.priority}
-                  required
-                  onChange={handleInput}
-                >
-                  <option value=""> - Select priority - </option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
-                  <option value="Urgent">Urgent</option>
-                </select>
-              </div>
-              <div className="col-md-6 mt-3">
-                <label for="label">
-                  <b>Label</b>
-                </label>
-                <select
-                  className="form-control"
-                  name="label"
-                  value={formData.label}
-                  required
-                  onChange={handleInput}
-                >
-                  <option value=""> - Select label - </option>
-                  <option value="Task">Task</option>
-                  <option value="Bug">Bug</option>
-                  <option value="Quote">Quote</option>
-                </select>
-              </div>
-
-              <div className="col-md-6 mt-3">
-                <label for="deadline">
-                  <b>Deadline date</b>
+                  <b>Email</b>
                 </label>
                 <input
-                  type="date"
+                  type="email"
                   className="form-control"
-                  name="deadline"
+                  name="email"
                   required
-                  value={formData.deadline}
+                  value={formData.email}
                   onChange={handleInput}
                 />
               </div>
-
-              <div className="col-md-6 mt-3"></div>
-
-              <div className="col-md-12">
-                <label for="brand">
-                  <b>Description</b>
+              <div className="col-md-6 mt-3">
+                <label for="role">
+                  <b>Role</b>
                 </label>
-                <textarea
+                <select
                   className="form-control"
-                  name="description"
-                  value={formData.description}
+                  name="role"
+                  value={formData.role}
+                  required
                   onChange={handleInput}
-                ></textarea>
+                >
+                  <option value=""> - Select role - </option>
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+                </select>
               </div>
-            </div>
-
-            <button
-              onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
-            >
-              Save
-            </button>
+              <button
+                onClick={submitForm}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                Save
+              </button>
+            </form>
+            <br />
+            <br />
+            update password
+            <form className="row justify-content-center">
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Password</b>
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  required
+                  value={passwordData.password}
+                  onChange={handleInputPassword}
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Confirm password</b>
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="passwordConfirm"
+                  required
+                  value={passwordData.passwordConfirm}
+                  onChange={handleInputPassword}
+                />
+              </div>
+              <button
+                onClick={submitPassword}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                Save
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -215,4 +254,4 @@ const EditTask = () => {
   );
 };
 
-export default EditTask;
+export default EditUser;

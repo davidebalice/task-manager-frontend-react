@@ -40,12 +40,12 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
 
   function removeFile(id) {
     Swal.fire({
-      title: "Sei sicuro?",
+      title: "Corfirm delete?",
       text: "Questa azione non può essere annullata!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sì, rimuovi!",
-      cancelButtonText: "No, annulla",
+      confirmButtonText: "Delete",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -125,7 +125,9 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
               {" "}
               {file.name}
             </a>
-            <div onClick={() => openEditModal(file.name, file._id)}>edit text</div>
+            <div onClick={() => openEditModal(file.name, file._id)}>
+              edit text
+            </div>
             <div onClick={() => removeFile(file._id)}>remove</div>
           </div>
         ))

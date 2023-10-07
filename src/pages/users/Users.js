@@ -12,6 +12,7 @@ import {
   faEnvelope,
   faCopy,
   faListCheck,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Users = () => {
@@ -50,6 +51,39 @@ const Users = () => {
         console.error("Error during api call:", error);
       });
   }, [token]);
+
+  function deleteUser(id) {
+    Swal.fire({
+      title: "Corfirm delete?",
+      text: "Questa azione non può essere annullata!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(
+            `${process.env.REACT_APP_API_BASE_URL}/api/user/delete/${id}`,
+            { id: id },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            console.log("response.data.user");
+            console.log(response.data.user);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    });
+  }
 
   const title = "Users";
   const brad = [
@@ -127,9 +161,22 @@ const Users = () => {
                             </button>
                           </Link>
 
+                          <Link to={`/photo/user/${user._id}`}>
+                            <button
+                              onClick={() => null}
+                              className="btn btn-primary btn-sm ms-1"
+                            >
+                              <FontAwesomeIcon icon={faCamera} />
+                            </button>
+                          </Link>
+
                           <button
                             onClick={() =>
-                              openEmailModal(user.email, user.name, user.surname)
+                              openEmailModal(
+                                user.email,
+                                user.name,
+                                user.surname
+                              )
                             }
                             className="btn btn-primary btn-sm ms-1"
                           >
@@ -137,7 +184,7 @@ const Users = () => {
                           </button>
 
                           <button
-                            onClick={() => null}
+                            onClick={() => deleteUser(user._id)}
                             className=" btn btn-danger btn-sm ms-1"
                           >
                             <FontAwesomeIcon icon={faTrash} />
