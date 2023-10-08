@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../../context/UserContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
+  const { userData, login, logout } = useContext(Context);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,7 +28,11 @@ const Login = () => {
           const token = response.data.token;
           localStorage.setItem("authToken", token);
 
-          window.location.href = "./";
+          console.log("response.data.user");
+          console.log(response.data.user);
+          login(response.data.user);
+
+          navigate("/");
         } else {
           Swal.fire("Login failed", response.data.message, "error");
           localStorage.removeItem("authToken");

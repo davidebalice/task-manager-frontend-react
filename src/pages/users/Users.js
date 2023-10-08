@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
 import EmailModal from "../../components/Modal/EmailModal";
+import Pagination from "../../components/pagination/Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -17,7 +18,13 @@ import {
 
 const Users = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get("page");
   const token = localStorage.getItem("authToken");
+  const [reload, setReload] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [data, setData] = useState([]);
   const [modalData, setModalData] = useState({
     show: false,
@@ -36,7 +43,7 @@ const Users = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/users`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/users?page=${page}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -44,13 +51,14 @@ const Users = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.users);
         setData(response.data.users);
+        setCurrentPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-  }, [token]);
+  }, [token, page, reload]);
 
   function deleteUser(id) {
     Swal.fire({
@@ -78,7 +86,7 @@ const Users = () => {
             console.log("response.data.user");
             console.log(response.data.user);
             if (response.data.status === "success") {
-              window.location.href = `/users`;
+              setReload((prevCount) => prevCount + 1);
             }
           })
           .catch((error) => {
@@ -140,7 +148,7 @@ const Users = () => {
                           />
                         </td>
                         <td>
-                          {user.surname} {user.name} {user.createdAt}
+                          {user.surname} {user.name}
                         </td>
                         <td>{user.email}</td>
                         <td>{user.role}</td>
@@ -197,6 +205,12 @@ const Users = () => {
                     ))}
                   </tbody>
                 </Table>
+                <Pagination
+                  pageName="users"
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             </div>
           </div>

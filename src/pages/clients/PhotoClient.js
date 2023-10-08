@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 const EditTask = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Photo client";
   const brad = [
@@ -80,7 +81,7 @@ const EditTask = () => {
         }).then((result) => {
           if (result.isConfirmed) {
             if (response.data.status === "success") {
-              window.location.href = `/clients/`;
+              navigate('/clients');
             }
           }
         });

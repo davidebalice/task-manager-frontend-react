@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 const AddUser = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Add user";
   const brad = [
@@ -46,7 +47,7 @@ const AddUser = () => {
         setResponseData(response.data.message);
 
         if (response.data.message === "success") {
-          window.location.href = `/users/`;
+          navigate(`/users`);
         }
       })
       .catch((error) => {

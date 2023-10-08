@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 const AddProject = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Add project";
   const brad = [
@@ -77,7 +79,7 @@ const AddProject = () => {
         });
 
         if (response.data.create === "success") {
-          window.location.href = "/projects";
+          navigate('/projects');
         }
       })
       .catch((error) => {

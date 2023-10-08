@@ -1,9 +1,11 @@
+import React, { useContext, useState, useEffect } from "react";
 import "./layout.css";
 import "boxicons";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Context } from "../context/UserContext";
 import Admin_icon from "../assets/photo/admin.jpg";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -41,6 +43,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Layouts() {
+  const { userData, login, logout } = useContext(Context);
+  const navigate = useNavigate();
   const pathname = window.location.pathname;
   const [render, setRender] = useState(true);
   const [headerToggle, setHeaderToggle] = useState(false);
@@ -108,7 +112,7 @@ export default function Layouts() {
       if (result.isConfirmed) {
         Swal.fire("logout Success", "", "success");
         localStorage.removeItem("authToken");
-        window.location.href = "./login";
+        navigate("/login");
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
       }
@@ -137,7 +141,13 @@ export default function Layouts() {
             {" "}
             <img src={Admin_icon} alt="admin icon" />{" "}
           </span>{" "}
-          <span className="ms-1">Name surname</span>{" "}
+          <span className="ms-1">
+            {userData && (
+              <>
+                {userData.surname} {userData.name}
+              </>
+            )}
+          </span>{" "}
         </div>
 
         <ul
@@ -160,7 +170,6 @@ export default function Layouts() {
           </li>
         </ul>
       </header>
-
       <div className="manubar">
         <div className={`l-navbar ${headerToggle ? "show" : ""}`} id="nav-bar">
           <nav className="nav">

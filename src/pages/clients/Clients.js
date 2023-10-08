@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
 import EmailModal from "../../components/Modal/EmailModal";
+import Pagination from "../../components/pagination/Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -17,7 +18,13 @@ import {
 
 const Clients = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get("page");
   const token = localStorage.getItem("authToken");
+  const [reload, setReload] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [data, setData] = useState([]);
   const [modalData, setModalData] = useState({
     show: false,
@@ -36,7 +43,7 @@ const Clients = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/clients`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/clients?page=${page}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -46,11 +53,13 @@ const Clients = () => {
       .then((response) => {
         console.log(response.data.clients);
         setData(response.data.clients);
+        setCurrentPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-  }, [token]);
+  }, [token, reload, page]);
 
   function deleteClient(id) {
     Swal.fire({
@@ -75,10 +84,10 @@ const Clients = () => {
             }
           )
           .then((response) => {
-            console.log("response.data.client");
-            console.log(response.data.client);
+            console.log("response.data.status");
+            console.log(response.data.status);
             if (response.data.status === "success") {
-              window.location.href = `/clients`;
+              setReload((prevCount) => prevCount + 1);
             }
           })
           .catch((error) => {
@@ -197,6 +206,12 @@ const Clients = () => {
                     ))}
                   </tbody>
                 </Table>
+                <Pagination
+                  pageName="clients"
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             </div>
           </div>

@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const AddClient = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Add client";
   const brad = [
@@ -44,7 +45,7 @@ const AddClient = () => {
         setResponseData(response.data.message);
 
         if (response.data.message === "success") {
-          window.location.href = `/clients/`;
+          navigate('/clients');
         }
       })
       .catch((error) => {

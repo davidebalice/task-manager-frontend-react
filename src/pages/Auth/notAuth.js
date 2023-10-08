@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const notAuth = () => {
   return (
     <>
@@ -7,6 +8,10 @@ const notAuth = () => {
           style={{ height: "65vh" }}
         >
           <p className="notAuth">User not authenticated</p>
+          
+          <Link className="dropdown-item" to="/login">
+          login
+            </Link>
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { isAuthenticated } from "./middlewares/auth";
 import Layouts from "./layouts/layouts";
 import Footer from "./layouts/footer";
+import { UserProvider } from "./context/UserContext";
 import NotAuth from "./pages/Auth/notAuth";
 import { AdminRoutes } from "./route/index";
 function App() {
@@ -28,9 +29,11 @@ function App() {
 
   return (
     <>
-      <Layouts />
-      {accessApp ? <AdminRoutes /> : <NotAuth/>}
-      {/* <Footer /> */}
+      <UserProvider>
+        <Layouts />
+        {accessApp ? <AdminRoutes /> : <NotAuth />}
+        {/* <Footer /> */}
+      </UserProvider>
     </>
   );
 }

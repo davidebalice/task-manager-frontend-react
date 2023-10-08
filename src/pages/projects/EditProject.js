@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 
 const EditProject = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Edit project";
   const brad = [
@@ -82,7 +83,7 @@ const EditProject = () => {
         }).then((result) => {
           if (result.isConfirmed) {
             if (response.data.create === "success") {
-              window.location.href = "/projects";
+              navigate('/projects');
             }
           }
         });
