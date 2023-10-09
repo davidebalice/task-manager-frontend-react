@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-const EditTask = () => {
+const PhotoUser = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Photo user";
@@ -70,7 +70,7 @@ const EditTask = () => {
       )
       .then((response) => {
         setResponseData(response.data.message);
-        setFormData({photo:response.data.photo});
+        setFormData({ photo: response.data.photo });
         Swal.fire({
           title: "User updated",
           text: "",
@@ -109,7 +109,7 @@ const EditTask = () => {
                   class="userImg"
                   alt=""
                 />
-                <label for="name">
+                <label for="photo">
                   <b>Select file</b>
                 </label>
                 <input
@@ -136,4 +136,4 @@ const EditTask = () => {
   );
 };
 
-export default EditTask;
+export default PhotoUser;

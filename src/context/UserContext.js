@@ -42,6 +42,7 @@ export function UserProvider({ children }) {
     <Context.Provider
       value={{
         userData,
+        setUserData,
         login,
         logout,
       }}

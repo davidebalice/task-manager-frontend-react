@@ -1,89 +1,324 @@
-import { useState, useEffect, useRef } from 'react'
-import Swal from 'sweetalert2'
-import Breadcrumb from '../../components/breadcrumb/index'
-import ProfileImg from '../../assets/photo/admin.jpg'
-export default function ProfileSetting() {
-    const title = "Profile Setting"
-    const brad = [
-        {
-            name: "home",
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Breadcrumb from "../../components/breadcrumb/index";
+import { Context } from "../../context/UserContext";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
+const Profile = () => {
+  const { userData, setUserData } = useContext(Context);
+  const [file, setFile] = useState(null);
+  const token = localStorage.getItem("authToken");
+  const title = "Profile";
+  const brad = [
+    {
+      name: "home",
+    },
+    {
+      name: title,
+    },
+  ];
+
+  const [responseData, setResponseData] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    email: "",
+  });
+  const [passwordData, setPasswordData] = useState({
+    password: "",
+    passwordConfirm: "",
+  });
+  const [formPhoto, setFormPhoto] = useState({
+    photo: null,
+  });
+
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleInputPassword = (event) => {
+    const { name, value } = event.target;
+    setPasswordData({
+      ...passwordData,
+      [name]: value,
+    });
+  };
+  /*
+  const handleFile = (e) => {
+    const selectedFile = e.target.files[0];
+    setFormPhoto({ ...formData, photo: selectedFile });
+  };
+*/
+  const handleFile = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
+      })
+      .then((response) => {
+        setFormData(response.data.user);
+        setUserData(response.data.user);
+        setFormPhoto(response.data.user);
+        console.log(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        Swal.fire("Error", error, "error");
+      });
+  }, []);
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/profile/update`,
+        formData,
         {
-            name: title,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
         }
-    ]
-
-
-    const [rerendarApi, setRerendarApi] = useState(false)
-
-    {/* data receve from store */ }
-    useEffect(() => {
-
-        //    call api
-        console.log("RENDER FROM STORE TRASH")
-    }, [rerendarApi])
-
-
-    const updatProfile = () => {
-
+      )
+      .then((response) => {
+        console.log("response.data");
+        console.log(response.data);
+        setResponseData(response.data.message);
+        setUserData(response.data.user);
         Swal.fire({
-            icon: 'info',
-            title: 'Are You Want to take this action',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
+          title: "Data updated",
+          text: "",
+          icon: "success",
+          cancelButtonText: "Close",
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const submitPassword = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/profile/password`,
+        passwordData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("response.data");
+        console.log(response.data);
+        setResponseData(response.data.message);
+        if (response.data.message === "success") {
+          Swal.fire({
+            title: "Password updated",
+            text: "",
+            icon: "success",
+            cancelButtonText: "Close",
+          }).then((result) => {
             if (result.isConfirmed) {
-                setRerendarApi(!rerendarApi)
-
-                Swal.fire('Update success', '', 'success')
-            } else if (result.isDenied) {
-                Swal.fire('Changes are not saved', '', 'info')
             }
-        })
-    }
-    return (
-        <>
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
-            <div className="container-fluid">
-                <Breadcrumb title={title} brad={brad} />
-                <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-                    <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                        <div className="">{title} </div>
-                    </div>
-                    <div className="card-body">
-                        <div className="row ">
+  const submitPhoto = (e) => {
+    e.preventDefault();
 
-                            <div className="col-md-6 mt-3">
-                                <label ><b>Full Name</ b></label>
-                                <input type="text" placeholder="Enter Your Name" className="form-control" />
-                            </div>
-                            <div className="col-md-6 mt-3">
-                                <label ><b>User Name</ b></label>
-                                <input type="text" placeholder="Email User Name" className="form-control" />
-                            </div>
-                            <div className="col-md-6 mt-3">
-                                <label ><b>Email</ b></label>
-                                <input type="text" placeholder="Enter Your Email" className="form-control" />
-                            </div>
-                            <div className="col-md-6 mt-3">
-                                <label ><b>Custom Login Link</ b></label>
-                                <input type="text" placeholder="Email Custom Login Link" className="form-control" />
-                            </div>
-                            <div className="mt-3">
-                                <p className="mb-0"><b>Upload Profile Picture</b></p>
-                                <img src={ProfileImg} style={{ width: 150, height: 150 }} />
-                            </div>
-                            <div className="col-md-6 mt-3">
-                                <input type="file" className="form-control" />
-                            </div>
+    const formPhoto2 = new FormData();
+    formPhoto2.append("photo", file);
 
-                        </div>
-                        <button onClick={updatProfile} className="btn btn-primary btn-sm mt-3">Update</button>
-                    </div>
-                </div>
+    axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/profile/photo`,
+        formPhoto2,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((response) => {
+        setFormPhoto({ photo: response.data.photo });
+        setFormData({ photo: response.data.photo });
+        setUserData({ photo: response.data.photo });
+        setResponseData(response.data.message);
+        if (response.data.message === "success") {
+          Swal.fire({
+            title: "Photo updated",
+            text: "",
+            icon: "success",
+            cancelButtonText: "Close",
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  return (
+    <>
+      <div className="container-fluid">
+        <Breadcrumb title={title} brad={brad} />
+        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
+          <div className="card-header d-flex justify-content-between border-bottom pb-1">
+            <div className="">{title} </div>
+          </div>
+          <div className="card-body">
+            <div className="row ">
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Surname</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="surname"
+                  required
+                  value={formData.surname}
+                  onChange={handleInput}
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Name</b>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInput}
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="priority">
+                  <b>Email</b>
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInput}
+                />
+              </div>
             </div>
-
-        </>
-    )
-}
+            <button
+              onClick={submitForm}
+              className="btn btn-primary btn-sm mt-3"
+            >
+              Update
+            </button>
+            <br />
+            <br />
+            update password
+            <br />
+            <br />
+            <div className="row ">
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Password</b>
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  required
+                  value={passwordData.password}
+                  onChange={handleInputPassword}
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="name">
+                  <b>Confirm password</b>
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="passwordConfirm"
+                  required
+                  value={passwordData.passwordConfirm}
+                  onChange={handleInputPassword}
+                />
+              </div>
+            </div>
+            <button
+              onClick={submitPassword}
+              className="btn btn-primary btn-sm mt-3"
+            >
+              Update
+            </button>
+            <div className="row ">
+              <div className="mt-3">
+                <p className="mb-0">
+                  <b>Upload Profile Picture</b>
+                </p>
+                <img
+                  src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${
+                    formData && formData.photo
+                  }`}
+                  class="userImg"
+                  alt=""
+                />
+              </div>
+              <div className="col-md-6 mt-3">
+                <label for="photo">
+                  <b>Select file</b>
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="photo"
+                  required
+                  onChange={handleFile}
+                />
+              </div>
+            </div>
+            <button
+              onClick={submitPhoto}
+              className="btn btn-primary btn-sm mt-3"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+export default Profile;

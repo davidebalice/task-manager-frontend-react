@@ -3,7 +3,6 @@ import "./layout.css";
 import "boxicons";
 import Swal from "sweetalert2";
 import { Context } from "../context/UserContext";
-import Admin_icon from "../assets/photo/admin.jpg";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -139,7 +138,13 @@ export default function Layouts() {
         >
           <span className="header_img">
             {" "}
-            <img src={Admin_icon} alt="admin icon" />{" "}
+            <img
+              src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${
+                userData && userData.photo
+              }`}
+              class="userImg"
+              alt=""
+            />{" "}
           </span>{" "}
           <span className="ms-1">
             {userData && (
@@ -156,15 +161,11 @@ export default function Layouts() {
           aria-labelledby="dropdownMenuButton1"
         >
           <li>
-            <Link className="dropdown-item" to="/profileSetting">
+            <Link className="dropdown-item" to="/profile">
               Profile
             </Link>
           </li>
-          <li>
-            <Link className="dropdown-item" to="/general-setting">
-              Setting
-            </Link>
-          </li>
+
           <li className="dropdown-item" onClick={logoutHandle}>
             Log Out
           </li>
