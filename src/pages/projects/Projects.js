@@ -4,6 +4,8 @@ import Breadcrumb from "../../components/breadcrumb/index";
 import Preview_img from "../../assets/photo/admin.jpg";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 const Projects = () => {
   const [data, setData] = useState([]);
@@ -20,6 +22,7 @@ const Projects = () => {
       })
       .then((response) => {
         setData(response.data.projects);
+        console.log(response.data.projects);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
@@ -43,31 +46,27 @@ const Projects = () => {
   ];
   return (
     <>
-      <div class="container-fluid">
+      <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        <div class="row">
-          <div class="col-sm-4 col-md-4 col-lg-3" key="add new project">
-            <div class="card">
-              +
-              <div class="card-body d-flex px-1 justify-content-between">
-                create new project
-                <Link to={`/add/project/`}>
-                  <button className="btn btn-primary btn-sm ">detail</button>
-                </Link>
-              </div>
-            </div>
-          </div>
 
+        <div className="row">
+          <Link to={`/add/project/`}>
+            <div className="addProject col-sm-4 col-md-4 col-lg-3">
+              <FontAwesomeIcon icon={faCirclePlus} className="addProjectIcon" />
+              <div className="card-body d-flex px-1">Add project</div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="row">
           {data.map((data, i) => (
-            <div class="col-sm-4 col-md-4 col-lg-3" key={i}>
-              <div class="card">
-                <img
-                  src={Preview_img}
-                  class="card-img-top"
-                  style={{ height: 220 }}
-                  alt="..."
-                />
-                <div class="card-body d-flex px-1 justify-content-between">
+            <div className="col-sm-4 col-md-4 col-lg-3" key={`project${i}`}>
+              <div className="porjectCard">
+                <div
+                  className="projectCardCover"
+                  style={{ backgroundImage: `url(${Preview_img})` }}
+                ></div>
+                <div className="projectCardButton">
                   <Link to={`/project/members/${data._id}`}>members</Link>
                   <Link to={`/edit/project/${data._id}`}>
                     <button className="btn btn-primary btn-sm ">edit</button>

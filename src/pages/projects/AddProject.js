@@ -3,6 +3,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const AddProject = () => {
   const navigate = useNavigate();
@@ -79,7 +81,7 @@ const AddProject = () => {
         });
 
         if (response.data.create === "success") {
-          navigate('/projects');
+          navigate("/projects");
         }
       })
       .catch((error) => {
@@ -91,6 +93,17 @@ const AddProject = () => {
     <>
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
+        <div class="row">
+          <Link to={`/projects`}>
+            <div class="addProject col-sm-4 col-md-4 col-lg-3">
+              <FontAwesomeIcon
+                icon={faCircleChevronLeft}
+                className="addProjectIcon"
+              />
+              <div class="card-body d-flex px-1">Back</div>
+            </div>
+          </Link>
+        </div>
         {responseData}
         <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
           <div className="card-header d-flex justify-content-between border-bottom pb-1">

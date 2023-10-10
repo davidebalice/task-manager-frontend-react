@@ -3,7 +3,9 @@ import "./layout.css";
 import "boxicons";
 import Swal from "sweetalert2";
 import { Context } from "../context/UserContext";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/img/logoWhite.png";
+import logo2 from "../assets/img/logoWhite2.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,7 +15,7 @@ import {
   faBuildingColumns,
   faIndent,
   faFileInvoice,
-  faFileCode,
+  faTableList,
   faUsersGear,
   faStore,
   faGear,
@@ -42,7 +44,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Layouts() {
-  const { userData, login, logout } = useContext(Context);
+  const { userData } = useContext(Context);
   const navigate = useNavigate();
   const pathname = window.location.pathname;
   const [render, setRender] = useState(true);
@@ -176,8 +178,21 @@ export default function Layouts() {
           <nav className="nav">
             <div>
               {" "}
+              <a
+                href="#"
+                className="sidebarHeader"
+                style={{
+                  justifyContent: headerToggle ? "center" : "left",
+                  width: headerToggle ? "100%" : "50px",
+                }}
+              >
+                <img
+                  src={headerToggle ? logo : logo2}
+                  className={headerToggle ? "logoSidebar" : "logoSidebarClosed"}
+                  alt="db logo"
+                />
+              </a>
               <a href="#" className="nav_logo">
-                {" "}
                 <i className="bx bx-layer nav_logo-icon"></i>{" "}
                 <span className="nav_logo-name">Task manager</span>{" "}
               </a>
@@ -196,7 +211,7 @@ export default function Layouts() {
                   onClick={updateActive}
                   className={`nav_link ${pathname === "/projects" && "active"}`}
                 >
-                  <FontAwesomeIcon icon={faBars} />
+                  <FontAwesomeIcon icon={faTableList} />
                   <span className="nav_name">Projects</span>
                 </Link>
 
@@ -220,13 +235,11 @@ export default function Layouts() {
 
                 <Link
                   onClick={updateActive}
-                  to="/change-password"
-                  className={`nav_link ${
-                    pathname === "/change-password" && "active"
-                  }`}
+                  to="/profile"
+                  className={`nav_link ${pathname === "/profile" && "active"}`}
                 >
                   <FontAwesomeIcon icon={faGear} />
-                  <span className="nav_name">Change Password</span>
+                  <span className="nav_name">Profile</span>
                 </Link>
                 <Link onClick={logoutHandle} to="#" className={`nav_link `}>
                   <FontAwesomeIcon icon={faFileInvoice} />

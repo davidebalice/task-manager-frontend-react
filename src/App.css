@@ -37,16 +37,6 @@
   }
 }
 
-/* layout */
-
-/* end layout */
-
-/* dashboard css */
-
-/****** UTILS ******/ /*** default values ***/
-/***** custom values *****/
-/***** Grid Values *****/
-/** Extends **/
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap");
 .css-equal-content,
 .css-equal-heights {
@@ -172,7 +162,7 @@ div#global-loader,
 .login-wrapper .login-content .toggle-password,
 .graph-sets > ul,
 .graph-sets,
-.dash-count,
+.dashboardBox,
 .dash-widget .dash-widgetimg span,
 .dash-widget,
 .image-upload.image-upload-new .image-uploads,
@@ -240,7 +230,7 @@ div#global-loader,
 .card-sales-split,
 .bar-code-view,
 .product-list ul li .productviews .productviewscontent,
-.dash-count,
+.dashboardBox,
 .table-top,
 .page-header,
 .chat-cont-left .chat-scroll .media .media-body,
@@ -343,7 +333,7 @@ div#global-loader,
 .login-wrapper,
 .graph-sets > ul,
 .graph-sets,
-.dash-count,
+.dashboardBox,
 .dash-widget .dash-widgetimg span,
 .dash-widget,
 .image-upload.image-upload-new .image-uploads,
@@ -421,7 +411,7 @@ div#global-loader,
 .card-sales-split,
 .bar-code-view,
 .product-list ul li .productviews .productviewscontent,
-.dash-count,
+.dashboardBox,
 .table-top,
 .page-header,
 .chat-cont-left .chat-scroll .media .media-body,
@@ -871,7 +861,7 @@ div#global-loader,
 .login-wrapper .login-content .toggle-password,
 .graph-sets > ul,
 .graph-sets,
-.dash-count,
+.dashboardBox,
 .dash-widget .dash-widgetimg span,
 .dash-widget,
 .image-upload.image-upload-new .image-uploads,
@@ -939,7 +929,7 @@ div#global-loader,
 .card-sales-split,
 .bar-code-view,
 .product-list ul li .productviews .productviewscontent,
-.dash-count,
+.dashboardBox,
 .table-top,
 .page-header,
 .chat-cont-left .chat-scroll .media .media-body,
@@ -1042,7 +1032,7 @@ div#global-loader,
 .login-wrapper,
 .graph-sets > ul,
 .graph-sets,
-.dash-count,
+.dashboardBox,
 .dash-widget .dash-widgetimg span,
 .dash-widget,
 .image-upload.image-upload-new .image-uploads,
@@ -1120,7 +1110,7 @@ div#global-loader,
 .card-sales-split,
 .bar-code-view,
 .product-list ul li .productviews .productviewscontent,
-.dash-count,
+.dashboardBox,
 .table-top,
 .page-header,
 .chat-cont-left .chat-scroll .media .media-body,
@@ -7765,55 +7755,60 @@ span.select2-container.select2-container--default.select2-container--open {
   border-radius: 50px;
 }
 
-.dash-count {
-  background: #ff9f43;
-  color: #fff;
-  min-height: 98px;
+.dashboardBox {
+  background: #fff;
+  color: #333;
+  min-height: 118px;
   width: 100%;
   border-radius: 6px;
   margin: 0 0 25px;
   padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-.dash-count.das1 {
-  background: #00cfe8;
+
+.dashboardSection {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 }
-.dash-count.das2 {
-  background: #1b2850;
-}
-.dash-count.das3 {
-  background: #28c76f;
-}
-.dash-count h4 {
+
+.dashboardBox h4 {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 0;
 }
-.dash-count h5 {
+.dashboardBox h5 {
   font-size: 14px;
 }
-.dash-count .dash-imgs {
+.dashboardBox .dash-imgs {
   -webkit-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-.dash-count .dash-imgs img {
-  width: 50px;
-  height: 50px;
+.dashboardBox .dash-imgs img {
+  width: 40px;
+  height: 40px;
 }
-.dash-count .dash-imgs i {
+.dashboardBox .dash-imgs i {
   font-size: 36px;
   color: #fff;
 }
-.dash-count .dash-imgs svg {
-  width: 50px;
-  height: 50px;
+.dashboardBox .dash-imgs svg {
+  width: 40px;
+  height: 40px;
 }
-.dash-count:hover .dash-imgs {
+.dashboardBox:hover .dash-imgs {
   transform: scale(1.25);
   -webkit-transform: scale(1.25);
   -ms-transform: scale(1.25);
 }
-
+.dashboardIcon {
+  color: #555;
+  font-size: 12px !important;
+}
+.dashboardTitle {
+  font-size: 17px !important;
+}
 .btn-white.dropdown-toggle:after {
   display: none;
 }
@@ -9546,6 +9541,184 @@ span.select2-container.select2-container--default.select2-container--open {
 
 .userImg {
   width: 120px;
+}
+
+.dashboardDescription {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px 0;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.dashboardBar {
+  width: 100%;
+  color: #333;
+  text-align: left;
+  background: none;
+  font-weight: bold;
+  padding-bottom: 14px;
+  border: 0;
+}
+
+.dashboardImg {
+  width: 70% !important;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.dashboardLogo {
+  width: 55% !important;
+  margin: 0 auto;
+}
+.dashboardLogo2 {
+  width: 100% !important;
+  max-width: 120px;
+  margin: 0 auto;
+}
+.dashboardText1 {
+  font-size: 26px;
+}
+
+.dashboardText2 {
+  font-size: 17px;
+  margin-top: 8px;
+}
+
+.dashboardText3 {
+  font-size: 22px;
+  color: #ff0000;
+}
+
+.dashboardText4 {
+  font-size: 19px;
+  margin-top: 10px;
+}
+
+.dashboardCol {
+  border-right: 1px solid #ddd;
+}
+
+@media (max-width: 767px) {
+  .dashboardCol {
+    margin-top: 40px;
+    width: 100%;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 80px;
+    border-right: none;
+  }
+}
+
+.dashboardCol:last-child {
+  border-right: none !important;
+}
+
+.githubContainer {
+  display: flex;
+  width: fit-content;
+  justify-content: center;
+  width: 60%;
+  position: relative;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 140px;
+}
+
+.githubTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+.githubLink {
+  color: #089fba;
+  background: #f1f1f1;
+  padding: 3px 10px;
+}
+
+.dbLogo {
+  width: 40%;
+  margin: 0 auto;
+  max-width: 180px;
+}
+
+.logoSidebar {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.logoSidebarClosed {
+  width: 34px;
+  margin: 0 auto;
+}
+
+.sidebarHeader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #555;
+  padding-bottom: 30px;
+  padding-top: 10px;
+  margin-bottom: 40px;
+  margin-left: 10px;
+}
+
+.addProject {
+  display: flex;
+  flex-direction: row;
+  background: #24a50b;
+  color: #fff;
+  gap: 12px;
+  align-items: center;
+  width: fit-content;
+  justify-content: start;
+  min-height: 40px;
+  border-radius: 4px;
+  padding: 14px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.addProject:hover {
+  background: #3bb722;
+}
+
+.addProjectIcon {
+  font-size: 25px;
+}
+
+.porjectCard {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  min-height: 280px;
+  transform: translateY(0); 
+  transition: all 0.2s ease;
+}
+
+.porjectCard:hover {
+  transform: translateY(-10px);
+}
+
+.projectCardCover {
+  width: 100%;
+  height: 290px;
+  background-size: cover;
+  background-position: center center;
+}
+
+.projectCardButton {
+  width: 100%;
+  height: 70px;
+  display: flex;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -19,7 +19,6 @@ const Profile = () => {
     },
   ];
 
-  const [responseData, setResponseData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -28,9 +27,6 @@ const Profile = () => {
   const [passwordData, setPasswordData] = useState({
     password: "",
     passwordConfirm: "",
-  });
-  const [formPhoto, setFormPhoto] = useState({
-    photo: null,
   });
 
   const handleInput = (event) => {
@@ -48,12 +44,7 @@ const Profile = () => {
       [name]: value,
     });
   };
-  /*
-  const handleFile = (e) => {
-    const selectedFile = e.target.files[0];
-    setFormPhoto({ ...formData, photo: selectedFile });
-  };
-*/
+
   const handleFile = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -71,7 +62,6 @@ const Profile = () => {
       .then((response) => {
         setFormData(response.data.user);
         setUserData(response.data.user);
-        setFormPhoto(response.data.user);
         console.log(response.data.user);
       })
       .catch((error) => {
@@ -97,7 +87,6 @@ const Profile = () => {
       .then((response) => {
         console.log("response.data");
         console.log(response.data);
-        setResponseData(response.data.message);
         setUserData(response.data.user);
         Swal.fire({
           title: "Data updated",
@@ -129,9 +118,6 @@ const Profile = () => {
         }
       )
       .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
-        setResponseData(response.data.message);
         if (response.data.message === "success") {
           Swal.fire({
             title: "Password updated",
@@ -167,10 +153,8 @@ const Profile = () => {
         }
       )
       .then((response) => {
-        setFormPhoto({ photo: response.data.photo });
         setFormData({ photo: response.data.photo });
         setUserData({ photo: response.data.photo });
-        setResponseData(response.data.message);
         if (response.data.message === "success") {
           Swal.fire({
             title: "Photo updated",
