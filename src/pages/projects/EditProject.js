@@ -10,6 +10,7 @@ const EditProject = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const title = "Edit project";
+  const [file, setFile] = useState(null);
   const brad = [
     {
       name: "home",
@@ -27,6 +28,7 @@ const EditProject = () => {
     summary: "",
     description: "",
     owner: "",
+    imageCover: "",
   });
 
   const handleInput = (event) => {
@@ -37,6 +39,32 @@ const EditProject = () => {
     });
   };
 
+  const handleFile = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
+  /*
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/user/photo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.user);
+        setFormData({
+          ...response.data.user,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        Swal.fire("Error", error, "error");
+      });
+  }, []);
+*/
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`, {
@@ -95,9 +123,33 @@ const EditProject = () => {
       });
   };
 
+  const submitFormPhoto = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/project/photo/${id}`,
+        { imageCover: file },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((response) => {
+        setFormData({
+          ...formData,
+          imageCover: response.data.imageCover,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <>
       <div className="container-fluid">
+        {formData.imageCover}
         <Breadcrumb title={title} brad={brad} />
         <div class="row">
           <Link to={`/projects`}>
@@ -196,6 +248,38 @@ const EditProject = () => {
             >
               Save
             </button>
+
+            <div className="card-body">
+              <div className="row justify-content-center">
+                <div className="col-md-6 mt-3">
+                  <img
+                    src={`${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${formData.imageCover}`}
+                    class="userImg"
+                    alt=""
+                  />
+
+                  <label for="photo">
+                    <b>Select file</b>
+                  </label>
+
+                  <input
+                    type="file"
+                    className="form-control"
+                    name="imageCover"
+                    required
+                    onChange={handleFile}
+                  />
+                </div>
+                <div className="col-md-6 mt-3"></div>
+              </div>
+
+              <button
+                onClick={submitFormPhoto}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>

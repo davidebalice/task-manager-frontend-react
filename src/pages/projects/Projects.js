@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
-import Preview_img from "../../assets/photo/admin.jpg";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,12 +28,6 @@ const Projects = () => {
       });
   }, [token]);
 
-  const themeBuyHandle = () => {
-    Swal.fire("Theme Buy Success", "", "success");
-  };
-  const themeInstallHandle = () => {
-    Swal.fire("Theme Install Success", "", "success");
-  };
   const title = "Projects";
   const brad = [
     {
@@ -62,16 +55,85 @@ const Projects = () => {
           {data.map((data, i) => (
             <div className="col-sm-4 col-md-4 col-lg-3" key={`project${i}`}>
               <div className="porjectCard">
-                <div
-                  className="projectCardCover"
-                  style={{ backgroundImage: `url(${Preview_img})` }}
-                ></div>
-                <div className="projectCardButton">
-                  <Link to={`/project/members/${data._id}`}>members</Link>
-                  <Link to={`/edit/project/${data._id}`}>
-                    <button className="btn btn-primary btn-sm ">edit</button>
+                <div>
+                  <div
+                    className="projectCardCover"
+                    style={{
+                      backgroundImage: `url(${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${data.imageCover}`,
+                    }}
+                  >
+                    <Link
+                      to={`/edit/project/${data._id}`}
+                      className="projectCardButton"
+                    >
+                      <button className="btn btn-primary btn-sm ">edit</button>
+                    </Link>
+                  </div>
+
+                  <div className="projectCardTitle">
+                    <p>{data.name}</p>
+                    <div className="projectCardLastUpdate">
+                      last update
+                      <br />
+                      <b>{data.lastUpdate}</b>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="projectCardButtonContainer">
+                  <Link
+                    to={`/project/members/${data._id}`}
+                    className="projectCardButton"
+                  >
+                    <p className="projectCardButtonTitle">Created by</p>
+                    {data.owner.slice(0, 3).map((owner, i) => (
+                      <>
+                        <img
+                          src={`${
+                            process.env.REACT_APP_API_BASE_URL
+                          }/api/user/img/${owner && owner.photo}`}
+                          class="projectUserImg"
+                          alt=""
+                        />{" "}
+                      </>
+                    ))}
                   </Link>
-                  <Link to={`/project/${data._id}`}>
+
+                  <Link
+                    to={`/project/members/${data._id}`}
+                    className="projectCardButton"
+                  >
+                    <p className="projectCardButtonTitle">
+                      Members: {data.members.length}
+                    </p>
+                    <div>
+                      {data.members
+                        .filter((member) => member._id !== data.owner._id)
+                        .slice(0, 3)
+                        .map((member, i) => (
+                          <img
+                            src={`${
+                              process.env.REACT_APP_API_BASE_URL
+                            }/api/user/img/${member && member.photo}`}
+                            className={`projectUserImg ${
+                              i === 0 ? "" : "projectUserImg2"
+                            }`}
+                            style={{
+                              zIndex: i === 1 ? "4" : i === 2 ? "3" : "",
+                            }}
+                            alt=""
+                          ></img>
+                        ))}
+                    </div>
+                  </Link>
+
+                  <Link
+                    to={`/project/${data._id}`}
+                    className="projectCardButton mr-0"
+                  >
+                    <p className="projectCardButtonTitle">
+                      Task {data.numTasks}
+                    </p>
                     <button className="btn btn-primary btn-sm ">detail</button>
                   </Link>
                 </div>

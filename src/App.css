@@ -9699,9 +9699,12 @@ span.select2-container.select2-container--default.select2-container--open {
   border: 1px solid #ccc;
   border-radius: 6px;
   overflow: hidden;
-  min-height: 280px;
-  transform: translateY(0); 
+  transform: translateY(0);
   transition: all 0.2s ease;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 30px;
 }
 
 .porjectCard:hover {
@@ -9715,10 +9718,70 @@ span.select2-container.select2-container--default.select2-container--open {
   background-position: center center;
 }
 
-.projectCardButton {
+.projectCardText {
   width: 100%;
-  height: 70px;
+  height: 130px;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.projectCardTitle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 18px;
+  height: 150px;
+  flex-direction: column;
+}
+
+.projectCardLastUpdate {
+  width: 100%;
+  font-size: 14px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.projectUserImg {
+  width: 44px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  z-index: 5;
+  position: relative;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.30);
+}
+
+.projectUserImg2 {
+  margin-left: -20px;
+  z-index: 4;
+}
+
+.projectCardButtonContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid #ddd;
+  background: #f1f1f1;
+  padding: 14px;
+  justify-content: space-between;
+}
+
+.projectCardButton {
+  margin-right: 20px;
+}
+
+.projectCardButton:last-child {
+  margin-right: 0;
+}
+
+.projectCardButtonTitle {
+  font-size: 13px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 7px;
 }
 
 /*# sourceMappingURL=style.css.map */
