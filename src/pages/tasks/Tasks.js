@@ -4,7 +4,10 @@ import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
+import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import EmailModal from "../../components/Modal/EmailModal";
+
 import {
   faPenToSquare,
   faTrash,
@@ -16,7 +19,22 @@ import {
 const Tasks = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [reload, setReload] = useState(1);
   const token = localStorage.getItem("authToken");
+  const [modalData, setModalData] = useState({
+    show: false,
+    name: "",
+    surname: "",
+    email: "",
+  });
+
+  const openEmailModal = (email, name, surname) => {
+    setModalData({ show: true, email, name, surname });
+  };
+
+  const closeEmailModal = () => {
+    setModalData(false, null, null);
+  };
 
   useEffect(() => {
     axios
@@ -35,7 +53,7 @@ const Tasks = () => {
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-  }, [token]);
+  }, [token, reload]);
 
   const title = "Tasks";
   const brad = [
@@ -47,23 +65,61 @@ const Tasks = () => {
     },
   ];
 
+  function deleteTask(id) {
+    Swal.fire({
+      title: "Confirm delete?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(
+            `${process.env.REACT_APP_API_BASE_URL}/api/task/delete/${id}`,
+            { id: id },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            console.log("response.data.user");
+            console.log(response.data.user);
+            if (response.data.status === "success") {
+              setReload((prevCount) => prevCount + 1);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    });
+  }
+
   return (
     <>
-      {id}
-
+      <EmailModal
+        show={modalData.show}
+        closeEmailModal={closeEmailModal}
+        modalData={modalData}
+      />
       <div className="container-fluid">
-        rthrthrthrth
         <Breadcrumb title={title} brad={brad} />
-        <Link to={`/project/add/task/${id}`}>
-          <div className="btn btn-info btn-sm text-white">+ Add Task</div>
-        </Link>
-        <div className="row my-3">
+        <ButtonGroup projectId={id} selectedTab="tasks" />
+        <div className="row">
           <div className="col-12">
-            <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-              <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                <h4>{title}</h4>
-              </div>
+            <div className="card pageContainer">
               <div className="card-body">
+                <Link to={`/project/add/task/${id}`}>
+                  <div className="btn btn-info btn-sm text-white">
+                    + Add Task
+                  </div>
+                </Link>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
@@ -113,14 +169,20 @@ const Tasks = () => {
                           </Link>
 
                           <button
-                            onClick={() => null}
+                            onClick={() =>
+                              openEmailModal(
+                                task.project_id.client.email,
+                                task.project_id.client.name,
+                                task.project_id.client.surname
+                              )
+                            }
                             className="btn btn-primary btn-sm ms-1"
                           >
                             <FontAwesomeIcon icon={faEnvelope} />
                           </button>
 
                           <button
-                            onClick={() => null}
+                            onClick={() => deleteTask(task._id)}
                             className=" btn btn-danger btn-sm ms-1"
                           >
                             <FontAwesomeIcon icon={faTrash} />

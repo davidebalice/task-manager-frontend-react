@@ -5,10 +5,10 @@ import Breadcrumb from "../../components/breadcrumb/index";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 
-const AddProject = () => {
+const ProjectMembers = () => {
   const token = localStorage.getItem("authToken");
   const { id } = useParams();
-  const title = "Add project";
+  const title = "Project members";
   const brad = [
     {
       name: "home",
@@ -120,14 +120,8 @@ const AddProject = () => {
     <>
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        <ButtonGroup projectId={id} />
-        {responseData}
-        PROJECT MEMBERS
-        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-          <div className="card-header d-flex justify-content-between border-bottom pb-1">
-            <div className="">{title} </div>
-            <button className="btn btn-primary btn-sm">Send Test Mail</button>
-          </div>
+        <ButtonGroup projectId={id} selectedTab="members" />
+        <div className="card pageContainer">
           <div className="card-body">
             <div className="row justify-content-center">
               <div className="col-md-6 mt-3">
@@ -172,4 +166,4 @@ const AddProject = () => {
   );
 };
 
-export default AddProject;
+export default ProjectMembers;

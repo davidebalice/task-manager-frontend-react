@@ -63,7 +63,7 @@ const Users = () => {
   function deleteUser(id) {
     Swal.fire({
       title: "Confirm delete?",
-      text: "Questa azione non può essere annullata!",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Delete",
@@ -108,7 +108,6 @@ const Users = () => {
 
   return (
     <>
-      {id}
       <EmailModal
         show={modalData.show}
         closeEmailModal={closeEmailModal}

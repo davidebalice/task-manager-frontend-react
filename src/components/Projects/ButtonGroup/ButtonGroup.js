@@ -1,42 +1,53 @@
 import { Link, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ButtonGroup = ({ projectId }) => {
+import {
+  faListCheck,
+  faTableList,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+
+const ButtonGroup = ({ projectId, selectedTab }) => {
   const location = useLocation();
-  const currentPath = location.pathname;
 
   return (
     <>
-      <div className="mb-2 my-3">
-        {currentPath !== `/project/${projectId}` && (
-          <Link to={`/project/${projectId}`}>
-            <button
-              type="button"
-              className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
-            >
-              Project
-            </button>
-          </Link>
-        )}
-        {currentPath !== `/project/tasks/${projectId}` && (
-          <Link to={`/project/tasks/${projectId}`}>
-            <button
-              type="button"
-              className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
-            >
-              Tasks
-            </button>
-          </Link>
-        )}
-        {currentPath !== `/project/members/${projectId}` && (
-          <Link to={`/project/members/${projectId}`}>
-            <button
-              type="button"
-              className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
-            >
-              Members
-            </button>
-          </Link>
-        )}
+      <div className="buttonGroup">
+        <Link to={`/project/${projectId}`}>
+          <button
+            type="button"
+            className={`projectTab ${
+              selectedTab === "project" ? "projectTabSelected" : ""
+            }`}
+          >
+            <FontAwesomeIcon icon={faTableList} className="buttonGroupIcon" />{" "}
+            Project detail
+          </button>
+        </Link>
+
+        <Link to={`/project/tasks/${projectId}`}>
+          <button
+            type="button"
+            className={`projectTab ${
+              selectedTab === "tasks" ? "projectTabSelected" : ""
+            }`}
+          >
+            <FontAwesomeIcon icon={faListCheck} className="buttonGroupIcon" />{" "}
+            Tasks
+          </button>
+        </Link>
+
+        <Link to={`/project/members/${projectId}`}>
+          <button
+            type="button"
+            className={`projectTab projectTabLast ${
+              selectedTab === "members" ? "projectTabSelected" : ""
+            }`}
+          >
+            <FontAwesomeIcon icon={faUser} className="buttonGroupIcon" />{" "}
+            Members
+          </button>
+        </Link>
       </div>
     </>
   );

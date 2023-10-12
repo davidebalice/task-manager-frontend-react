@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
-import Preview_img from "../../assets/photo/admin.jpg";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,22 +9,9 @@ import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 const Project = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [rerender, setRerender] = useState(false);
   const token = localStorage.getItem("authToken");
   const [members, setMembers] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("render from bkash setting");
-  }, [rerender]);
-
-  // type means personal =1 or marchent=2 or agent=3
-  const bkashSettingUpdate = (type) => {
-    // call api
-    Swal.fire("Bkash Setting saved", "", "success");
-    setRerender(!rerender);
-    console.log(type);
-  };
 
   useEffect(() => {
     axios
@@ -46,12 +32,6 @@ const Project = () => {
       });
   }, [token]);
 
-  const themeBuyHandle = () => {
-    Swal.fire("Theme Buy Success", "", "success");
-  };
-  const themeInstallHandle = () => {
-    Swal.fire("Theme Install Success", "", "success");
-  };
   const title = "Project";
   const brad = [
     {
@@ -64,14 +44,12 @@ const Project = () => {
   return (
     <>
       <div className="container-fluid">
-        id: {id}
         <Breadcrumb title={title} brad={brad} />
-        <ButtonGroup projectId={id} />
-        <div className="row my-3">
+        <ButtonGroup projectId={id} selectedTab="project" />
+        <div className="row">
           <div className="col-12">
             <div
-              className="card"
-              style={{ borderTop: "2px solid #4723d9", color: "#333" }}
+              className="card pageContainer"
             >
               <nav className="paymentSetting"></nav>
               <div
@@ -84,7 +62,7 @@ const Project = () => {
                   role="tabpanel"
                   aria-labelledby="nav-home-tab"
                 >
-                  <div className="row">
+                  <div className="row" style={{padding:'20px'}}>
                     <div className="col-md-8 mt-3" style={{ color: "#333" }}>
                       <div>
                         <label>
@@ -115,26 +93,27 @@ const Project = () => {
                     </div>
 
                     <div className="col-md-4 mt-3">
-                      <div>
+                      <div className="sideSection">
                         <label>
                           <b>Client</b>
                         </label>
                         <p>aaaa</p>
                       </div>
 
-                      <div>
+                      <div className="sideSection">
                         <label>
                           <b>Budget</b>
                         </label>
                         <p>aaaa</p>
                       </div>
 
-                      <div>
+                      <div className="sideSection">
                         <label>
                           <b>Tasks</b>
                         </label>
                         <p>aaaa</p>
                       </div>
+
                     </div>
                   </div>
                 </div>

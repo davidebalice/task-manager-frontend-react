@@ -7755,6 +7755,16 @@ span.select2-container.select2-container--default.select2-container--open {
   border-radius: 50px;
 }
 
+.dashboardActivities {
+  background: #f1f1f1;
+  color: #444;
+  font-size: 16px;
+  width: 100%;
+  height: 54px;
+  font-weight: bold;
+  padding: 14px;
+}
+
 .dashboardBox {
   background: #fff;
   color: #333;
@@ -9751,7 +9761,7 @@ span.select2-container.select2-container--default.select2-container--open {
   border: 3px solid #fff;
   z-index: 5;
   position: relative;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
 
 .projectUserImg2 {
@@ -9782,6 +9792,67 @@ span.select2-container.select2-container--default.select2-container--open {
   color: #333;
   font-weight: bold;
   margin-bottom: 7px;
+}
+
+.statusContainer {
+  color: #fff;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  width: 100px;
+}
+
+.buttonGroup {
+  width: 100%;
+  display: flex;
+}
+
+.projectTab {
+  border-radius: 6px 6px 0px 0px;
+  border: 1px solid #ccc;
+  border-right: 0;
+  border-color: #ccc;
+  border-bottom: 0px;
+  padding: 12px 40px;
+  color: #333;
+  font-weight: bold;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.projectTab:hover {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.buttonGroupIcon {
+  font-size: 22px;
+}
+
+.projectTabSelected {
+  background: #18b0e9;
+  color: #fff;
+}
+
+.projectTabLast {
+  border-right: 1px solid #ccc;
+}
+
+.pageContainer {
+  border-radius: 0px 6px 6px 6px;
+}
+
+.sideSection {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-height: 70px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 /*# sourceMappingURL=style.css.map */

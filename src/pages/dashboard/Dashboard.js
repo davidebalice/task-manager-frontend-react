@@ -26,6 +26,7 @@ export default function Hero() {
     tasks: 0,
     clients: 0,
     users: 0,
+    activities: [],
   });
 
   useEffect(() => {
@@ -103,7 +104,9 @@ export default function Hero() {
                         <br />
                         <b className="dashboardText3">Important</b>
                         <p className="dashboardText4">
-                          App is in DEMO Mode, crud operations are not allowed
+                          App is in <b>DEMO Mode</b>
+                          <br />
+                          CRUD operations are not allowed!
                         </p>
                       </div>
                     </div>
@@ -239,18 +242,9 @@ export default function Hero() {
 
         <div className="accordion mb-2" id="transactions_table">
           <div className="accordion-item">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseOne3"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                Last 10 Completed Transactions
-              </button>
-            </h2>
+            <div className="dashboardActivities" type="button">
+              Last 10 activities
+            </div>
             <div
               id="collapseOne3"
               className="accordion-collapse collapse show"
@@ -261,43 +255,59 @@ export default function Hero() {
                   <table className="table align-middle border table-striped table-hover">
                     <thead>
                       <tr>
-                        <th>Email</th>
-                        <th>Invoice Id</th>
-                        <th>Payment Method</th>
-                        <th>Sender Number</th>
-                        <th>Amount</th>
-                        <th>Transaction Id</th>
-                        <th>Date</th>
+                        <th>Date last update</th>
+                        <th>Project</th>
+                        <th>Task</th>
+                        <th>Activity</th>
+                        <th>User</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>d23</td>
-                        <td>dd3d</td>
-                        <td>3ed3e</td>
-                        <td>ed3ed</td>
-                        <td>e3d3ed</td>
-                        <td>asdsad</td>
-                        <td>edwedwe</td>
-                      </tr>
-                      <tr>
-                        <td>d23</td>
-                        <td>dd3d</td>
-                        <td>3ed3e</td>
-                        <td>ed3ed</td>
-                        <td>e3d3ed</td>
-                        <td>asdsad</td>
-                        <td>edwedwe</td>
-                      </tr>
-                      <tr>
-                        <td>d23</td>
-                        <td>dd3d</td>
-                        <td>3ed3e</td>
-                        <td>ed3ed</td>
-                        <td>e3d3ed</td>
-                        <td>asdsad</td>
-                        <td>edwedwe</td>
-                      </tr>
+                      {data.activities &&
+                        data.activities.map((activity) => {
+                          const lastUpdate = new Date(activity.lastUpdate);
+                          const formattedDate = lastUpdate.toLocaleDateString(
+                            [],
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            }
+                          );
+                          const formattedTime = lastUpdate.toLocaleTimeString(
+                            [],
+                            { hour: "2-digit", minute: "2-digit" }
+                          );
+
+                          return (
+                            <tr key={activity._id} value={activity._id}>
+                              <td>
+                                {formattedDate} {formattedTime}
+                              </td>
+                              <td>{activity.task_id.project_id.name}</td>
+                              <td>{activity.task_id.name}</td>
+                              <td>{activity.name}</td>
+                              <td>
+                                {activity.lastUpdateUser &&
+                                  `${activity.lastUpdateUser.name} ${activity.lastUpdateUser.surname}`}
+                              </td>
+                              <td>
+                                <p
+                                  className="statusContainer"
+                                  style={{
+                                    background:
+                                      activity.status === "Done"
+                                        ? "#0aa70a"
+                                        : "#f57b03",
+                                  }}
+                                >
+                                  {activity.status}
+                                </p>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>
