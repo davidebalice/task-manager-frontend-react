@@ -5,10 +5,19 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faSackDollar,
+  faListCheck,
+  faTableList,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Project = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [openTasksPercentage, setOpenTasksPercentage] = useState(0);
   const token = localStorage.getItem("authToken");
   const [members, setMembers] = useState([]);
   const navigate = useNavigate();
@@ -24,13 +33,25 @@ const Project = () => {
       })
       .then((response) => {
         setData(response.data.project);
+        setTasks(response.data.tasks);
         setMembers(response.data.project.members);
+        console.log(response.data.project);
+        console.log(response.data.tasks);
         console.log(response.data.project.members);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
       });
   }, [token]);
+
+  useEffect(() => {
+    const openTasks = tasks.filter((task) => task.status === "Open").length;
+    const totalTasks = tasks.length;
+    //const openTasksPercentage = (openTasks.length / totalTasks) * 100;
+    const openTasksPercentage =
+      totalTasks > 0 ? (openTasks / totalTasks) * 100 : 0;
+    setOpenTasksPercentage(openTasksPercentage);
+  }, [tasks]);
 
   const title = "Project";
   const brad = [
@@ -48,21 +69,14 @@ const Project = () => {
         <ButtonGroup projectId={id} selectedTab="project" />
         <div className="row">
           <div className="col-12">
-            <div
-              className="card pageContainer"
-            >
-              <nav className="paymentSetting"></nav>
-              <div
-                className="tab-content paymentSetting_content mx-2"
-                id="nav-tabContent"
-              >
+            <div className="card pageContainer">
+              <div className="tab-content paymentSetting_content mx-2">
                 <div
                   className="tab-pane fade show active"
-                  id="nav-bkash-personal"
                   role="tabpanel"
                   aria-labelledby="nav-home-tab"
                 >
-                  <div className="row" style={{padding:'20px'}}>
+                  <div className="row" style={{ padding: "20px" }}>
                     <div className="col-md-8 mt-3" style={{ color: "#333" }}>
                       <div>
                         <label>
@@ -71,6 +85,15 @@ const Project = () => {
                         <p>created on: {data.createdAt}</p>
                         <p>last update: aaa</p>
                         <p>progress: %</p>
+                        {openTasksPercentage.toFixed(2)}%
+                        <div className="progressBarContainer">
+                          <div
+                            className="progressBar"
+                            style={{ width: `${openTasksPercentage}%` }}
+                          >
+                            &nbsp;
+                          </div>
+                        </div>
                       </div>
 
                       <div className="col-md-8 mt-3" style={{ color: "#333" }}>
@@ -94,26 +117,51 @@ const Project = () => {
 
                     <div className="col-md-4 mt-3">
                       <div className="sideSection">
+                        <div className="sideSectionIcon">
+                          <FontAwesomeIcon icon={faUser} />
+                        </div>
+
                         <label>
                           <b>Client</b>
+                          <p className="sideSectionTitle">aaaa</p>
                         </label>
-                        <p>aaaa</p>
                       </div>
 
                       <div className="sideSection">
+                        <div className="sideSectionIcon">
+                          <FontAwesomeIcon icon={faSackDollar} />
+                        </div>
                         <label>
                           <b>Budget</b>
+                          <p className="sideSectionTitle">aaaa</p>
                         </label>
-                        <p>aaaa</p>
                       </div>
 
                       <div className="sideSection">
+                        <div className="sideSectionIcon">
+                          <FontAwesomeIcon icon={faListCheck} />
+                        </div>
                         <label>
                           <b>Tasks</b>
+                          <p>
+                            Total:{" "}
+                            <b className="sideSectionNumber">{tasks.length}</b>{" "}
+                            - Completed:{" "}
+                            <b className="sideSectionNumber">
+                              {
+                                tasks.filter((task) => task.status === "Open")
+                                  .length
+                              }
+                            </b>{" "}
+                            - Opened:{" "}
+                            <b className="sideSectionNumber">
+                              {tasks.length -
+                                tasks.filter((task) => task.status === "Open")
+                                  .length}
+                            </b>
+                          </p>
                         </label>
-                        <p>aaaa</p>
                       </div>
-
                     </div>
                   </div>
                 </div>

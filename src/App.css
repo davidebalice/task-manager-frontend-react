@@ -9536,7 +9536,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .progressBar {
-  background: #336699;
+  background: #18b0e9;
   width: 0%;
   transition: width 0.3s;
 }
@@ -9687,9 +9687,10 @@ span.select2-container.select2-container--default.select2-container--open {
   width: fit-content;
   justify-content: start;
   min-height: 40px;
+  max-height: 54px;
   border-radius: 4px;
   padding: 14px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-weight: bold;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -9811,9 +9812,7 @@ span.select2-container.select2-container--default.select2-container--open {
 
 .projectTab {
   border-radius: 6px 6px 0px 0px;
-  border: 1px solid #ccc;
-  border-right: 0;
-  border-color: #ccc;
+  border: 1px solid #ddd;
   border-bottom: 0px;
   padding: 12px 40px;
   color: #333;
@@ -9822,6 +9821,7 @@ span.select2-container.select2-container--default.select2-container--open {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-right: 8px;
 }
 
 .projectTab:hover {
@@ -9838,12 +9838,9 @@ span.select2-container.select2-container--default.select2-container--open {
   color: #fff;
 }
 
-.projectTabLast {
-  border-right: 1px solid #ccc;
-}
-
 .pageContainer {
   border-radius: 0px 6px 6px 6px;
+  border-color: #ddd;
 }
 
 .sideSection {
@@ -9853,6 +9850,52 @@ span.select2-container.select2-container--default.select2-container--open {
   display: flex;
   align-items: center;
   gap: 14px;
+  border: 1px solid #f1f1f1;
+  color: #444;
+}
+
+.sideSectionIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18b0e9;
+  color: #fff;
+  border-radius: 4px;
+  margin-left: 14px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+}
+
+.sideSectionNumber {
+  font-weight: bold;
+  color: #18b0e9 !important;
+}
+
+.sideSectionTitle {
+  color: #18b0e9;
+  font-weight: bold;
+}
+
+.taskIcon {
+  font-weight: bold;
+  font-size: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.taskIcon2 {
+  font-size: 14px;
+}
+
+.taskIcon3 {
+  font-size: 17px;
+}
+
+.taskButton {
+  display: flex;
+  align-items: center;
+  height: 32px;
 }
 
 /*# sourceMappingURL=style.css.map */

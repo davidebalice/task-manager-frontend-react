@@ -40,7 +40,7 @@ const ButtonGroup = ({ projectId, selectedTab }) => {
         <Link to={`/project/members/${projectId}`}>
           <button
             type="button"
-            className={`projectTab projectTabLast ${
+            className={`projectTab  ${
               selectedTab === "members" ? "projectTabSelected" : ""
             }`}
           >

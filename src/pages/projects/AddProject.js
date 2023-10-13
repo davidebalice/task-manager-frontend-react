@@ -105,7 +105,7 @@ const AddProject = () => {
           </Link>
         </div>
         {responseData}
-        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
+        <div className="card pageContainer">
           <div className="card-header d-flex justify-content-between border-bottom pb-1">
             <div className="">{title} </div>
           </div>

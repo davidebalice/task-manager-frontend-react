@@ -5,14 +5,16 @@ import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EmailModal from "../../components/Modal/EmailModal";
-
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
   faTrash,
   faEnvelope,
-  faCopy,
+  faCirclePlus,
   faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -116,18 +118,24 @@ const Tasks = () => {
             <div className="card pageContainer">
               <div className="card-body">
                 <Link to={`/project/add/task/${id}`}>
-                  <div className="btn btn-info btn-sm text-white">
-                    + Add Task
+                  <div className="addProject col-sm-4 col-md-4 col-lg-3">
+                    <FontAwesomeIcon
+                      icon={faCirclePlus}
+                      className="addProjectIcon"
+                    />
+                    <div className="card-body d-flex px-1">Add task</div>
                   </div>
                 </Link>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
                       <th>Date</th>
+                      <th>Last update</th>
                       <th>Name</th>
                       <th>Status</th>
                       <th>Priority</th>
                       <th>Label</th>
+                      <th>Activities</th>
                       <th>Progress</th>
                       <th>Dead line</th>
                       <th>Actions</th>
@@ -135,61 +143,155 @@ const Tasks = () => {
                   </thead>
 
                   <tbody>
-                    {data.map((task) => (
-                      <tr>
-                        <td>{task.formattedDate}</td>
-                        <td>{task.name}</td>
-                        <td>{task.status}</td>
-                        <td>{task.priority}</td>
-                        <td>
-                          <button
-                            onClick={() => null}
-                            className={`btn p-0 px-1 btn-success btn-sm`}
-                          >
-                            {task.label}
-                          </button>
-                        </td>
-                        <td>progress</td>
-                        <td>{task.formattedDeadline}</td>
-                        <td>
-                          <Link to={`/project/task/${task._id}`}>
-                            <button className=" btn btn-primary btn-sm ms-1 btnTask">
-                              <FontAwesomeIcon icon={faListCheck} />
-                              Detail of Task
-                            </button>
-                          </Link>
+                    {data.length === 0 && <p className="my-5">Task not found</p>}
+                    {data.map((task) => {
+                      const totalActivities = task.activities.length;
+                      const completedActivities = task.activities.filter(
+                        (activity) => activity.status === "Done"
+                      ).length;
+                      let completionPercentage =
+                        totalActivities > 0
+                          ? (completedActivities / totalActivities) * 100
+                          : 0;
 
-                          <Link to={`/project/edit/task/${task._id}`}>
+                      const highestLastUpdate = task.activities.reduce(
+                        (highest, activity) => {
+                          if (!highest || activity.lastUpdate > highest) {
+                            console.log(activity.lastUpdate);
+                            return activity.lastUpdate;
+                          }
+                          return highest;
+                        },
+                        null
+                      );
+
+                      const formattedLastUpdate = highestLastUpdate
+                        ? moment(highestLastUpdate).format("DD/MM/YYYY HH:mm")
+                        : " - - -";
+
+                      return (
+                        <tr>
+                          <td>{task.formattedDate}</td>
+                          <td>{formattedLastUpdate}</td>
+                          <td>{task.name}</td>
+                          <td>{task.status}</td>
+                          <td
+                            style={{
+                              color:
+                                task.priority === "High" ? "#ff0000" : "#333",
+                            }}
+                          >
+                            {task.priority}
+                          </td>
+                          <td>
                             <button
                               onClick={() => null}
-                              className="btn btn-primary btn-sm ms-1"
+                              className={`btn p-0 px-1 btn-success btn-sm`}
                             >
-                              <FontAwesomeIcon icon={faPenToSquare} />
+                              {task.label}
                             </button>
-                          </Link>
-
-                          <button
-                            onClick={() =>
-                              openEmailModal(
-                                task.project_id.client.email,
-                                task.project_id.client.name,
-                                task.project_id.client.surname
-                              )
-                            }
-                            className="btn btn-primary btn-sm ms-1"
+                          </td>
+                          <td>{totalActivities}</td>
+                          <td>{completionPercentage.toFixed(2)}% </td>
+                          <td>{task.formattedDeadline}</td>
+                          <td
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
-                            <FontAwesomeIcon icon={faEnvelope} />
-                          </button>
+                            <Link
+                              to={`/project/task/${task._id}`}
+                              style={{ flex: "1" }}
+                            >
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip style={{ width: "180px" }}>
+                                    {" "}
+                                    Detail of task, activities, files, comments
+                                  </Tooltip>
+                                }
+                              >
+                                <button className=" btn btn-primary btn-sm ms-1 btnTask">
+                                  <FontAwesomeIcon
+                                    icon={faListCheck}
+                                    className="taskIcon taskIcon3"
+                                  />
+                                  Detail of Task
+                                </button>
+                              </OverlayTrigger>
+                            </Link>
 
-                          <button
-                            onClick={() => deleteTask(task._id)}
-                            className=" btn btn-danger btn-sm ms-1"
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                            <div
+                              style={{ display: "flex", flexDirection: "row" }}
+                            >
+                              <Link to={`/project/edit/task/${task._id}`}>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip style={{ width: "80px" }}>
+                                      Edit
+                                    </Tooltip>
+                                  }
+                                >
+                                  <button
+                                    onClick={() => null}
+                                    className="btn btn-primary btn-sm ms-1 taskButton"
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faPenToSquare}
+                                      className="taskIcon"
+                                    />
+                                  </button>
+                                </OverlayTrigger>
+                              </Link>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip style={{ width: "120px" }}>
+                                    Send email to client
+                                  </Tooltip>
+                                }
+                              >
+                                <button
+                                  onClick={() =>
+                                    openEmailModal(
+                                      task.project_id.client.email,
+                                      task.project_id.client.name,
+                                      task.project_id.client.surname
+                                    )
+                                  }
+                                  className="btn btn-primary btn-sm ms-1 taskButton"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faEnvelope}
+                                    className="taskIcon"
+                                  />
+                                </button>
+                              </OverlayTrigger>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip style={{ width: "100px" }}>
+                                    Delete task
+                                  </Tooltip>
+                                }
+                              >
+                                <button
+                                  onClick={() => deleteTask(task._id)}
+                                  className="btn btn-danger btn-sm ms-1 taskButton"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faTrash}
+                                    className="taskIcon taskIcon2"
+                                  />
+                                </button>
+                              </OverlayTrigger>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>

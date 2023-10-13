@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const AddTask = () => {
   const navigate = useNavigate();
@@ -96,12 +98,18 @@ const AddTask = () => {
     <>
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        {responseData}
-        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-          <div className="card-header d-flex justify-content-between border-bottom pb-1">
-            <div className="">{title}</div>
-          </div>
+        <ButtonGroup projectId={id} selectedTab="tasks" />
+        <div className="card pageContainer">
           <div className="card-body">
+            <Link to={`/project/tasks/${id}`}>
+              <div class="addProject col-sm-4 col-md-4 col-lg-3">
+                <FontAwesomeIcon
+                  icon={faCircleChevronLeft}
+                  className="addProjectIcon"
+                />
+                <div class="card-body d-flex px-1">Back</div>
+              </div>
+            </Link>
             <div className="row justify-content-center">
               <div className="col-md-6 mt-3">
                 <label for="name">

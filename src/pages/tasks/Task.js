@@ -117,20 +117,13 @@ const Project = () => {
   return (
     <>
       <div className="container-fluid">
-        id project: {id}
-        id task: {id}
         <Breadcrumb title={title} brad={brad} />
         <ButtonGroup projectId={project._id} />
-        <div className="row my-3">
+        <div className="row">
           <div className="col-12">
-            <div
-              className="card"
-              style={{ borderTop: "2px solid #4723d9", color: "#333" }}
-            >
-              <nav className="paymentSetting"></nav>
+            <div className="card pageContainer">
               <div
                 className="tab-content paymentSetting_content mx-2"
-                id="nav-tabContent"
               >
                 <div
                   className="tab-pane fade show active"
@@ -139,8 +132,8 @@ const Project = () => {
                   aria-labelledby="nav-home-tab"
                 >
                   <div className="row">
-                    <div className="col-md-8 mt-3" style={{ color: "#333" }}>
-                      <div>
+                    <div className="col-md-8 " style={{ color: "#333" }}>
+                      <div style={{padding:'20px'}}>
                         <label>
                           <b>project name: {project.name}</b>
                           <br />
