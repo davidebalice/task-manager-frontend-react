@@ -143,7 +143,9 @@ const Tasks = () => {
                   </thead>
 
                   <tbody>
-                    {data.length === 0 && <p className="my-5">Task not found</p>}
+                    {data.length === 0 && (
+                      <p className="my-5">Task not found</p>
+                    )}
                     {data.map((task) => {
                       const totalActivities = task.activities.length;
                       const completedActivities = task.activities.filter(
@@ -204,7 +206,7 @@ const Tasks = () => {
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
-                                  <Tooltip style={{ width: "180px" }}>
+                                  <Tooltip className="tooltip">
                                     {" "}
                                     Detail of task, activities, files, comments
                                   </Tooltip>
@@ -227,9 +229,7 @@ const Tasks = () => {
                                 <OverlayTrigger
                                   placement="top"
                                   overlay={
-                                    <Tooltip style={{ width: "80px" }}>
-                                      Edit
-                                    </Tooltip>
+                                    <Tooltip className="tooltip">Edit</Tooltip>
                                   }
                                 >
                                   <button
@@ -247,7 +247,7 @@ const Tasks = () => {
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
-                                  <Tooltip style={{ width: "120px" }}>
+                                  <Tooltip className="tooltip">
                                     Send email to client
                                   </Tooltip>
                                 }
@@ -272,7 +272,7 @@ const Tasks = () => {
                               <OverlayTrigger
                                 placement="top"
                                 overlay={
-                                  <Tooltip style={{ width: "100px" }}>
+                                  <Tooltip className="tooltip">
                                     Delete task
                                   </Tooltip>
                                 }

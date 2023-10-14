@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom'
-export default function breadcrumb({title,brad}) {
- 
+
+const breadcrumb = ({title,brad}) => {
+
     return (
         <>
             <div className="row d-flex justify-content-between breadcrumb_main my-2 mb-4">
@@ -24,3 +25,5 @@ export default function breadcrumb({title,brad}) {
         </>
     )
 }
+
+export default breadcrumb

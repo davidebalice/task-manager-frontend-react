@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Breadcrumb from "../../components/breadcrumb/index";
-import Swal from "sweetalert2";
+import Breadcrumb from "../../components/breadcrumb";
+import Loading from "../../components/loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import {
+  faCirclePlus,
+  faListCheck,
+  faNoteSticky,
+  faTrash,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Projects = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const token = localStorage.getItem("authToken");
 
@@ -21,6 +30,7 @@ const Projects = () => {
       })
       .then((response) => {
         setData(response.data.projects);
+        setLoading(false);
         console.log(response.data.projects);
       })
       .catch((error) => {
@@ -42,105 +52,192 @@ const Projects = () => {
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
 
-        <div className="row">
-          <Link to={`/add/project/`}>
-            <div className="addProject col-sm-4 col-md-4 col-lg-3">
-              <FontAwesomeIcon icon={faCirclePlus} className="addProjectIcon" />
-              <div className="card-body d-flex px-1">Add project</div>
-            </div>
-          </Link>
-        </div>
-
-        <div className="row">
-          {data.map((data, i) => (
-            <div className="col-sm-4 col-md-4 col-lg-3" key={`project${i}`}>
-              <div className="porjectCard">
-                <div>
-                  <div
-                    className="projectCardCover"
-                    style={{
-                      backgroundImage: `url(${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${data.imageCover}`,
-                    }}
-                  >
-                    <Link
-                      to={`/edit/project/${data._id}`}
-                      className="projectCardButton"
-                    >
-                      <button className="btn btn-primary btn-sm ">edit</button>
-                    </Link>
-                  </div>
-
-                  <div className="projectCardTitle">
-                    <p>{data.name}</p>
-                    <div className="projectCardLastUpdate">
-                      last update
-                      <br />
-                      <b>{data.lastUpdate}</b>
-                    </div>
-                  </div>
+        {loading ? (
+          <>
+            <Loading />
+          </>
+        ) : (
+          <>
+            <div className="row">
+              <Link to={`/add/project/`}>
+                <div className="addProject col-sm-4 col-md-4 col-lg-3">
+                  <FontAwesomeIcon
+                    icon={faCirclePlus}
+                    className="addProjectIcon"
+                  />
+                  <div className="card-body d-flex px-1">Add project</div>
                 </div>
+              </Link>
+            </div>
 
-                <div className="projectCardButtonContainer">
-                  <Link
-                    to={`/project/members/${data._id}`}
-                    className="projectCardButton"
-                  >
-                    <p className="projectCardButtonTitle">Created by</p>
-                    {data.owner.slice(0, 3).map((owner, i) => (
-                      <>
-                        <img
-                          src={`${
-                            process.env.REACT_APP_API_BASE_URL
-                          }/api/user/img/${owner && owner.photo}`}
-                          class="projectUserImg"
-                          alt=""
-                        />{" "}
-                      </>
-                    ))}
-                  </Link>
-
-                  <Link
-                    to={`/project/members/${data._id}`}
-                    className="projectCardButton"
-                  >
-                    <p className="projectCardButtonTitle">
-                      Members: {data.members.length}
-                    </p>
+            <div className="row">
+              {data.map((data, i) => (
+                <div
+                  className="col-sm-4 col-md-4 col-lg-4 col-xl-3 "
+                  key={`project${i}`}
+                >
+                  <div className="porjectCard">
                     <div>
-                      {data.members
-                        .filter((member) => member._id !== data.owner._id)
-                        .slice(0, 3)
-                        .map((member, i) => (
-                          <img
-                            src={`${
-                              process.env.REACT_APP_API_BASE_URL
-                            }/api/user/img/${member && member.photo}`}
-                            className={`projectUserImg ${
-                              i === 0 ? "" : "projectUserImg2"
-                            }`}
-                            style={{
-                              zIndex: i === 1 ? "4" : i === 2 ? "3" : "",
-                            }}
-                            alt=""
-                          ></img>
-                        ))}
-                    </div>
-                  </Link>
+                      <div
+                        className="projectCardCover"
+                        style={{
+                          backgroundImage: `url(${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${data.imageCover}`,
+                        }}
+                      ></div>
 
-                  <Link
-                    to={`/project/${data._id}`}
-                    className="projectCardButton mr-0"
-                  >
-                    <p className="projectCardButtonTitle">
-                      Task {data.numTasks}
-                    </p>
-                    <button className="btn btn-primary btn-sm ">detail</button>
-                  </Link>
+                      <div className="projectMembersContainer">
+                        <Link to={`/project/members/${data._id}`}>
+                          <p className="projectCardButtonTitle text-black">
+                            Created by
+                          </p>
+                          {data.owner.slice(0, 3).map((owner, i) => (
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip className="tooltip">
+                                  {`${owner.name} ${owner.surname}`}
+                                </Tooltip>
+                              }
+                            >
+                              <img
+                                src={`${
+                                  process.env.REACT_APP_API_BASE_URL
+                                }/api/user/img/${owner && owner.photo}`}
+                                class="projectUserImg"
+                                alt=""
+                              />
+                            </OverlayTrigger>
+                          ))}
+                        </Link>
+
+                        <Link to={`/project/members/${data._id}`}>
+                          <p className="projectCardButtonTitle text-black">
+                            Members: {data.members.length}
+                          </p>
+                          <div>
+                            {data.members
+                              .filter((member) => member._id !== data.owner._id)
+                              .slice(0, 3)
+                              .map((member, i) => (
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip className="tooltip">
+                                      {`${member.name} ${member.surname}`}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <img
+                                    src={`${
+                                      process.env.REACT_APP_API_BASE_URL
+                                    }/api/user/img/${member && member.photo}`}
+                                    className={`projectUserImg ${
+                                      i === 0 ? "" : "projectUserImg2"
+                                    }`}
+                                    style={{
+                                      zIndex:
+                                        i === 1 ? "4" : i === 2 ? "3" : "",
+                                    }}
+                                    alt=""
+                                  ></img>
+                                </OverlayTrigger>
+                              ))}
+                          </div>
+                        </Link>
+                      </div>
+
+                      <div className="projectCardTitle">
+                        <p>{data.name}</p>
+                        <div className="projectCardLastUpdate">
+                          last update
+                          <br />
+                          <b>{data.lastUpdate}</b>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="projectCardButtonContainer">
+                      <Link to={`/project/${data._id}`}>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              Details of project
+                            </Tooltip>
+                          }
+                        >
+                          <button className="btn btn-primary btn-sm projectCardButton">
+                            <FontAwesomeIcon
+                              icon={faNoteSticky}
+                              className="projectCardIcon"
+                            />
+                            <p className="projectCardButtonTitle">Detail</p>
+                          </button>
+                        </OverlayTrigger>
+                      </Link>
+
+                      <Link to={`/edit/project/${data._id}`}>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">Edit project</Tooltip>
+                          }
+                        >
+                          <button className="btn btn-primary btn-sm projectCardButton">
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              className="projectCardIcon"
+                            />
+                            <p className="projectCardButtonTitle">Edit</p>
+                          </button>
+                        </OverlayTrigger>
+                      </Link>
+
+                      <Link to={`/project/tasks/${data._id}`}>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip className="tooltip">Tasks</Tooltip>}
+                        >
+                          <button className="btn btn-primary btn-sm projectCardButton">
+                            <div className="text-black">
+                              <FontAwesomeIcon
+                                icon={faListCheck}
+                                className="projectCardIcon"
+                              />{" "}
+                              ( <b className="text-primary">{data.numTasks}</b>{" "}
+                              )
+                            </div>
+
+                            <p className="projectCardButtonTitle">Tasks</p>
+                          </button>
+                        </OverlayTrigger>
+                      </Link>
+
+                      <Link to={`/project/delete/${data._id}`}>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              Delete project
+                            </Tooltip>
+                          }
+                        >
+                          <button className="btn btn-primary btn-sm projectCardButton bg-red">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="projectCardIcon"
+                            />
+                            <p className="projectCardButtonTitle">Delete</p>
+                          </button>
+                        </OverlayTrigger>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </>
   );

@@ -79,11 +79,14 @@ const Project = () => {
                   <div className="row" style={{ padding: "20px" }}>
                     <div className="col-md-8 mt-3" style={{ color: "#333" }}>
                       <div>
-                        <label>
-                          <b>{data.name}</b>
+                        <label className="projectDetailTitle">
+                          {data.name}
                         </label>
-                        <p>created on: {data.createdAt}</p>
-                        <p>last update: aaa</p>
+                        <div className="projectDetailData">
+                          <p><b>Creation date</b>:<br />{data.createdAt}</p>
+                          <p><b>Created by</b>:<br />44444</p>
+                          <p><b>Last update</b>:<br />aaa</p>
+                        </div>
                         <p>progress: %</p>
                         {openTasksPercentage.toFixed(2)}%
                         <div className="progressBarContainer">
@@ -94,9 +97,6 @@ const Project = () => {
                             &nbsp;
                           </div>
                         </div>
-                      </div>
-
-                      <div className="col-md-8 mt-3" style={{ color: "#333" }}>
                         <div>
                           <label>
                             <b>Members</b>
@@ -111,6 +111,13 @@ const Project = () => {
                           ) : (
                             <div>No members</div>
                           )}
+                        </div>
+                        <div>
+                          <label>
+                            <b>Description</b>
+                          </label>
+                          <br />
+                          {data.description}
                         </div>
                       </div>
                     </div>
