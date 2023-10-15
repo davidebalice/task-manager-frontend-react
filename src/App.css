@@ -9545,17 +9545,59 @@ span.select2-container.select2-container--default.select2-container--open {
   width: 100%;
 }
 
+.progressContainer {
+  display: flex;
+  gap: 12px;
+  font-weight: bold;
+}
+
 .progressBarContainer {
   background: #f1f1f1;
-  width: 200px;
+  width: 400px;
   border: 1px solid #ccc;
-  height: 26px;
+  height: 28px;
+  overflow: hidden;
+}
+
+.progressBarPercentage {
+  background: #444;
+  color: #fff;
+  border: 1px solid #ccc;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progressBar {
   background: #18b0e9;
   width: 0%;
   transition: width 0.3s;
+  height: 28px;
+}
+
+.progressBarContainerSm {
+  background: #fff;
+  width: 100px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  text-align: center;
+  height: 22px;
+}
+
+.progressBarSm {
+  background: #18b0e9;
+  width: 0%;
+  text-align: right;
+  font-size: 13px;
+  font-weight: bold;
+  transition: width 0.3s;
+  display: flex;
+  height: 23px;
+  color: #fff;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .btnTask {
@@ -9843,6 +9885,12 @@ span.select2-container.select2-container--default.select2-container--open {
   color: #333;
 }
 
+.projectSection {
+  border-bottom: 1px solid #ccc;
+  margin-top: 40px;
+  padding-bottom: 50px;
+}
+
 .statusContainer {
   color: #fff;
   font-size: 12px;
@@ -9893,7 +9941,7 @@ span.select2-container.select2-container--default.select2-container--open {
 
 .sideSection {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  min-height: 70px;
+  min-height: 80px;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
@@ -9958,7 +10006,7 @@ span.select2-container.select2-container--default.select2-container--open {
   margin-top: 50px;
   padding-top: 40px;
   padding-bottom: 30px;
-  gap:70px
+  gap: 70px;
 }
 
 /*# sourceMappingURL=style.css.map */

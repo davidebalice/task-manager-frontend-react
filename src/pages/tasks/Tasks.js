@@ -4,6 +4,7 @@ import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
+import Loading from "../../components/loading";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 import EmailModal from "../../components/Modal/EmailModal";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -20,6 +21,7 @@ import {
 
 const Tasks = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(1);
   const token = localStorage.getItem("authToken");
@@ -49,7 +51,7 @@ const Tasks = () => {
       })
       .then((response) => {
         console.log(response.data.tasks);
-
+        setLoading(false);
         setData(response.data.tasks);
       })
       .catch((error) => {
@@ -112,6 +114,12 @@ const Tasks = () => {
       />
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
+        {loading ? (
+          <>
+            <Loading />
+          </>
+        ) : (
+          <>
         <ButtonGroup projectId={id} selectedTab="tasks" />
         <div className="row">
           <div className="col-12">
@@ -155,6 +163,10 @@ const Tasks = () => {
                         totalActivities > 0
                           ? (completedActivities / totalActivities) * 100
                           : 0;
+                      completionPercentage =
+                        completionPercentage % 1 === 0
+                          ? completionPercentage.toFixed(0)
+                          : completionPercentage.toFixed(2);
 
                       const highestLastUpdate = task.activities.reduce(
                         (highest, activity) => {
@@ -194,7 +206,16 @@ const Tasks = () => {
                             </button>
                           </td>
                           <td>{totalActivities}</td>
-                          <td>{completionPercentage.toFixed(2)}% </td>
+                          <td>
+                            <div className="progressBarContainerSm">
+                              <div
+                                className="progressBarSm"
+                                style={{ width: `${completionPercentage}%` }}
+                              >
+                                {completionPercentage} %&nbsp;{"  "}
+                              </div>
+                            </div>
+                          </td>
                           <td>{task.formattedDeadline}</td>
                           <td
                             style={{ display: "flex", flexDirection: "column" }}
@@ -298,6 +319,8 @@ const Tasks = () => {
             </div>
           </div>
         </div>
+        </>
+        )}
       </div>
     </>
   );
