@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
+import Loading from "../../../components/loading";
 
 const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
-
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     file: [],
@@ -32,6 +33,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
       task_id: taskId,
       project_id: projectId,
     });
+    setLoading(false);
   }, [taskId, projectId]);
 
   function handleUpdateFiles(newFiles) {
@@ -41,7 +43,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   function removeFile(id) {
     Swal.fire({
       title: "Corfirm delete?",
-      text: "Questa azione non può essere annullata!",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Delete",
@@ -112,63 +114,72 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
 
   return (
     <>
-      Files
-      {files.length}
-      {Array.isArray(files) && files.length > 0 ? (
-        files.map((file) => (
-          <div key={file._id}>
-            <a
-              href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${file.file}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {" "}
-              {file.name}
-            </a>
-            <div onClick={() => openEditModal(file.name, file._id)}>
-              edit text
-            </div>
-            <div onClick={() => removeFile(file._id)}>remove</div>
-          </div>
-        ))
+      {loading ? (
+        <>
+          <Loading />
+        </>
       ) : (
-        <div>No files</div>
+        <>
+          {Array.isArray(files) && files.length > 0 ? (
+            files.map((file) => (
+              <div key={file._id}>
+                <a
+                  href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${file.file}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {" "}
+                  {file.name}
+                </a>
+                <div onClick={() => openEditModal(file.name, file._id)}>
+                  edit text
+                </div>
+                <div onClick={() => removeFile(file._id)}>remove</div>
+              </div>
+            ))
+          ) : (
+            <div>No files</div>
+          )}
+          <EditModal
+            show={editData.show}
+            closeEditModal={closeEditModal}
+            editData={editData}
+            updateUrl="/api/update/file"
+            onUpdateActivities={handleUpdateFiles}
+            type="files"
+          />
+          <div>
+            <label for="name">
+              <b>Add file</b>
+            </label>
+            <form enctype="multipart/form-data" method="post" id="formUpload">
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInput}
+              />
+              <input
+                type="file"
+                className="form-control"
+                ref={inputFileRef}
+                name="file"
+                required
+                onChange={handleFile}
+                multiple
+              />
+              <button
+                onClick={submitForm}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                Add project
+              </button>
+            </form>
+          </div>
+        </>
       )}
-      <EditModal
-        show={editData.show}
-        closeEditModal={closeEditModal}
-        editData={editData}
-        updateUrl="/api/update/file"
-        onUpdateActivities={handleUpdateFiles}
-        type="files"
-      />
-      <div>
-        <label for="name">
-          <b>Add file</b>
-        </label>
-        <form enctype="multipart/form-data" method="post" id="formUpload">
-          <input
-            type="text"
-            className="form-control"
-            name="name"
-            required
-            value={formData.name}
-            onChange={handleInput}
-          />
-          <input
-            type="file"
-            className="form-control"
-            ref={inputFileRef}
-            name="file"
-            required
-            onChange={handleFile}
-            multiple
-          />
-          <button onClick={submitForm} className="btn btn-primary btn-sm mt-3">
-            Add project
-          </button>
-        </form>
-      </div>
     </>
   );
 };

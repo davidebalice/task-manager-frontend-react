@@ -12,69 +12,99 @@ import File from "../../components/Tasks/File/File";
 import Screenshots from "../../components/Tasks/Screenshots/Screenshots";
 import moment from "moment";
 import Loading from "../../components/loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { queries } from "@testing-library/react";
 
 const Project = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [activities, setActivities] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [screenshots, setScreenshots] = useState([]);
-  const [members, setMembers] = useState([]);
-  const [task, setTask] = useState([]);
-  const [project, setProject] = useState([]);
   const [tab, setTab] = useState("activities");
   const token = localStorage.getItem("authToken");
+  const [data, setData] = useState({
+    loading: true,
+    progress: 0,
+    activities: [],
+    comments: [],
+    files: [],
+    screenshots: [],
+    members: [],
+    task: [],
+    project: {},
+    demo: false,
+  });
 
   function updateComments(newComments) {
-    setComments(newComments);
+    setData((prevData) => ({
+      ...prevData,
+      comments: newComments,
+    }));
   }
 
   function updateFiles(newFiles) {
-    setFiles(newFiles);
+    setData((prevData) => ({
+      ...prevData,
+      files: newFiles,
+    }));
   }
 
   function updateScreenshots(newScreenshots) {
-    setScreenshots(newScreenshots);
+    setData((prevData) => ({
+      ...prevData,
+      screenshots: newScreenshots,
+    }));
   }
 
   function updateActivities(newActivities) {
-    setActivities(newActivities);
+    setData((prevData) => ({
+      ...prevData,
+      activities: newActivities,
+    }));
   }
 
   const handleStatus = async (event, id) => {
-    const isChecked = event.target.checked;
-    try {
-      axios
-        .post(
-          process.env.REACT_APP_API_BASE_URL + "/api/activity/update-status",
-          {
-            activityId: id,
-            checked: isChecked,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-              Accept: "application/json",
+    if (data.demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
+      });
+    } else {
+      const isChecked = event.target.checked;
+      try {
+        axios
+          .post(
+            process.env.REACT_APP_API_BASE_URL + "/api/activity/update-status",
+            {
+              activityId: id,
+              checked: isChecked,
             },
-          }
-        )
-        .then((response) => {
-          setActivities((prevActivities) =>
-            prevActivities.map((activity) =>
-              activity._id === id
-                ? { ...activity, status: response.data.status }
-                : activity
-            )
-          );
-        })
-        .catch((error) => {
-          console.error("Error during api call:", error);
-        });
-    } catch (error) {
-      console.error("Errore nella chiamata API:", error);
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            setData((prevData) => {
+              return {
+                ...prevData,
+                activities: prevData.activities.map((activity) =>
+                  activity._id === id
+                    ? { ...activity, status: response.data.status }
+                    : activity
+                ),
+              };
+            });
+          })
+          .catch((error) => {
+            console.error("Error during api call:", error);
+          });
+      } catch (error) {
+        console.error("Errore nella chiamata API:", error);
+      }
     }
   };
 
@@ -88,15 +118,22 @@ const Project = () => {
         },
       })
       .then((response) => {
-        setComments(response.data.comments);
-        setActivities(response.data.activities);
-        setFiles(response.data.files);
-        setScreenshots(response.data, screenshots);
-        setTask(response.data.task);
-        setMembers(response.data.task.members);
-        setProject(response.data.task.project_id);
-        setLoading(false);
+        setData((prevData) => ({
+          ...prevData,
+          loading: false,
+          demo: response.data.demo,
+          comments: response.data.comments,
+          project: response.data.task.project_id,
+          task: response.data.task,
+          members: response.data.members,
+          screenshots: response.data.screenshots,
+          activities: response.data.activities,
+          files: response.data.files,
+        }));
+
         console.log(response.data.task);
+        console.log("response.data.demo");
+        console.log(response.data.demo);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
@@ -104,18 +141,22 @@ const Project = () => {
   }, [token]);
 
   useEffect(() => {
-    const completedActivities = activities.filter(
+    const completedActivities = data.activities.filter(
       (activity) => activity.status === "Done"
     );
     const percentage = parseInt(
-      (completedActivities.length / activities.length) * 100
+      (completedActivities.length / data.activities.length) * 100
     );
-    setProgress(percentage);
+
+    setData((prevData) => ({
+      ...prevData,
+      progress: percentage,
+    }));
 
     console.log(completedActivities.length);
-    console.log(activities.length);
+    console.log(data.activities.length);
     console.log(percentage);
-  }, [activities]);
+  }, [data.activities]);
 
   const title = "Task";
   const brad = [
@@ -130,13 +171,13 @@ const Project = () => {
     <>
       <div className="container-fluid">
         <Breadcrumb title={title} brad={brad} />
-        {loading ? (
+        {data.loading ? (
           <>
             <Loading />
           </>
         ) : (
           <>
-            <ButtonGroup projectId={project._id} selectedTab="tasks" />
+            <ButtonGroup projectId={data.project._id} selectedTab="tasks" />
             <div className="row">
               <div className="col-12">
                 <div className="card pageContainer">
@@ -149,26 +190,44 @@ const Project = () => {
                       <div className="row">
                         <div className="col-md-8 " style={{ color: "#333" }}>
                           <div style={{ padding: "20px" }}>
+                            <Link to={`/project/tasks/${data.project._id}`}>
+                              <div className="backButton col-sm-4 col-md-4 col-lg-3">
+                                <FontAwesomeIcon
+                                  icon={faChevronLeft}
+                                  className="addButtonIcon"
+                                />
+                                <div className="card-body d-flex px-1">
+                                  Back to Tasks
+                                </div>
+                              </div>
+                            </Link>
+
                             <label>
-                              <b>{project.name}</b>
+                              <b>{data.project.name}</b>
                               <br />
-                              <b className="projectDetailTitle">{task.name}</b>
+                              <b className="projectDetailTitle">
+                                {data.task.name}
+                              </b>
                               <br />
                             </label>
 
                             <div className="projectDetailData">
                               <p>
                                 <b>Creation date</b>:<br />
-                                {moment(task.createdAt).format("DD/MM/YYYY")}
+                                {moment(data.task.createdAt).format(
+                                  "DD/MM/YYYY"
+                                )}
                               </p>
                               <p>
                                 <b>Created by</b>:<br />
-                                {task.owner ? task.owner.name : ""}{" "}
-                                {task.owner ? task.owner.surname : ""}
+                                {data.task.owner
+                                  ? data.task.owner.name
+                                  : ""}{" "}
+                                {data.task.owner ? data.task.owner.surname : ""}
                               </p>
                               <p>
                                 <b>Last update</b>:<br />
-                                {moment(task.lastUpdate).format(
+                                {moment(data.task.lastUpdate).format(
                                   "DD/MM/YYYY HH:mm"
                                 )}
                               </p>
@@ -182,13 +241,13 @@ const Project = () => {
                                 <div className="progressBarContainer">
                                   <div
                                     className="progressBar"
-                                    style={{ width: `${progress}%` }}
+                                    style={{ width: `${data.progress}%` }}
                                   >
                                     &nbsp;
                                   </div>
                                 </div>
                                 <div className="progressBarPercentage">
-                                  {progress.toFixed(2)} %
+                                  {data.progress.toFixed(2)} %
                                 </div>
                               </div>
                             </div>
@@ -196,32 +255,32 @@ const Project = () => {
                             <ButtonTask setTab={setTab} tab={tab} />
                             {tab === "activities" ? (
                               <Activities
-                                activities={activities}
+                                activities={data.activities}
                                 handleStatus={handleStatus}
                                 onUpdateActivities={updateActivities}
-                                projectId={project._id}
-                                taskId={task._id}
+                                projectId={data.project._id}
+                                taskId={data.task._id}
                               />
                             ) : tab === "comments" ? (
                               <Comments
-                                comments={comments}
+                                comments={data.comments}
                                 onUpdateComments={updateComments}
-                                projectId={project._id}
-                                taskId={task._id}
+                                projectId={data.project._id}
+                                taskId={data.task._id}
                               />
                             ) : tab === "file" ? (
                               <File
-                                files={files}
+                                files={data.files}
                                 onUpdateFiles={updateFiles}
-                                projectId={project._id}
-                                taskId={task._id}
+                                projectId={data.project._id}
+                                taskId={data.task._id}
                               />
                             ) : tab === "screenshots" ? (
                               <Screenshots
-                                screenshots={Screenshots}
+                                screenshots={data.screenshots}
                                 onUpdateScreenshots={updateScreenshots}
-                                projectId={project._id}
-                                taskId={task._id}
+                                projectId={data.project._id}
+                                taskId={data.task._id}
                               />
                             ) : (
                               <></>
@@ -256,8 +315,9 @@ const Project = () => {
                               <b>Members</b>
                             </label>
 
-                            {Array.isArray(members) && members.length > 0 ? (
-                              members.map((member) => (
+                            {Array.isArray(data.members) &&
+                            data.members.length > 0 ? (
+                              data.members.map((member) => (
                                 <div key={member._id}>
                                   {member.surname} {member.name}
                                 </div>

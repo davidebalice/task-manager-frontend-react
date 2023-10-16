@@ -2,14 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   faListCheck,
-  faTableList,
-  faUser,
+  faImage,
+  faFile,
+  faComment
 } from "@fortawesome/free-solid-svg-icons";
 
 const ButtonTask = ({ setTab, tab }) => {
   return (
     <>
-     <div className="buttonGroup borderBottom">
+      <div className="buttonGroup borderBottom">
         <button
           type="button"
           className={`projectTab ${
@@ -17,6 +18,7 @@ const ButtonTask = ({ setTab, tab }) => {
           }`}
           onClick={() => setTab("activities")}
         >
+          <FontAwesomeIcon icon={faListCheck} className="buttonGroupIcon" />{" "}
           Activities
         </button>
 
@@ -27,6 +29,7 @@ const ButtonTask = ({ setTab, tab }) => {
           }`}
           onClick={() => setTab("comments")}
         >
+          <FontAwesomeIcon icon={faComment} className="buttonGroupIcon" />{" "}
           Comments
         </button>
 
@@ -35,6 +38,7 @@ const ButtonTask = ({ setTab, tab }) => {
           className={`projectTab ${tab === "file" ? "projectTabSelected" : ""}`}
           onClick={() => setTab("file")}
         >
+          <FontAwesomeIcon icon={faFile} className="buttonGroupIcon" />{" "}
           File
         </button>
 
@@ -45,6 +49,7 @@ const ButtonTask = ({ setTab, tab }) => {
           }`}
           onClick={() => setTab("screenshots")}
         >
+          <FontAwesomeIcon icon={faImage} className="buttonGroupIcon" />{" "}
           Screenshots
         </button>
       </div>

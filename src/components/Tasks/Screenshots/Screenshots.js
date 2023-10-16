@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
+import Loading from "../../../components/loading";
 
 const Screenshots = ({
   screenshots,
@@ -13,7 +14,7 @@ const Screenshots = ({
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
-
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     screenshots: [],
@@ -38,6 +39,7 @@ const Screenshots = ({
       task_id: taskId,
       project_id: projectId,
     });
+    setLoading(false);
   }, [taskId, projectId]);
 
   function handleUpdateFiles(newFiles) {
@@ -47,7 +49,7 @@ const Screenshots = ({
   function removeFile(id) {
     Swal.fire({
       title: "Corfirm delete?",
-      text: "Questa azione non può essere annullata!",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Delete",
@@ -122,63 +124,75 @@ const Screenshots = ({
 
   return (
     <>
-      Screenshots
-      {screenshots.length}
-      {Array.isArray(screenshots) && screenshots.length > 0 ? (
-        screenshots.map((screenshot) => (
-          <div key={screenshot._id}>
-            <a
-              href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${screenshot.file}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {" "}
-              {screenshot.name}
-            </a>
-            <div onClick={() => openEditModal(screenshot.name, screenshot._id)}>
-              edit text
-            </div>
-            <div onClick={() => removeFile(screenshot._id)}>remove</div>
-          </div>
-        ))
+      {loading ? (
+        <>
+          <Loading />
+        </>
       ) : (
-        <div>No screenshots</div>
+        <>
+          {screenshots && screenshots.length}
+          {Array.isArray(screenshots) && screenshots.length > 0 ? (
+            screenshots.map((screenshot) => (
+              <div key={screenshot._id}>
+                <a
+                  href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${screenshot.file}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {" "}
+                  {screenshot.name}
+                </a>
+                <div
+                  onClick={() => openEditModal(screenshot.name, screenshot._id)}
+                >
+                  edit text
+                </div>
+                <div onClick={() => removeFile(screenshot._id)}>remove</div>
+              </div>
+            ))
+          ) : (
+            <div>No screenshots</div>
+          )}
+          <EditModal
+            show={editData.show}
+            closeEditModal={closeEditModal}
+            editData={editData}
+            updateUrl="/api/update/screenshot"
+            onUpdateActivities={handleUpdateFiles}
+            type="files"
+          />
+          <div>
+            <label for="name">
+              <b>Add screenshot</b>
+            </label>
+            <form enctype="multipart/form-data" method="post" id="formUpload">
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInput}
+              />
+              <input
+                type="file"
+                className="form-control"
+                ref={inputFileRef}
+                name="file"
+                required
+                onChange={handleFile}
+                multiple
+              />
+              <button
+                onClick={submitForm}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                Add project
+              </button>
+            </form>
+          </div>
+        </>
       )}
-      <EditModal
-        show={editData.show}
-        closeEditModal={closeEditModal}
-        editData={editData}
-        updateUrl="/api/update/screenshot"
-        onUpdateActivities={handleUpdateFiles}
-        type="files"
-      />
-      <div>
-        <label for="name">
-          <b>Add screenshot</b>
-        </label>
-        <form enctype="multipart/form-data" method="post" id="formUpload">
-          <input
-            type="text"
-            className="form-control"
-            name="name"
-            required
-            value={formData.name}
-            onChange={handleInput}
-          />
-          <input
-            type="file"
-            className="form-control"
-            ref={inputFileRef}
-            name="file"
-            required
-            onChange={handleFile}
-            multiple
-          />
-          <button onClick={submitForm} className="btn btn-primary btn-sm mt-3">
-            Add project
-          </button>
-        </form>
-      </div>
     </>
   );
 };

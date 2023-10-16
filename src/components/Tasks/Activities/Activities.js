@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
 import Table from "react-bootstrap/Table";
+import Loading from "../../../components/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -22,6 +23,7 @@ const Activities = ({
 }) => {
   const token = localStorage.getItem("authToken");
   const [add, setAdd] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
   const [formData, setFormData] = useState({
     name: "",
@@ -36,6 +38,7 @@ const Activities = ({
       task_id: taskId,
       project_id: projectId,
     });
+    setLoading(false);
   }, [taskId, projectId]);
 
   const handleInput = (event) => {
@@ -60,8 +63,8 @@ const Activities = ({
 
   const removeActivity = (id) => {
     Swal.fire({
-      title: "Sei sicuro?",
-      text: "Questa azione non può essere annullata!",
+      title: "Confirm delete?",
+      text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sì, rimuovi!",
@@ -125,104 +128,137 @@ const Activities = ({
 
   return (
     <>
-      <EditModal
-        show={editData.show}
-        closeEditModal={closeEditModal}
-        editData={editData}
-        updateUrl="/api/update/activity"
-        onUpdateActivities={handleUpdateActivities}
-        type="activities"
-      />
-      <div>
-        <div
-          className="addButton col-sm-4 col-md-4 col-lg-3"
-          onClick={() => setAdd(!add)}
-        >
-          <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
-          <div className="card-body d-flex px-1">
-            {add ? "Close" : "Add activity"}
-          </div>
-        </div>
-
-        {add && (
-          <form>
-            <label for="name">
-              <b>Add activity to task</b>
-            </label>
-
-            <textarea
-              type="text"
-              className="form-control"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleInput}
-            ></textarea>
-            <button
-              onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
+      {loading ? (
+        <>
+          <Loading />
+        </>
+      ) : (
+        <>
+          <EditModal
+            show={editData.show}
+            closeEditModal={closeEditModal}
+            editData={editData}
+            updateUrl="/api/update/activity"
+            onUpdateActivities={handleUpdateActivities}
+            type="activities"
+          />
+          <div>
+            <div
+              className="addButton col-sm-4 col-md-4 col-lg-3"
+              onClick={() => setAdd(!add)}
             >
-              Add activity
-            </button>
-          </form>
-        )}
-      </div>
+              <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
+              <div className="card-body d-flex px-1">
+                {add ? "Close" : "Add activity"}
+              </div>
+            </div>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Complete</th>
-            <th>Activity</th>
-            <th>Data creation</th>
-            <th>Created by</th>
-            <th>Data close</th>
-            <th>Closed by</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+            {add && (
+              <form>
+                <label for="name">
+                  <b>Add activity to task</b>
+                </label>
 
-        <tbody>
-          {Array.isArray(activities) && activities.length > 0 ? (
-            activities.map((activity) => (
-              <tr key={activity._id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={activity.status === "Done"}
-                    onChange={(event) => handleStatus(event, activity._id)}
-                  />
-                </td>
-                <td>
-                  <p
-                    className={
-                      activity.status === "Done"
-                        ? "activityName cutText"
-                        : "activityName"
-                    }
-                  >
-                    {activity.name}
-                  </p>
-                </td>
-                <td>
-                  <div
-                    onClick={() => openEditModal(activity.name, activity._id)}
-                  >
-                    edit
-                  </div>
-                  <div onClick={() => removeActivity(activity._id)}>remove</div>
-                </td>
+                <textarea
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInput}
+                ></textarea>
+                <button
+                  onClick={submitForm}
+                  className="btn btn-primary btn-sm mt-3"
+                >
+                  Add activity
+                </button>
+              </form>
+            )}
+          </div>
+
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="text-center">Complete</th>
+                <th>Activity</th>
+                <th>Data creation</th>
+                <th>Created by</th>
+                <th>Data update</th>
+                <th>Updated by</th>
+                <th>Actions</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colspan="5">
-                <br />
-                No activities
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+            </thead>
+
+            <tbody>
+              {Array.isArray(activities) && activities.length > 0 ? (
+                activities.map((activity) => (
+                  <tr key={activity._id}>
+                    <td className="text-center">
+                      <input
+                        type="checkbox"
+                        checked={activity.status === "Done"}
+                        onChange={(event) => handleStatus(event, activity._id)}
+                        className="activityCheckbox"
+                      />
+                    </td>
+                    <td>
+                      <p
+                        className={
+                          activity.status === "Done"
+                            ? "activityName cutText"
+                            : "activityName"
+                        }
+                      >
+                        {activity.name}
+                      </p>
+                    </td>
+
+                    <td>{activity.createdAt}</td>
+                    <td>
+                      {activity.owner.name && activity.owner.surname ? (
+                        <span>
+                          {activity.owner.name} {activity.owner.surname}
+                        </span>
+                      ) : null}
+                    </td>
+                    <td>{activity.lastUpdate ? activity.lastUpdate : ""}</td>
+                    <td>
+                      {activity.lastUpdateUser.name &&
+                      activity.lastUpdateUser.surname ? (
+                        <span>
+                          {activity.lastUpdateUser.name}{" "}
+                          {activity.lastUpdateUser.surname}
+                        </span>
+                      ) : null}
+                    </td>
+
+                    <td>
+                      <div
+                        onClick={() =>
+                          openEditModal(activity.name, activity._id)
+                        }
+                      >
+                        edit
+                      </div>
+                      <div onClick={() => removeActivity(activity._id)}>
+                        remove
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colspan="5">
+                    <br />
+                    No activities
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </>
+      )}
     </>
   );
 };
