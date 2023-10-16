@@ -1,10 +1,20 @@
-const ButtonTask = ({ setTab }) => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  faListCheck,
+  faTableList,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+
+const ButtonTask = ({ setTab, tab }) => {
   return (
     <>
-      <div className="mb-2 my-3">
+     <div className="buttonGroup borderBottom">
         <button
           type="button"
-          className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
+          className={`projectTab ${
+            tab === "activities" ? "projectTabSelected" : ""
+          }`}
           onClick={() => setTab("activities")}
         >
           Activities
@@ -12,7 +22,9 @@ const ButtonTask = ({ setTab }) => {
 
         <button
           type="button"
-          className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
+          className={`projectTab ${
+            tab === "comments" ? "projectTabSelected" : ""
+          }`}
           onClick={() => setTab("comments")}
         >
           Comments
@@ -20,7 +32,7 @@ const ButtonTask = ({ setTab }) => {
 
         <button
           type="button"
-          className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
+          className={`projectTab ${tab === "file" ? "projectTabSelected" : ""}`}
           onClick={() => setTab("file")}
         >
           File
@@ -28,7 +40,9 @@ const ButtonTask = ({ setTab }) => {
 
         <button
           type="button"
-          className={`btn mt-2 btn-outline-primary btn-sm mx-1`}
+          className={`projectTab ${
+            tab === "screenshots" ? "projectTabSelected" : ""
+          }`}
           onClick={() => setTab("screenshots")}
         >
           Screenshots

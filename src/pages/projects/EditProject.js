@@ -43,28 +43,7 @@ const EditProject = () => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
   };
-  /*
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/user/photo/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data.user);
-        setFormData({
-          ...response.data.user,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        Swal.fire("Error", error, "error");
-      });
-  }, []);
-*/
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`, {
@@ -103,20 +82,29 @@ const EditProject = () => {
         console.log("response.data");
         console.log(response.data);
 
-        Swal.fire({
-          title: "Project updated",
-          text: "",
-          icon: "success",
-          showCancelButton: true,
-          confirmButtonText: "Back to projects",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            if (response.data.create === "success") {
-              navigate("/projects");
+        if (response.data.status === "success") {
+          Swal.fire({
+            title: "Project updated",
+            text: "",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Back to projects",
+            cancelButtonText: "Close",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (response.data.status === "success") {
+                navigate("/projects");
+              }
             }
-          }
-        });
+          });
+        } else if (response.data.status === "demo") {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
+          });
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -153,10 +141,10 @@ const EditProject = () => {
         <Breadcrumb title={title} brad={brad} />
         <div class="row">
           <Link to={`/projects`}>
-            <div class="addProject col-sm-4 col-md-4 col-lg-3">
+            <div class="addButton col-sm-4 col-md-4 col-lg-3">
               <FontAwesomeIcon
                 icon={faCircleChevronLeft}
-                className="addProjectIcon"
+                className="addButtonIcon"
               />
               <div class="card-body d-flex px-1">Back</div>
             </div>

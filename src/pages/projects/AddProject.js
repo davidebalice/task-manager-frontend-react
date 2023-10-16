@@ -95,10 +95,10 @@ const AddProject = () => {
         <Breadcrumb title={title} brad={brad} />
         <div class="row">
           <Link to={`/projects`}>
-            <div class="addProject col-sm-4 col-md-4 col-lg-3">
+            <div class="addButton col-sm-4 col-md-4 col-lg-3">
               <FontAwesomeIcon
                 icon={faCircleChevronLeft}
-                className="addProjectIcon"
+                className="addButtonIcon"
               />
               <div class="card-body d-flex px-1">Back</div>
             </div>

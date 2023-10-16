@@ -105,7 +105,13 @@ div#global-loader,
   -webkit-justify-content: center;
   -ms-flex-pack: center;
 }
-
+.singIn {
+  color: #089fba;
+  font-size: 16px;
+  margin-top: 6px;
+  text-decoration: underline;
+  font-weight: bold;
+}
 .pass-group .toggle-password,
 .pass-group .toggle-passworda,
 .profile-set .profile-top .profileupload a,
@@ -9590,7 +9596,7 @@ span.select2-container.select2-container--default.select2-container--open {
   background: #18b0e9;
   width: 0%;
   text-align: right;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   transition: width 0.3s;
   display: flex;
@@ -9740,7 +9746,7 @@ span.select2-container.select2-container--default.select2-container--open {
   margin-left: 10px;
 }
 
-.addProject {
+.addButton {
   display: flex;
   flex-direction: row;
   background: #24a50b;
@@ -9754,16 +9760,17 @@ span.select2-container.select2-container--default.select2-container--open {
   border-radius: 4px;
   padding: 14px;
   margin-bottom: 20px;
+  cursor: pointer;
   font-weight: bold;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
-.addProject:hover {
+.addButton:hover {
   background: #3bb722;
 }
 
-.addProjectIcon {
+.addButtonIcon {
   font-size: 25px;
 }
 
@@ -10007,6 +10014,30 @@ span.select2-container.select2-container--default.select2-container--open {
   padding-top: 40px;
   padding-bottom: 30px;
   gap: 70px;
+}
+
+.taskSection {
+  margin-top: 50px;
+  padding-bottom: 60px;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.cutText {
+  text-decoration: line-through;
+  color: #777 !important;
+  text-decoration-thickness: 0.07em;
+  text-decoration-color: #999;
+  text-decoration-skip-ink: auto;
+}
+
+.activityName {
+  color: #333;
+  font-size: 15px !important;
 }
 
 /*# sourceMappingURL=style.css.map */

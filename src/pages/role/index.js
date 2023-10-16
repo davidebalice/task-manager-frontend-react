@@ -9,9 +9,6 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { faPenToSquare, faTrash, faEnvelope, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { apidata } from './store/store'
 import { Link } from 'react-router-dom'
-// import {Modal} from 'bootstrap'
-
-
 
 export default function Roll_Create() {
 

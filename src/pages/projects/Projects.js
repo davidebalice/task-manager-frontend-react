@@ -3,9 +3,9 @@ import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faListCheck,
@@ -60,10 +60,10 @@ const Projects = () => {
           <>
             <div className="row">
               <Link to={`/add/project/`}>
-                <div className="addProject col-sm-4 col-md-4 col-lg-3">
+                <div className="addButton col-sm-4 col-md-4 col-lg-3">
                   <FontAwesomeIcon
                     icon={faCirclePlus}
-                    className="addProjectIcon"
+                    className="addButtonIcon"
                   />
                   <div className="card-body d-flex px-1">Add project</div>
                 </div>

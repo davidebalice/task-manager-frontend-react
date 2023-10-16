@@ -7,11 +7,12 @@ const notAuth = () => {
           className="row justify-content-center align-items-center jumbotron w-100"
           style={{ height: "65vh" }}
         >
-          <p className="notAuth">User not authenticated</p>
-          
-          <Link className="dropdown-item" to="/login">
-          login
+          <p className="notAuth">User not authenticated
+            <br/>   
+            <Link className="dropdown-item singIn" to="/login">
+              Sign in
             </Link>
+          </p>
         </div>
       </div>
     </>

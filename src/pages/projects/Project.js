@@ -66,16 +66,6 @@ const Project = () => {
     },
   ];
 
-  /*
-  const formattedLastUpdate = highestLastUpdate
-  ? moment(highestLastUpdate).format("DD/MM/YYYY HH:mm")
-  : " - - -";*/
-  /*
-  const formattedCreated = data.createdAt
-  ? moment(highestLastUpdate).format("DD/MM/YYYY HH:mm")
-  : " - - -";
-*/
-
   return (
     <>
       <div className="container-fluid">
@@ -123,8 +113,9 @@ const Project = () => {
                             </div>
 
                             <div className="projectSection">
-                              <b>Progress</b>:<br />
-                              <br />
+                              <p>
+                                <b>Project progress</b>:
+                              </p>
                               <div className="progressContainer">
                                 <div className="progressBarContainer">
                                   <div

@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
+import Table from "react-bootstrap/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCirclePlus,
+  faListCheck,
+  faNoteSticky,
+  faTrash,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Activities = ({
   activities,
@@ -116,10 +125,6 @@ const Activities = ({
 
   return (
     <>
-      Activities
-      {activities.length}
-      task_id:{formData.task_id}
-      <br />
       <EditModal
         show={editData.show}
         closeEditModal={closeEditModal}
@@ -129,7 +134,16 @@ const Activities = ({
         type="activities"
       />
       <div>
-        <button onClick={() => setAdd(true)}>+ add activity</button>
+        <div
+          className="addButton col-sm-4 col-md-4 col-lg-3"
+          onClick={() => setAdd(!add)}
+        >
+          <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
+          <div className="card-body d-flex px-1">
+            {add ? "Close" : "Add activity"}
+          </div>
+        </div>
+
         {add && (
           <form>
             <label for="name">
@@ -153,24 +167,62 @@ const Activities = ({
           </form>
         )}
       </div>
-      {Array.isArray(activities) && activities.length > 0 ? (
-        activities.map((activity) => (
-          <div key={activity._id}>
-            <input
-              type="checkbox"
-              checked={activity.status === "Done"}
-              onChange={(event) => handleStatus(event, activity._id)}
-            />
-            {activity.name}
-            <div onClick={() => openEditModal(activity.name, activity._id)}>
-              edit
-            </div>
-            <div onClick={() => removeActivity(activity._id)}>remove</div>
-          </div>
-        ))
-      ) : (
-        <div>No activities</div>
-      )}
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Complete</th>
+            <th>Activity</th>
+            <th>Data creation</th>
+            <th>Created by</th>
+            <th>Data close</th>
+            <th>Closed by</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {Array.isArray(activities) && activities.length > 0 ? (
+            activities.map((activity) => (
+              <tr key={activity._id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={activity.status === "Done"}
+                    onChange={(event) => handleStatus(event, activity._id)}
+                  />
+                </td>
+                <td>
+                  <p
+                    className={
+                      activity.status === "Done"
+                        ? "activityName cutText"
+                        : "activityName"
+                    }
+                  >
+                    {activity.name}
+                  </p>
+                </td>
+                <td>
+                  <div
+                    onClick={() => openEditModal(activity.name, activity._id)}
+                  >
+                    edit
+                  </div>
+                  <div onClick={() => removeActivity(activity._id)}>remove</div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colspan="5">
+                <br />
+                No activities
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </>
   );
 };

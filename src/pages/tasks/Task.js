@@ -143,7 +143,6 @@ const Project = () => {
                   <div className="tab-content paymentSetting_content mx-2">
                     <div
                       className="tab-pane fade show active"
-                      id="nav-bkash-personal"
                       role="tabpanel"
                       aria-labelledby="nav-home-tab"
                     >
@@ -175,21 +174,26 @@ const Project = () => {
                               </p>
                             </div>
 
-                            <p>progress: {progress} %</p>
-                            <br />
-
-                            <div className="progressBarContainer">
-                              <div
-                                className="progressBar"
-                                style={{ width: `${progress}%` }}
-                              >
-                                &nbsp;
+                            <div className="taskSection">
+                              <p>
+                                <b>Task progress</b>:
+                              </p>
+                              <div className="progressContainer">
+                                <div className="progressBarContainer">
+                                  <div
+                                    className="progressBar"
+                                    style={{ width: `${progress}%` }}
+                                  >
+                                    &nbsp;
+                                  </div>
+                                </div>
+                                <div className="progressBarPercentage">
+                                  {progress.toFixed(2)} %
+                                </div>
                               </div>
                             </div>
 
-                            <ButtonTask setTab={setTab} />
-                            {task._id}
-                            <br />
+                            <ButtonTask setTab={setTab} tab={tab} />
                             {tab === "activities" ? (
                               <Activities
                                 activities={activities}

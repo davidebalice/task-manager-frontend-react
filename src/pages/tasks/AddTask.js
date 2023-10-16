@@ -102,10 +102,10 @@ const AddTask = () => {
         <div className="card pageContainer">
           <div className="card-body">
             <Link to={`/project/tasks/${id}`}>
-              <div class="addProject col-sm-4 col-md-4 col-lg-3">
+              <div class="addButton col-sm-4 col-md-4 col-lg-3">
                 <FontAwesomeIcon
                   icon={faCircleChevronLeft}
-                  className="addProjectIcon"
+                  className="addButtonIcon"
                 />
                 <div class="card-body d-flex px-1">Back</div>
               </div>
