@@ -101,7 +101,7 @@ const EditTask = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         formanta.name:{formData.name}
         <Breadcrumb title={title} brad={brad} />
         {responseData}

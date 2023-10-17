@@ -112,7 +112,7 @@ const Tasks = () => {
         closeEmailModal={closeEmailModal}
         modalData={modalData}
       />
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         {loading ? (
           <>

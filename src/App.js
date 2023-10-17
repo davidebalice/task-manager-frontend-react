@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { isAuthenticated } from "./middlewares/auth";
 import Layouts from "./layouts/layouts";
 import Footer from "./layouts/footer";
@@ -9,37 +9,41 @@ import NotAuth from "./pages/Auth/notAuth";
 import { AdminRoutes } from "./route/index";
 
 function App() {
-  const [accessApp, setAccessApp] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const [layout, setLayout] = useState(false);
+  const [footer, setFooter] = useState(false);
   const userIsAuthenticated = isAuthenticated();
   const location = useLocation();
   const pathname = location.pathname;
 
-
   useEffect(() => {
-    console.log(pathname);
     if (
       pathname === "/login" ||
       pathname === "/forgot-password" ||
       pathname === "/register"
     ) {
-      setAccessApp(true);
+      setAuth(true);
+      setFooter(false);
+      setLayout(false);
     } else {
+      setFooter(true);
+      setLayout(true);
       if (userIsAuthenticated) {
-        setAccessApp(true);
+        setAuth(true);
       } else {
-        setAccessApp(false);
+        setAuth(false);
       }
     }
   }, [pathname, userIsAuthenticated]);
 
   return (
-    <>
+    <div id="">
       <UserProvider>
-        <Layouts />
-        {accessApp ? <AdminRoutes /> : <NotAuth />}
-        {/* <Footer /> */}
+        {layout && <Layouts />}
+        {auth ? <AdminRoutes /> : <NotAuth />}
+        {footer && <Footer />}
       </UserProvider>
-    </>
+    </div>
   );
 }
 

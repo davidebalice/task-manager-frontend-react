@@ -91,7 +91,7 @@ const AddProject = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         <div class="row">
           <Link to={`/projects`}>

@@ -49,7 +49,7 @@ const Projects = () => {
   ];
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
 
         {loading ? (

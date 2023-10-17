@@ -51,7 +51,7 @@ export default function Hero() {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <div className="row justify-content-between">
           <div
             className="col d-flex align-items-center"

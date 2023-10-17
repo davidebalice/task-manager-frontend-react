@@ -113,7 +113,7 @@ const Users = () => {
         closeEmailModal={closeEmailModal}
         modalData={modalData}
       />
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         <Link to={`/add/user/`}>
           <div className="btn btn-info btn-sm text-white">+ Add User</div>

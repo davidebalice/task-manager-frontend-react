@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../../context/UserContext";
 import axios from "axios";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
-  const { userData, login, logout } = useContext(Context);
+  const { login } = useContext(Context);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -65,7 +65,7 @@ const Login = () => {
           style={{ height: "65vh" }}
         >
           <div className="col-md-5">
-            <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
+            <div className="card">
               <div className="card-header border-bottom text-center">
                 <h2>Login</h2>
               </div>

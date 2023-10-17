@@ -171,7 +171,7 @@ const Project = () => {
   ];
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         {data.loading ? (
           <>

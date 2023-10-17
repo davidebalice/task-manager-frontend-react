@@ -96,7 +96,7 @@ const AddTask = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         <ButtonGroup projectId={id} selectedTab="tasks" />
         <div className="card pageContainer">

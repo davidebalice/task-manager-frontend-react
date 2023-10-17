@@ -58,7 +58,7 @@ const AddUser = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
         {responseData}
         <div className="card" style={{ borderTop: "2px solid #4723d9" }}>

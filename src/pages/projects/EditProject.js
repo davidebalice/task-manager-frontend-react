@@ -136,7 +136,7 @@ const EditProject = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         {formData.imageCover}
         <Breadcrumb title={title} brad={brad} />
         <div class="row">

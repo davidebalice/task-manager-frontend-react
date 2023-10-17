@@ -18,10 +18,8 @@ import Clients from "../pages/clients/Clients";
 import AddClient from "../pages/clients/AddClient";
 import EditClient from "../pages/clients/EditClient";
 import PhotoClient from "../pages/clients/PhotoClient";
-
 import Tasks from "../pages/tasks/Tasks";
 import Task from "../pages/tasks/Task";
-
 import Profile from "../pages/profile/Profile";
 
 export function AdminRoutes() {

@@ -50,7 +50,6 @@ const Project = () => {
   useEffect(() => {
     const openTasks = tasks.filter((task) => task.status === "Open").length;
     const totalTasks = tasks.length;
-    //const openTasksPercentage = (openTasks.length / totalTasks) * 100;
     const openTasksPercentage =
       totalTasks > 0 ? (openTasks / totalTasks) * 100 : 0;
     setOpenTasksPercentage(openTasksPercentage);
@@ -68,7 +67,7 @@ const Project = () => {
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="page">
         <Breadcrumb title={title} brad={brad} />
 
         {loading ? (

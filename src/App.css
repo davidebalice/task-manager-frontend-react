@@ -6948,7 +6948,6 @@ span.select2-container.select2-container--default.select2-container--open {
   display: inline-block;
 }
 
-/****** PAGES ******/
 .chat-window .card .card-header {
   background-color: #fff;
   border-bottom: 1px solid #e8ebed;
@@ -9966,6 +9965,11 @@ span.select2-container.select2-container--default.select2-container--open {
 .projectTabSelected {
   background: #18b0e9;
   color: #fff;
+}
+
+.page {
+  width: 100%;
+  min-height: calc(100vh - 183px);
 }
 
 .pageContainer {
