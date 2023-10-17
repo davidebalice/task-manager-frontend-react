@@ -10068,8 +10068,25 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .activityCheckbox {
- width:22px;
- height:22px
+  width: 22px;
+  height: 22px;
+}
+
+.activityButton {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.activityButtonEdit {
+  font-size: 19px;
+  color: #18b0e9;
+}
+
+.activityButtonDelete {
+  font-size: 16px;
+  color: #ff0000;
 }
 
 /*# sourceMappingURL=style.css.map */

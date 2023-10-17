@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
 import Table from "react-bootstrap/Table";
 import Loading from "../../../components/loading";
+import moment from "moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -67,8 +70,8 @@ const Activities = ({
       text: "",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sì, rimuovi!",
-      cancelButtonText: "No, annulla",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -86,7 +89,6 @@ const Activities = ({
           .then((response) => {
             console.log("response.data.activities");
             console.log(response.data.activities);
-
             handleUpdateActivities(response.data.activities);
           })
           .catch((error) => {
@@ -186,7 +188,7 @@ const Activities = ({
                 <th>Created by</th>
                 <th>Data update</th>
                 <th>Updated by</th>
-                <th>Actions</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
 
@@ -214,7 +216,11 @@ const Activities = ({
                       </p>
                     </td>
 
-                    <td>{activity.createdAt}</td>
+                    <td>
+                      {activity.createdAt !== null &&
+                        moment(activity.createdAt).format("DD/MM/YYYY")}
+                    </td>
+
                     <td>
                       {activity.owner.name && activity.owner.surname ? (
                         <span>
@@ -222,7 +228,10 @@ const Activities = ({
                         </span>
                       ) : null}
                     </td>
-                    <td>{activity.lastUpdate ? activity.lastUpdate : ""}</td>
+                    <td>
+                      {activity.lastUpdate !== null &&
+                        moment(activity.lastUpdate).format("DD/MM/YYYY HH:mm")}
+                    </td>
                     <td>
                       {activity.lastUpdateUser.name &&
                       activity.lastUpdateUser.surname ? (
@@ -234,15 +243,43 @@ const Activities = ({
                     </td>
 
                     <td>
-                      <div
-                        onClick={() =>
-                          openEditModal(activity.name, activity._id)
-                        }
-                      >
-                        edit
-                      </div>
-                      <div onClick={() => removeActivity(activity._id)}>
-                        remove
+                      <div className="activityButton">
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              {" "}
+                              Edit activity
+                            </Tooltip>
+                          }
+                        >
+                          <div
+                            onClick={() =>
+                              openEditModal(activity.name, activity._id)
+                            }
+                          >
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              className="activityButtonEdit"
+                            />
+                          </div>
+                        </OverlayTrigger>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              {" "}
+                              Delete activity
+                            </Tooltip>
+                          }
+                        >
+                        <div onClick={() => removeActivity(activity._id)}>
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="activityButtonDelete"
+                          />
+                        </div>
+                        </OverlayTrigger>
                       </div>
                     </td>
                   </tr>

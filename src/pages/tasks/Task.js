@@ -134,6 +134,8 @@ const Project = () => {
         console.log(response.data.task);
         console.log("response.data.demo");
         console.log(response.data.demo);
+        console.log("response.data.screenshots");
+        console.log(response.data.screenshots);
       })
       .catch((error) => {
         console.error("Error during api call:", error);

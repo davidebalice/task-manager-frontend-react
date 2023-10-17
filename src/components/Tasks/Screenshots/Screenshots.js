@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
+import PhotoModal from "../../Modal/PhotoModal";
 import Loading from "../../../components/loading";
 
 const Screenshots = ({
@@ -14,6 +15,7 @@ const Screenshots = ({
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
+  const [photoData, setPhotoData] = useState({ show: false, imgUrl: "" });
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -88,6 +90,14 @@ const Screenshots = ({
     setEditData(false, null, null);
   };
 
+  const openPhotoModal = (imgUrl, title) => {
+    setPhotoData({ show: true, imgUrl, title });
+  };
+
+  const closePhotoModal = () => {
+    setPhotoData(false, "", "");
+  };
+
   const submitForm = (e) => {
     e.preventDefault();
     axios
@@ -115,7 +125,7 @@ const Screenshots = ({
           inputFileRef.current.value = "";
         }
 
-        handleUpdateFiles(response.data.files);
+        handleUpdateFiles(response.data.screenshots);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -130,18 +140,26 @@ const Screenshots = ({
         </>
       ) : (
         <>
-          {screenshots && screenshots.length}
           {Array.isArray(screenshots) && screenshots.length > 0 ? (
             screenshots.map((screenshot) => (
               <div key={screenshot._id}>
-                <a
-                  href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${screenshot.file}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {" "}
-                  {screenshot.name}
-                </a>
+                <img
+                  src={`${
+                    process.env.REACT_APP_API_BASE_URL
+                  }/api/screenshot/img/${screenshot && screenshot.file}`}
+                  alt=""
+                  onClick={() =>
+                    openPhotoModal(
+                      `${
+                        process.env.REACT_APP_API_BASE_URL
+                      }/api/screenshot/img/${screenshot && screenshot.file}`,
+                      screenshot.name
+                    )
+                  }
+                />
+
+                {screenshot.name}
+
                 <div
                   onClick={() => openEditModal(screenshot.name, screenshot._id)}
                 >
@@ -160,6 +178,12 @@ const Screenshots = ({
             updateUrl="/api/update/screenshot"
             onUpdateActivities={handleUpdateFiles}
             type="files"
+          />
+          <PhotoModal
+            show={photoData.show}
+            closePhotoModal={closePhotoModal}
+            title={photoData.title}
+            imgUrl={photoData.imgUrl}
           />
           <div>
             <label for="name">
