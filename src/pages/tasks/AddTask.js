@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 import Breadcrumb from "../../components/breadcrumb/index";
+import Spacer from "../../components/spacer";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleChevronLeft,
+  faCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const AddTask = () => {
   const navigate = useNavigate();
@@ -102,12 +106,12 @@ const AddTask = () => {
         <div className="card pageContainer">
           <div className="card-body">
             <Link to={`/project/tasks/${id}`}>
-              <div class="addButton col-sm-4 col-md-4 col-lg-3">
+              <div class="addButtonSm col-sm-4 col-md-4 col-lg-3">
                 <FontAwesomeIcon
                   icon={faCircleChevronLeft}
-                  className="addButtonIcon"
+                  className="addButtonIconSm"
                 />
-                <div class="card-body d-flex px-1">Back</div>
+                Back
               </div>
             </Link>
             <div className="row justify-content-center">
@@ -192,6 +196,8 @@ const AddTask = () => {
 
               <div className="col-md-6 mt-3"></div>
 
+              <Spacer height={30} />
+
               <div className="col-md-12">
                 <label for="brand">
                   <b>Description</b>
@@ -207,8 +213,9 @@ const AddTask = () => {
 
             <button
               onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
+              className="btn btn-primary btn-sm addButtonSm mt-5"
             >
+              <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
               Add task
             </button>
           </div>

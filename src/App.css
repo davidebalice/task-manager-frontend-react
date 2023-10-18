@@ -59,6 +59,14 @@
   float: left;
 }
 
+.tableRow tbody tr:nth-of-type(odd) td {
+  background-color: #f7f7f7;
+}
+
+.tableRow tbody tr:nth-of-type(even) td {
+  background-color: #ffffff;
+}
+
 .pass-group .toggle-password,
 .pass-group .toggle-passworda,
 .profile-set .profile-top .profileupload a,
@@ -9773,6 +9781,35 @@ span.select2-container.select2-container--default.select2-container--open {
   font-size: 25px;
 }
 
+.addButtonSm {
+  display: flex;
+  flex-direction: row;
+  background: #24a50b !important;
+  border-color: #24a50b !important;
+  color: #fff;
+  gap: 12px;
+  align-items: center;
+  width: fit-content;
+  justify-content: start;
+  min-height: 40px;
+  max-height: 54px;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.addButtonSm:hover {
+  background: #3bb722;
+}
+
+.addButtonSmIcon {
+  font-size: 20px;
+}
+
 .backButton {
   display: flex;
   flex-direction: row;
@@ -9977,6 +10014,39 @@ span.select2-container.select2-container--default.select2-container--open {
   border-color: #ddd;
 }
 
+.pageContainerFull {
+  border-radius: 6px;
+  border-color: #ddd;
+}
+
+.form-control {
+  box-shadow: inset 0px 1px 6px rgba(0, 0, 0, 0.15);
+  background: #f9f9f9;
+}
+
+label {
+  margin-bottom: 4px !important;
+}
+
+.spacer {
+  clear: both;
+}
+
+.divider {
+  clear: both;
+  height: 1px;
+  display: flex;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.cell {
+  white-space: normal !important;
+  text-wrap: wrap !important;
+}
+
 .sideSection {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   min-height: 80px;
@@ -10091,6 +10161,62 @@ span.select2-container.select2-container--default.select2-container--open {
 .activityButtonDelete {
   font-size: 16px;
   color: #ff0000;
+}
+
+.screenshotCardContainer {
+  display: flex;
+  width: 100%;
+}
+
+.screenshotCard {
+  border: 1px solid #cccccc !important;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.screenshotCardWrapper {
+  padding: 12px;
+}
+
+.screenshotCardHeader {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  justify-content: space-between;
+  font-size: 14px;
+  padding:6px
+}
+
+.screenshotImg {
+  width: 100%;
+  height: auto;
+  transition: filter 0.3s;
+}
+
+.screenshotImg:hover {
+  filter: brightness(0.8);
+}
+
+.photoModal{
+  width:100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  margin:0 auto;
+  display: flex;
+}
+
+.photoModalHeader{
+  width:100%
+}
+
+.photoModalImg{
+  width:100%;
+  max-width: 1000px;
 }
 
 /*# sourceMappingURL=style.css.map */

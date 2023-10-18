@@ -4,6 +4,21 @@ import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
 import PhotoModal from "../../Modal/PhotoModal";
 import Loading from "../../../components/loading";
+import Table from "react-bootstrap/Table";
+import Divider from "../../divider/";
+import Spacer from "../../spacer/";
+import moment from "moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCirclePlus,
+  faCircleXmark,
+  faNoteSticky,
+  faTrash,
+  faPenToSquare,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Screenshots = ({
   screenshots,
@@ -14,6 +29,7 @@ const Screenshots = ({
 }) => {
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
+  const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
   const [photoData, setPhotoData] = useState({ show: false, imgUrl: "" });
   const [loading, setLoading] = useState(true);
@@ -140,37 +156,155 @@ const Screenshots = ({
         </>
       ) : (
         <>
-          {Array.isArray(screenshots) && screenshots.length > 0 ? (
-            screenshots.map((screenshot) => (
-              <div key={screenshot._id}>
-                <img
-                  src={`${
-                    process.env.REACT_APP_API_BASE_URL
-                  }/api/screenshot/img/${screenshot && screenshot.file}`}
-                  alt=""
-                  onClick={() =>
-                    openPhotoModal(
-                      `${
-                        process.env.REACT_APP_API_BASE_URL
-                      }/api/screenshot/img/${screenshot && screenshot.file}`,
-                      screenshot.name
-                    )
-                  }
-                />
+          <div
+            className="addButton col-sm-4 col-md-4 col-lg-3"
+            onClick={() => setAdd(!add)}
+          >
+            <FontAwesomeIcon
+              icon={add ? faCircleXmark : faCirclePlus}
+              className="addButtonIcon"
+            />
+            <div className="card-body d-flex px-1">
+              {add ? "Close" : "Add screenshot"}
+            </div>
+          </div>
 
-                {screenshot.name}
-
-                <div
-                  onClick={() => openEditModal(screenshot.name, screenshot._id)}
-                >
-                  edit text
-                </div>
-                <div onClick={() => removeFile(screenshot._id)}>remove</div>
-              </div>
-            ))
-          ) : (
-            <div>No screenshots</div>
+          {add && (
+            <form enctype="multipart/form-data" method="post" id="formUpload">
+              <label for="name">
+                <b>Add screenshot to task</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInput}
+                placeholder="Description of screenshot"
+              />
+              <Spacer height={20} />
+              <input
+                type="file"
+                className="form-control"
+                ref={inputFileRef}
+                name="file"
+                required
+                onChange={handleFile}
+                multiple
+              />
+              <button
+                onClick={submitForm}
+                className="btn addButtonSm btn-sm mt-3"
+              >
+                <FontAwesomeIcon icon={faPlus} className="addButtonIconSm" />
+                Add screenshot
+              </button>
+              <Divider
+                className="divider"
+                marginTop={60}
+                marginBottom={60}
+                borderSize={1}
+                borderType={"solid"}
+                borderColor={"#ddd"}
+              >
+                {" "}
+              </Divider>
+            </form>
           )}
+
+          <div className="screenshotCardContainer">
+            <div className="row">
+              {Array.isArray(screenshots) && screenshots.length > 0 ? (
+                screenshots.map((screenshot) => (
+                  <div
+                    className="screenshotCardWrapper col-lg-3 col-md-6 col-sm-12"
+                    key={screenshot._id}
+                  >
+                    <div className="screenshotCard">
+                      <div className="screenshotCardHeader">
+                        {screenshot.createdAt !== null &&
+                          moment(screenshot.createdAt).format("DD/MM/YYYY")}
+
+                        {screenshot.owner.name && screenshot.owner.surname ? (
+                          <span>
+                            {screenshot.owner.name} {screenshot.owner.surname}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <img
+                        src={`${
+                          process.env.REACT_APP_API_BASE_URL
+                        }/api/screenshot/img/${screenshot && screenshot.file}`}
+                        alt=""
+                        className="screenshotImg"
+                        onClick={() =>
+                          openPhotoModal(
+                            `${
+                              process.env.REACT_APP_API_BASE_URL
+                            }/api/screenshot/img/${
+                              screenshot && screenshot.file
+                            }`,
+                            screenshot.name
+                          )
+                        }
+                      />
+
+                      <div className="screenshotCardHeader">
+                        <p>{screenshot.name}</p>
+                        <div className="activityButton">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Edit description of screenshot
+                              </Tooltip>
+                            }
+                          >
+                            <div
+                              onClick={() =>
+                                openEditModal(screenshot.name, screenshot._id)
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="activityButtonEdit"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Delete screenshot
+                              </Tooltip>
+                            }
+                          >
+                            <div onClick={() => removeFile(screenshot._id)}>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="activityButtonDelete"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center p-5">
+                  <br />
+                  No screenshots
+                  <br />
+                  <br />
+                </div>
+              )}
+            </div>
+          </div>
           <EditModal
             show={editData.show}
             closeEditModal={closeEditModal}
@@ -185,36 +319,6 @@ const Screenshots = ({
             title={photoData.title}
             imgUrl={photoData.imgUrl}
           />
-          <div>
-            <label for="name">
-              <b>Add screenshot</b>
-            </label>
-            <form enctype="multipart/form-data" method="post" id="formUpload">
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleInput}
-              />
-              <input
-                type="file"
-                className="form-control"
-                ref={inputFileRef}
-                name="file"
-                required
-                onChange={handleFile}
-                multiple
-              />
-              <button
-                onClick={submitForm}
-                className="btn btn-primary btn-sm mt-3"
-              >
-                Add project
-              </button>
-            </form>
-          </div>
         </>
       )}
     </>

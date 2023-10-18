@@ -10,6 +10,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import CountUp from "react-countup";
+import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
 import "../../App.css";
 import cover from "../../assets/img/cover.jpg";
@@ -252,7 +253,7 @@ export default function Hero() {
             >
               <div className="accordion-body">
                 <div className="table-responsive my-3">
-                  <table className="table align-middle border table-striped table-hover">
+                  <Table className="tableRow" hover bordered>
                     <thead>
                       <tr>
                         <th>Date last update</th>
@@ -285,9 +286,9 @@ export default function Hero() {
                               <td>
                                 {formattedDate} {formattedTime}
                               </td>
-                              <td>{activity.task_id.project_id.name}</td>
-                              <td>{activity.task_id.name}</td>
-                              <td>{activity.name}</td>
+                              <td className="cell">{activity.task_id.project_id.name}</td>
+                              <td className="cell">{activity.task_id.name}</td>
+                              <td className="cell">{activity.name}</td>
                               <td>
                                 {activity.lastUpdateUser &&
                                   `${activity.lastUpdateUser.name} ${activity.lastUpdateUser.surname}`}
@@ -309,7 +310,7 @@ export default function Hero() {
                           );
                         })}
                     </tbody>
-                  </table>
+                  </Table>
                 </div>
               </div>
             </div>

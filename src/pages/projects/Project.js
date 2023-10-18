@@ -125,7 +125,10 @@ const Project = () => {
                                   </div>
                                 </div>
                                 <div className="progressBarPercentage">
-                                  {openTasksPercentage.toFixed(2)} %
+                                  {openTasksPercentage >= 0.1
+                                    ? openTasksPercentage.toFixed(2)
+                                    : "0"}{" "}
+                                  %
                                 </div>
                               </div>
                             </div>

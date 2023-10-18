@@ -2,9 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import Spacer from "../../components/spacer";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleChevronLeft,
+  faCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const AddProject = () => {
   const navigate = useNavigate();
@@ -104,11 +108,7 @@ const AddProject = () => {
             </div>
           </Link>
         </div>
-        {responseData}
-        <div className="card pageContainer">
-          <div className="card-header d-flex justify-content-between border-bottom pb-1">
-            <div className="">{title} </div>
-          </div>
+        <div className="card pageContainerFull">
           <div className="card-body">
             <div className="row justify-content-center">
               <div className="col-md-6 mt-3">
@@ -161,6 +161,8 @@ const AddProject = () => {
               </div>
               <div className="col-md-6 mt-3"></div>
 
+              <Spacer height={40} />
+
               <div className="col-md-12">
                 <label for="summary">
                   <b>Summary</b>
@@ -172,6 +174,8 @@ const AddProject = () => {
                   onChange={handleInput}
                 ></textarea>
               </div>
+
+              <Spacer height={40} />
 
               <div className="col-md-12">
                 <label for="description">
@@ -187,8 +191,9 @@ const AddProject = () => {
             </div>
             <button
               onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
+              className="btn btn-primary btn-sm addButtonSm mt-5"
             >
+              <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
               Add project
             </button>
           </div>

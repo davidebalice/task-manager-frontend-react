@@ -3,10 +3,26 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
 import Loading from "../../../components/loading";
+import Table from "react-bootstrap/Table";
+import Divider from "../../divider/";
+import Spacer from "../../spacer/";
+import moment from "moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCirclePlus,
+  faCircleXmark,
+  faNoteSticky,
+  faTrash,
+  faPenToSquare,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
+  const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -42,7 +58,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
 
   function removeFile(id) {
     Swal.fire({
-      title: "Corfirm delete?",
+      title: "Confirm delete?",
       text: "",
       icon: "warning",
       showCancelButton: true,
@@ -120,39 +136,24 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
         </>
       ) : (
         <>
-          {Array.isArray(files) && files.length > 0 ? (
-            files.map((file) => (
-              <div key={file._id}>
-                <a
-                  href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${file.file}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {" "}
-                  {file.name}
-                </a>
-                <div onClick={() => openEditModal(file.name, file._id)}>
-                  edit text
-                </div>
-                <div onClick={() => removeFile(file._id)}>remove</div>
-              </div>
-            ))
-          ) : (
-            <div>No files</div>
-          )}
-          <EditModal
-            show={editData.show}
-            closeEditModal={closeEditModal}
-            editData={editData}
-            updateUrl="/api/update/file"
-            onUpdateActivities={handleUpdateFiles}
-            type="files"
-          />
-          <div>
-            <label for="name">
-              <b>Add file</b>
-            </label>
+          <div
+            className="addButton col-sm-4 col-md-4 col-lg-3"
+            onClick={() => setAdd(!add)}
+          >
+            <FontAwesomeIcon
+              icon={add ? faCircleXmark : faCirclePlus}
+              className="addButtonIcon"
+            />
+            <div className="card-body d-flex px-1">
+              {add ? "Close" : "Add file"}
+            </div>
+          </div>
+
+          {add && (
             <form enctype="multipart/form-data" method="post" id="formUpload">
+              <label for="name">
+                <b>Add file to task</b>
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -160,7 +161,9 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
                 required
                 value={formData.name}
                 onChange={handleInput}
+                placeholder="Description of file"
               />
+              <Spacer height={20} />
               <input
                 type="file"
                 className="form-control"
@@ -172,12 +175,121 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
               />
               <button
                 onClick={submitForm}
-                className="btn btn-primary btn-sm mt-3"
+                className="btn addButtonSm btn-sm mt-3"
               >
-                Add project
+                <FontAwesomeIcon icon={faPlus} className="addButtonIconSm" />
+                Add file
               </button>
+              <Divider
+                className="divider"
+                marginTop={60}
+                marginBottom={60}
+                borderSize={1}
+                borderType={"solid"}
+                borderColor={"#ddd"}
+              >
+                {" "}
+              </Divider>
             </form>
-          </div>
+          )}
+
+          <Table className="tableRow" hover bordered>
+            <thead>
+              <tr>
+                <th>Data creation</th>
+                <th>Created by</th>
+                <th style={{ width: "60%" }}>File</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {Array.isArray(files) && files.length > 0 ? (
+                files.map((file) => (
+                  <tr key={file._id}>
+                    <td>
+                      {file.createdAt !== null &&
+                        moment(file.createdAt).format("DD/MM/YYYY")}
+                    </td>
+
+                    <td>
+                      {file.owner.name && file.owner.surname ? (
+                        <span>
+                          {file.owner.name} {file.owner.surname}
+                        </span>
+                      ) : null}
+                    </td>
+
+                    <td>
+                      <a
+                        href={`${process.env.REACT_APP_API_BASE_URL}/api/download/${file.file}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {" "}
+                        {file.name}
+                        <br />
+                        <u>{file.file}</u>
+                      </a>
+                    </td>
+
+                    <td>
+                      <div className="activityButton">
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              {" "}
+                              Edit description of file
+                            </Tooltip>
+                          }
+                        >
+                          <div
+                            onClick={() => openEditModal(file.name, file._id)}
+                          >
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              className="activityButtonEdit"
+                            />
+                          </div>
+                        </OverlayTrigger>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip"> Delete file</Tooltip>
+                          }
+                        >
+                          <div onClick={() => removeFile(file._id)}>
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="activityButtonDelete"
+                            />
+                          </div>
+                        </OverlayTrigger>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colspan="7" className="text-center p-5">
+                    <br />
+                    No files
+                    <br />
+                    <br />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+          <EditModal
+            show={editData.show}
+            closeEditModal={closeEditModal}
+            editData={editData}
+            updateUrl="/api/update/file"
+            onUpdateActivities={handleUpdateFiles}
+            type="files"
+          />
         </>
       )}
     </>

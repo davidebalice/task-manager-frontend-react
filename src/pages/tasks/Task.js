@@ -249,7 +249,10 @@ const Project = () => {
                                   </div>
                                 </div>
                                 <div className="progressBarPercentage">
-                                  {data.progress.toFixed(2)} %
+                                  {data.progress >= 0.1
+                                    ? data.progress.toFixed(2)
+                                    : "0"}{" "}
+                                  %
                                 </div>
                               </div>
                             </div>

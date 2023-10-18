@@ -125,7 +125,7 @@ const Users = () => {
                 <h4>{title}</h4>
               </div>
               <div className="card-body">
-                <Table striped bordered hover>
+                <Table className="tableRow" hover bordered>
                   <thead>
                     <tr>
                       <th>Photo</th>

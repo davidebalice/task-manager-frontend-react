@@ -3,6 +3,20 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
 import Loading from "../../../components/loading";
+import Table from "react-bootstrap/Table";
+import Divider from "../../divider/";
+import moment from "moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCirclePlus,
+  faCircleXmark,
+  faNoteSticky,
+  faTrash,
+  faPenToSquare,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Comments = ({
   comments,
@@ -45,12 +59,12 @@ const Comments = ({
 
   function removeComment(id) {
     Swal.fire({
-      title: "Sei sicuro?",
-      text: "Questa azione non può essere annullata!",
+      title: "Confirm delete?",
+      text: "",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sì, rimuovi!",
-      cancelButtonText: "No, annulla",
+      confirmButtonText: "Delete",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -68,13 +82,7 @@ const Comments = ({
           .then((response) => {
             console.log("response.data.comments");
             console.log(response.data.comments);
-            /*
-            const owner = data.owner;
-            setFormData({
-              ...formData,
-              owner: owner,
-            });
-    */
+
             handleUpdateComments(response.data.comments);
           })
           .catch((error) => {
@@ -130,34 +138,24 @@ const Comments = ({
         </>
       ) : (
         <>
-          {Array.isArray(comments) && comments.length > 0 ? (
-            comments.map((comment) => (
-              <div key={comment._id}>
-                {comment.comment}
-                <div
-                  onClick={() => openEditModal(comment.comment, comment._id)}
-                >
-                  edit
-                </div>
-                <div onClick={() => removeComment(comment._id)}>remove</div>
-              </div>
-            ))
-          ) : (
-            <div>No comments</div>
-          )}
-          <EditModal
-            show={editData.show}
-            closeEditModal={closeEditModal}
-            editData={editData}
-            updateUrl="/api/update/comment"
-            onUpdateActivities={handleUpdateComments}
-            type="comments"
-          />
-          <div>
-            <label for="name">
-              <b>Add comment</b>
-            </label>
+          <div
+            className="addButton col-sm-4 col-md-4 col-lg-3"
+            onClick={() => setAdd(!add)}
+          >
+            <FontAwesomeIcon
+              icon={add ? faCircleXmark : faCirclePlus}
+              className="addButtonIcon"
+            />
+            <div className="card-body d-flex px-1">
+              {add ? "Close" : "Add comment"}
+            </div>
+          </div>
+          {add && (
             <form>
+              <label for="name">
+                <b>Add comment to task</b>
+              </label>
+
               <textarea
                 type="text"
                 className="form-control"
@@ -168,12 +166,119 @@ const Comments = ({
               ></textarea>
               <button
                 onClick={submitForm}
-                className="btn btn-primary btn-sm mt-3"
+                className="btn addButtonSm btn-sm mt-3"
               >
-                Add project
+                <FontAwesomeIcon icon={faPlus} className="addButtonIconSm" />
+                Add comment
               </button>
+              <Divider
+                className="divider"
+                marginTop={60}
+                marginBottom={60}
+                borderSize={1}
+                borderType={"solid"}
+                borderColor={"#ddd"}
+              >
+                {" "}
+              </Divider>
             </form>
-          </div>
+          )}
+
+          <Table className="tableRow" hover bordered>
+            <thead>
+              <tr>
+                <th>Data creation</th>
+                <th>Created by</th>
+                <th>Comment</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {Array.isArray(comments) && comments.length > 0 ? (
+                comments.map((comment) => (
+                  <tr key={comment._id}>
+                    <td>
+                      {comment.createdAt !== null &&
+                        moment(comment.createdAt).format("DD/MM/YYYY")}
+                    </td>
+
+                    <td>
+                      {comment.owner.name && comment.owner.surname ? (
+                        <span>
+                          {comment.owner.name} {comment.owner.surname}
+                        </span>
+                      ) : null}
+                    </td>
+                    
+
+                    <td className="cell">
+                      <p>{comment.comment}</p>
+                    </td>
+
+                    <td>
+                      <div className="activityButton">
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              {" "}
+                              Edit comment
+                            </Tooltip>
+                          }
+                        >
+                          <div
+                            onClick={() =>
+                              openEditModal(comment.comment, comment._id)
+                            }
+                          >
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              className="activityButtonEdit"
+                            />
+                          </div>
+                        </OverlayTrigger>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">
+                              {" "}
+                              Delete comment
+                            </Tooltip>
+                          }
+                        >
+                          <div onClick={() => removeComment(comment._id)}>
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="activityButtonDelete"
+                            />
+                          </div>
+                        </OverlayTrigger>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colspan="7" className="text-center p-5">
+                    <br />
+                    No comments
+                    <br />
+                    <br />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+
+          <EditModal
+            show={editData.show}
+            closeEditModal={closeEditModal}
+            editData={editData}
+            updateUrl="/api/update/comment"
+            onUpdateActivities={handleUpdateComments}
+            type="comments"
+          />
         </>
       )}
     </>

@@ -56,7 +56,7 @@ const EditModal = ({
 
   return (
     <>
-      <Modal show={editData.show}>
+      <Modal show={editData.show} centered>
         <Modal.Header>
           <Modal.Title>Status</Modal.Title>
 

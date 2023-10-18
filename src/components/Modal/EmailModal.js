@@ -55,7 +55,7 @@ const EmailModal = ({ modalData, closeEmailModal }) => {
 
   return (
     <>
-      <Modal show={modalData.show}>
+      <Modal show={modalData.show} centered>
         message:{message}
         <br />
         text: {data.text}

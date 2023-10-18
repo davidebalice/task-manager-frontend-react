@@ -5,15 +5,17 @@ import EditModal from "../../../components/Modal/EditModal";
 import Table from "react-bootstrap/Table";
 import Loading from "../../../components/loading";
 import moment from "moment";
+import Divider from "../../divider/";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faListCheck,
-  faNoteSticky,
+  faCircleXmark,
   faTrash,
   faPenToSquare,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Activities = ({
@@ -70,7 +72,7 @@ const Activities = ({
       text: "",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Delete",
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -149,7 +151,10 @@ const Activities = ({
               className="addButton col-sm-4 col-md-4 col-lg-3"
               onClick={() => setAdd(!add)}
             >
-              <FontAwesomeIcon icon={faCirclePlus} className="addButtonIcon" />
+              <FontAwesomeIcon
+                icon={add ? faCircleXmark : faCirclePlus}
+                className="addButtonIcon"
+              />
               <div className="card-body d-flex px-1">
                 {add ? "Close" : "Add activity"}
               </div>
@@ -171,15 +176,26 @@ const Activities = ({
                 ></textarea>
                 <button
                   onClick={submitForm}
-                  className="btn btn-primary btn-sm mt-3"
+                  className="btn addButtonSm btn-sm mt-3"
                 >
+                  <FontAwesomeIcon icon={faPlus} className="addButtonIconSm" />
                   Add activity
                 </button>
+                <Divider
+                  className="divider"
+                  marginTop={60}
+                  marginBottom={60}
+                  borderSize={1}
+                  borderType={"solid"}
+                  borderColor={"#ddd"}
+                >
+                  {" "}
+                </Divider>
               </form>
             )}
           </div>
 
-          <Table striped bordered hover>
+          <Table className="tableRow" hover bordered>
             <thead>
               <tr>
                 <th className="text-center">Complete</th>
@@ -204,7 +220,8 @@ const Activities = ({
                         className="activityCheckbox"
                       />
                     </td>
-                    <td>
+
+                    <td className="cell">
                       <p
                         className={
                           activity.status === "Done"
@@ -228,10 +245,12 @@ const Activities = ({
                         </span>
                       ) : null}
                     </td>
+
                     <td>
                       {activity.lastUpdate !== null &&
                         moment(activity.lastUpdate).format("DD/MM/YYYY HH:mm")}
                     </td>
+                    
                     <td>
                       {activity.lastUpdateUser.name &&
                       activity.lastUpdateUser.surname ? (
@@ -273,12 +292,12 @@ const Activities = ({
                             </Tooltip>
                           }
                         >
-                        <div onClick={() => removeActivity(activity._id)}>
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            className="activityButtonDelete"
-                          />
-                        </div>
+                          <div onClick={() => removeActivity(activity._id)}>
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="activityButtonDelete"
+                            />
+                          </div>
                         </OverlayTrigger>
                       </div>
                     </td>
@@ -286,9 +305,11 @@ const Activities = ({
                 ))
               ) : (
                 <tr>
-                  <td colspan="5">
+                  <td colspan="7" className="text-center p-5">
                     <br />
                     No activities
+                    <br />
+                    <br />
                   </td>
                 </tr>
               )}
