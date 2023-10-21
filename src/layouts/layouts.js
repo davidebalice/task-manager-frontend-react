@@ -54,7 +54,7 @@ export default function Layouts() {
   const [headerNavManu, setheaderNavManu] = useState(true);
   const defaultOpenSidebar = localStorage.getItem("defaultOpenSidebar");
   const mainBody = document.getElementById("mainBody");
-  
+
   useEffect(() => {
     if (
       pathname === "/login" ||
@@ -90,10 +90,18 @@ export default function Layouts() {
   };
 
   useEffect(() => {
-    window.innerWidth >= 768 &&
-      (headerToggle
-        ? mainBody.classList.add("mainBody")
-        : mainBody.classList.remove("mainBody"));
+    if (window.innerWidth >= 1068) {
+      if (headerToggle) {
+        mainBody.classList.add("mainBody");
+      } else {
+        mainBody.classList.remove("mainBody");
+      }
+    } else {
+      localStorage.setItem("defaultOpenSidebar", "close");
+      setHeaderToggle(false);
+      setheaderNavManu(false);
+    }
+
     if (document.getElementById("header") !== null) {
       headerToggle &&
         document.getElementById("header").classList.add("mainBody");

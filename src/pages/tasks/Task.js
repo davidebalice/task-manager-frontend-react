@@ -10,10 +10,17 @@ import Activities from "../../components/Tasks/Activities/Activities";
 import Comments from "../../components/Tasks/Comments/Comments";
 import File from "../../components/Tasks/File/File";
 import Screenshots from "../../components/Tasks/Screenshots/Screenshots";
+import Spacer from "../../components/spacer/";
 import moment from "moment";
 import Loading from "../../components/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faChevronLeft,
+  faCalendar,
+  faClock,
+  faComment,
+} from "@fortawesome/free-solid-svg-icons";
 import { queries } from "@testing-library/react";
 
 const Project = () => {
@@ -31,6 +38,7 @@ const Project = () => {
     task: [],
     project: {},
     demo: false,
+    lastComment: [],
   });
 
   function updateComments(newComments) {
@@ -160,6 +168,26 @@ const Project = () => {
     console.log(percentage);
   }, [data.activities]);
 
+  const getLatestComment = (comments) => {
+    if (!comments || comments.length === 0) {
+      return null;
+    }
+    let latestComment = comments[0];
+    for (const comment of comments) {
+      if (comment.createdAt > latestComment.createdAt) {
+        latestComment = comment;
+      }
+    }
+    return latestComment;
+  };
+
+  useEffect(() => {
+    setData((prevData) => ({
+      ...prevData,
+      lastComment: getLatestComment(data.comments),
+    }));
+  }, [data.comments]);
+
   const title = "Task";
   const brad = [
     {
@@ -215,47 +243,53 @@ const Project = () => {
 
                             <div className="projectDetailData">
                               <p>
-                                <b>Creation date</b>:<br />
+                                <p className="projectDetailMidTitle">
+                                  Creation date:
+                                </p>
                                 {moment(data.task.createdAt).format(
                                   "DD/MM/YYYY"
                                 )}
                               </p>
                               <p>
-                                <b>Created by</b>:<br />
-                                {data.task.owner
-                                  ? data.task.owner.name
-                                  : ""}{" "}
+                                <p className="projectDetailMidTitle">
+                                  Created by:
+                                </p>
+                                {data.task.owner ? data.task.owner.name : ""}{" "}
                                 {data.task.owner ? data.task.owner.surname : ""}
                               </p>
                               <p>
-                                <b>Last update</b>:<br />
+                                <p className="projectDetailMidTitle">
+                                  Last update:
+                                </p>
                                 {moment(data.task.lastUpdate).format(
                                   "DD/MM/YYYY HH:mm"
                                 )}
                               </p>
-                            </div>
 
-                            <div className="taskSection">
-                              <p>
-                                <b>Task progress</b>:
-                              </p>
-                              <div className="progressContainer">
-                                <div className="progressBarContainer">
-                                  <div
-                                    className="progressBar"
-                                    style={{ width: `${data.progress}%` }}
-                                  >
-                                    &nbsp;
+                              <div>
+                                <p className="projectDetailMidTitle mb-0">
+                                  <b>Task progress</b>:
+                                </p>
+                                <div className="progressContainer">
+                                  <div className="progressBarContainer">
+                                    <div
+                                      className="progressBar"
+                                      style={{ width: `${data.progress}%` }}
+                                    >
+                                      &nbsp;
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="progressBarPercentage">
-                                  {data.progress >= 0.1
-                                    ? data.progress.toFixed(2)
-                                    : "0"}{" "}
-                                  %
+                                  <div className="progressBarPercentage">
+                                    {data.progress >= 0.1
+                                      ? data.progress.toFixed(2)
+                                      : "0"}{" "}
+                                    %
+                                  </div>
                                 </div>
                               </div>
                             </div>
+
+                            <Spacer height={60} />
 
                             <ButtonTask setTab={setTab} tab={tab} />
                             {tab === "activities" ? (
@@ -293,12 +327,62 @@ const Project = () => {
                           </div>
                         </div>
 
-                        <div className="col-md-4 mt-3">
-                          <div>
-                            <label>
-                              <b>Client</b>
-                            </label>
-                            <p>aaaa</p>
+                        <div className="col-12 col-md-4 mt-3 ">
+                          <div className="sideSection">
+                            <div className="sideText">
+                              {data.lastComment &&
+                                data.lastComment.comment !== "" && (
+                                  <>
+                                    <p className="mb-2 bold">Last comment:</p>
+
+                                    <div className="dataLastColumn">
+                                      <div className="imgThumbContainer">
+                                        <img
+                                          src={`${
+                                            process.env.REACT_APP_API_BASE_URL
+                                          }/api/user/img/${
+                                            data.lastComment.owner.photo &&
+                                            data.lastComment.owner.photo
+                                          }`}
+                                          class="imgThumb"
+                                          alt=""
+                                        />{" "}
+                                        <span className="text-primary bold">
+                                          {data.lastComment.owner.name}{" "}
+                                          {data.lastComment.owner.surname}
+                                        </span>
+                                      </div>
+
+                                      <div className="dataContainer">
+                                        <FontAwesomeIcon
+                                          icon={faCalendar}
+                                          className="text-primary dataIcon"
+                                        />
+                                        <span>
+                                          {moment(
+                                            data.lastComment.createdAt
+                                          ).format("DD/MM/YYYY HH:mm")}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <br />
+                                    <span>{data.lastComment.comment}</span>
+                                  </>
+                                )}
+                            </div>
+
+                            <div
+                              onClick={() => setTab("comments")}
+                              style={{ color: "#333" }}
+                            >
+                                 <FontAwesomeIcon
+                                          icon={faComment}
+                                          className="text-primary dataIcon"
+                                        />
+                              
+                              tutti i commenti
+                            </div>
                           </div>
 
                           <div>

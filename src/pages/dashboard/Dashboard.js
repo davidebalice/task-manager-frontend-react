@@ -284,7 +284,7 @@ export default function Hero() {
                           return (
                             <tr key={activity._id} value={activity._id}>
                               <td>
-                                {formattedDate} {formattedTime}
+                                {formattedDate}<br />{formattedTime}
                               </td>
                               <td className="cell">{activity.task_id.project_id.name}</td>
                               <td className="cell">{activity.task_id.name}</td>

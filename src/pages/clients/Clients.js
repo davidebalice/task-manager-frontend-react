@@ -133,7 +133,6 @@ const Clients = () => {
                       <th>Photo</th>
                       <th>Name</th>
                       <th>Email</th>
-                      <th>Role</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -149,20 +148,9 @@ const Clients = () => {
                           />
                         </td>
                         <td>
-                          {client.surname} {client.name} {client.createdAt}
+                          {client.companyName}
                         </td>
                         <td>{client.email}</td>
-                        <td>{client.role}</td>
-                        <td>
-                          <button
-                            onClick={() => null}
-                            className={`btn p-0 px-1 btn-success btn-sm`}
-                          >
-                            {client.label}
-                          </button>
-                        </td>
-                        <td>progress</td>
-                        <td>{client.formattedDeadline}</td>
                         <td>
                           <Link to={`/edit/client/${client._id}`}>
                             <button

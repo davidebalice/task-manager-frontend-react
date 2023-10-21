@@ -78,48 +78,54 @@ const Project = () => {
           <>
             <ButtonGroup projectId={id} selectedTab="project" />
             <div className="row">
-              <div className="col-12">
-                <div className="card pageContainer">
-                  <div className="tab-content paymentSetting_content mx-2">
-                    <div
-                      className="tab-pane fade show active"
-                      role="tabpanel"
-                      aria-labelledby="nav-home-tab"
-                    >
-                      <div className="row" style={{ padding: "20px" }}>
-                        <div
-                          className="col-md-8 mt-3"
-                          style={{ color: "#333" }}
-                        >
-                          <div>
-                            <b className="projectDetailTitle">{data.name}</b>
-                            <div className="projectDetailData">
-                              <p>
-                                <b>Creation date</b>:<br />
-                                {moment(data.createdAt).format("DD/MM/YYYY")}
+              <div className="card pageContainer">
+                <div className="tab-content paymentSetting_content mx-2">
+                  <div
+                    className="tab-pane fade show active"
+                    role="tabpanel"
+                    aria-labelledby="nav-home-tab"
+                  >
+                    <div className="row" style={{ padding: "20px" }}>
+                      <div
+                        className="col-12 col-md-8 mt-3"
+                        style={{ color: "#333" }}
+                      >
+                        <div>
+                          <b className="projectDetailTitle">{data.name}</b>
+                          <div className="projectDetailData">
+                            <p>
+                              <p className="projectDetailMidTitle">
+                                Creation date:
                               </p>
-                              <p>
-                                <b>Created by</b>:<br />
-                                {data.owner ? data.owner.name : ""}{" "}
-                                {data.owner ? data.owner.surname : ""}
+                              {moment(data.createdAt).format("DD/MM/YYYY")}
+                            </p>
+                            <p>
+                              <p className="projectDetailMidTitle">
+                                Creation by:
                               </p>
-                              <p>
-                                <b>Last update</b>:<br />
-                                {moment(data.lastUpdate).format(
-                                  "DD/MM/YYYY HH:mm"
-                                )}
+                              {data.owner ? data.owner.name : ""}{" "}
+                              {data.owner ? data.owner.surname : ""}
+                            </p>
+                            <p>
+                              <p className="projectDetailMidTitle">
+                                Last update:
                               </p>
-                            </div>
+                              {moment(data.lastUpdate).format(
+                                "DD/MM/YYYY HH:mm"
+                              )}
+                            </p>
 
-                            <div className="projectSection">
-                              <p>
+                            <div>
+                              <p className="projectDetailMidTitle mb-0">
                                 <b>Project progress</b>:
                               </p>
                               <div className="progressContainer">
                                 <div className="progressBarContainer">
                                   <div
                                     className="progressBar"
-                                    style={{ width: `${openTasksPercentage}%` }}
+                                    style={{
+                                      width: `${openTasksPercentage}%`,
+                                    }}
                                   >
                                     &nbsp;
                                   </div>
@@ -132,46 +138,47 @@ const Project = () => {
                                 </div>
                               </div>
                             </div>
+                          </div>
 
-                            <div className="projectSection">
-                              <label>
-                                <b>Members</b>
-                              </label>
+                          <div className="projectSection">
+                            <label>
+                              <b>Members</b>
+                            </label>
 
-                              {Array.isArray(members) && members.length > 0 ? (
-                                members.map((member) => (
-                                  <div key={member._id}>
-                                    {member.surname} {member.name}
-                                  </div>
-                                ))
-                              ) : (
-                                <div>No members</div>
-                              )}
-                            </div>
+                            {Array.isArray(members) && members.length > 0 ? (
+                              members.map((member) => (
+                                <div key={member._id}>
+                                  {member.surname} {member.name}
+                                </div>
+                              ))
+                            ) : (
+                              <div>No members</div>
+                            )}
+                          </div>
 
-                            <div className="projectSection">
-                              <label>
-                                <b>Description</b>
-                              </label>
-                              <br />
-                              {data.description}
-                            </div>
+                          <div className="projectSection">
+                            <label>
+                              <b>Description</b>
+                            </label>
+                            <br />
+                            {data.description}
                           </div>
                         </div>
+                      </div>
 
-                        <div className="col-md-4 mt-3">
-                          <div className="sideSection">
+                      <div className="col-12 col-md-4 mt-3 ">
+                        <div className="sideSection">
+                          <div className="sideSectionItem">
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faUser} />
                             </div>
-
                             <label>
                               <b>Client</b>
                               <p className="sideSectionTitle">aaaa</p>
                             </label>
                           </div>
 
-                          <div className="sideSection">
+                          <div className="sideSectionItem">
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faSackDollar} />
                             </div>
@@ -181,7 +188,7 @@ const Project = () => {
                             </label>
                           </div>
 
-                          <div className="sideSection">
+                          <div className="sideSectionItem">
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faListCheck} />
                             </div>
