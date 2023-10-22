@@ -4,7 +4,8 @@ import {
   faListCheck,
   faImage,
   faFile,
-  faComment
+  faUser,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ButtonTask = ({ setTab, tab }) => {
@@ -38,8 +39,7 @@ const ButtonTask = ({ setTab, tab }) => {
           className={`projectTab ${tab === "file" ? "projectTabSelected" : ""}`}
           onClick={() => setTab("file")}
         >
-          <FontAwesomeIcon icon={faFile} className="buttonGroupIcon" />{" "}
-          File
+          <FontAwesomeIcon icon={faFile} className="buttonGroupIcon" /> File
         </button>
 
         <button
@@ -51,6 +51,16 @@ const ButtonTask = ({ setTab, tab }) => {
         >
           <FontAwesomeIcon icon={faImage} className="buttonGroupIcon" />{" "}
           Screenshots
+        </button>
+
+        <button
+          type="button"
+          className={`projectTab ${
+            tab === "members" ? "projectTabSelected" : ""
+          }`}
+          onClick={() => setTab("members")}
+        >
+          <FontAwesomeIcon icon={faUser} className="buttonGroupIcon" /> Members
         </button>
       </div>
     </>

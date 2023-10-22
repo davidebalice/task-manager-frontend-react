@@ -13,6 +13,7 @@ import Screenshots from "../../components/Tasks/Screenshots/Screenshots";
 import Spacer from "../../components/spacer/";
 import moment from "moment";
 import Loading from "../../components/loading";
+import PhotoModal from "../../components/Modal/PhotoModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -20,6 +21,7 @@ import {
   faCalendar,
   faClock,
   faComment,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { queries } from "@testing-library/react";
 
@@ -39,7 +41,9 @@ const Project = () => {
     project: {},
     demo: false,
     lastComment: [],
+    lastScreenshot: [],
   });
+  const [photoData, setPhotoData] = useState({ show: false, imgUrl: "" });
 
   function updateComments(newComments) {
     setData((prevData) => ({
@@ -181,12 +185,34 @@ const Project = () => {
     return latestComment;
   };
 
+  const getLatestScreenshot = (screenshots) => {
+    if (!screenshots || screenshots.length === 0) {
+      return null;
+    }
+    let latestScreenshot = screenshots[0];
+    for (const screenshot of screenshots) {
+      if (screenshot.createdAt > latestScreenshot.createdAt) {
+        latestScreenshot = screenshot;
+      }
+    }
+    return latestScreenshot;
+  };
+
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
       lastComment: getLatestComment(data.comments),
+      lastScreenshot: getLatestScreenshot(data.screenshots),
     }));
-  }, [data.comments]);
+  }, [data.comments, data.screenshots]);
+
+  const openPhotoModal = (imgUrl, title) => {
+    setPhotoData({ show: true, imgUrl, title });
+  };
+
+  const closePhotoModal = () => {
+    setPhotoData(false, "", "");
+  };
 
   const title = "Task";
   const brad = [
@@ -330,6 +356,25 @@ const Project = () => {
                         <div className="col-12 col-md-4 mt-3 ">
                           <div className="sideSection">
                             <div className="sideText">
+                              <label>
+                                <b>Members</b>
+                              </label>
+
+                              {Array.isArray(data.members) &&
+                              data.members.length > 0 ? (
+                                data.members.map((member) => (
+                                  <div key={member._id}>
+                                    {member.surname} {member.name}
+                                  </div>
+                                ))
+                              ) : (
+                                <div>No members</div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="sideSection">
+                            <div className="sideText">
                               {data.lastComment &&
                                 data.lastComment.comment !== "" && (
                                   <>
@@ -375,45 +420,93 @@ const Project = () => {
                             <div
                               onClick={() => setTab("comments")}
                               style={{ color: "#333" }}
+                              className="AllButton"
                             >
-                                 <FontAwesomeIcon
-                                          icon={faComment}
-                                          className="text-primary dataIcon"
-                                        />
-                              
-                              tutti i commenti
+                              <FontAwesomeIcon
+                                icon={faComment}
+                                className="text-primary dataIcon"
+                              />
+                              All comments
                             </div>
                           </div>
 
-                          <div>
-                            <label>
-                              <b>Budget</b>
-                            </label>
-                            <p>aaaa</p>
-                          </div>
+                          <div className="sideSection">
+                            <div className="sideText">
+                              {data.lastScreenshot &&
+                                data.lastScreenshot.comment !== "" && (
+                                  <>
+                                    <p className="mb-2 bold">
+                                      Last screenshot:
+                                    </p>
 
-                          <div>
-                            <label>
-                              <b>Tasks</b>
-                            </label>
-                            <p>aaaa</p>
-                          </div>
+                                    <div className="dataLastColumn">
+                                      <div className="imgThumbContainer">
+                                        <img
+                                          src={`${
+                                            process.env.REACT_APP_API_BASE_URL
+                                          }/api/user/img/${
+                                            data.lastScreenshot.owner.photo &&
+                                            data.lastScreenshot.owner.photo
+                                          }`}
+                                          class="imgThumb"
+                                          alt=""
+                                        />{" "}
+                                        <span className="text-primary bold">
+                                          {data.lastScreenshot.owner.name}{" "}
+                                          {data.lastScreenshot.owner.surname}
+                                        </span>
+                                      </div>
 
-                          <div>
-                            <label>
-                              <b>Members</b>
-                            </label>
+                                      <div className="dataContainer">
+                                        <FontAwesomeIcon
+                                          icon={faCalendar}
+                                          className="text-primary dataIcon"
+                                        />
+                                        <span>
+                                          {moment(
+                                            data.lastScreenshot.createdAt
+                                          ).format("DD/MM/YYYY HH:mm")}
+                                        </span>
+                                      </div>
+                                    </div>
 
-                            {Array.isArray(data.members) &&
-                            data.members.length > 0 ? (
-                              data.members.map((member) => (
-                                <div key={member._id}>
-                                  {member.surname} {member.name}
-                                </div>
-                              ))
-                            ) : (
-                              <div>No members</div>
-                            )}
+                                    <br />
+                                    <img
+                                      src={`${
+                                        process.env.REACT_APP_API_BASE_URL
+                                      }/api/screenshot/img/${
+                                        data.lastScreenshot &&
+                                        data.lastScreenshot.file
+                                      }`}
+                                      alt=""
+                                      className="screenshotImg"
+                                      onClick={() =>
+                                        openPhotoModal(
+                                          `${
+                                            process.env.REACT_APP_API_BASE_URL
+                                          }/api/screenshot/img/${
+                                            data.lastScreenshot &&
+                                            data.lastScreenshot.file
+                                          }`,
+                                          data.lastScreenshot.name
+                                        )
+                                      }
+                                    />
+                                  </>
+                                )}
+                            </div>
+
+                            <div
+                              onClick={() => setTab("comments")}
+                              style={{ color: "#333" }}
+                              className="AllButton"
+                            >
+                              <FontAwesomeIcon
+                                icon={faImage}
+                                className="text-primary dataIcon"
+                              />
+                              All screenshots
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -425,6 +518,12 @@ const Project = () => {
           </>
         )}
       </div>
+      <PhotoModal
+        show={photoData.show}
+        closePhotoModal={closePhotoModal}
+        title={photoData.title}
+        imgUrl={photoData.imgUrl}
+      />
     </>
   );
 };
