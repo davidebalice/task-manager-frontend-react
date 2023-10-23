@@ -9984,7 +9984,7 @@ span.select2-container.select2-container--default.select2-container--open {
   border-radius: 6px 6px 0px 0px;
   border: 1px solid #ddd;
   border-bottom: 0px;
-  padding: 12px 30px;
+  padding: 12px 20px;
   color: #333;
   font-weight: bold;
   background: #fff;
@@ -9992,6 +9992,7 @@ span.select2-container.select2-container--default.select2-container--open {
   align-items: center;
   gap: 12px;
   margin-right: 8px;
+  font-size: 15px;
 }
 
 .projectTab:hover {
@@ -10006,16 +10007,20 @@ span.select2-container.select2-container--default.select2-container--open {
     border: 1px solid #ddd;
     gap: 8px;
     border-bottom: 1px solid #ddd;
+    font-size: 13px;
   }
   .borderBottom {
     border: 0px;
     width: 100%;
     margin-bottom: 40px;
   }
+  .buttonGroupIcon {
+    font-size: 16px;
+  }
 }
 
 .buttonGroupIcon {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .projectTabSelected {
@@ -10082,6 +10087,7 @@ label {
   justify-content: start;
   color: #444;
   padding: 20px;
+  overflow: auto;
 }
 
 .sideSectionItem {
@@ -10135,6 +10141,20 @@ label {
   display: flex;
   align-items: center;
   height: 32px;
+}
+
+.taskButtonDisabled {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: #e1e1e1 !important;
+  color: #777 !important;
+  border-color: #e1e1e1 !important;
+}
+
+.taskButtonDisabled:hover {
+  background: #d1d1d1 !important;
+  border-color: #d1d1d1 !important;
 }
 
 .projectDetailTitle {
@@ -10274,7 +10294,7 @@ label {
   width: 44px;
 }
 
-.imgThumbContainer{
+.imgThumbContainer {
   display: flex;
   gap: 8px;
   font-weight: bold;
@@ -10282,38 +10302,96 @@ label {
   align-items: center;
 }
 
-.dataContainer{
+.dataContainer {
   display: flex;
   gap: 8px;
-  color:#777;
+  color: #777;
   font-size: 14px;
   align-items: center;
   font-style: italic;
 }
 
-.dataIcon{
-  font-size:25px
+.dataIcon {
+  font-size: 25px;
 }
 
-.dataLastColumn{
+.dataLastColumn {
   display: flex;
-  gap:40px
+  gap: 40px;
 }
 
-.AllButton{
+.AllButton {
   display: flex;
-  background:#f1f1f1;
+  background: #f1f1f1;
   border-radius: 6px;
-  width:fit-content;
+  width: fit-content;
   align-items: center;
   padding: 8px 20px;
-  gap:14px;
+  gap: 14px;
   cursor: pointer;
 }
 
-.AllButton:hover{
-  background:#e1e1e1;
+.AllButton:hover {
+  background: #e1e1e1;
 }
+
+.membersRow {
+  gap: 6px;
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.membersButtonDeleteIcon {
+  color: #fff;
+  font-size: 12px;
+}
+
+.membersButtonDelete {
+  background: red;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.membersButtonDelete:hover {
+  background: #a70c0c;
+}
+
+.membersButtonAddIcon {
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.membersButtonAdd {
+  background: #1fd51f;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.membersButtonAdd:hover {
+  background: #15b715;
+}
+
+.memberSide {
+  float: left !important;
+  width:220px;
+  margin-bottom:6px;
+  overflow: hidden;
+}
+
 /*# sourceMappingURL=style.css.map */
 
 /* end  dashboard css */

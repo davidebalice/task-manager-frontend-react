@@ -9,7 +9,7 @@ import AddProject from "../pages/projects/AddProject";
 import EditProject from "../pages/projects/EditProject";
 import AddTask from "../pages/tasks/AddTask";
 import EditTask from "../pages/tasks/EditTask";
-import ProjectMembers from "../pages/projects/ProjectMembers";
+import Members from "../pages/projects/Members";
 import Users from "../pages/users/Users";
 import AddUser from "../pages/users/AddUser";
 import EditUser from "../pages/users/EditUser";
@@ -35,7 +35,7 @@ export function AdminRoutes() {
         <Route path="/project/:id" element={<Project />} />
         <Route path="/add/project/" element={<AddProject />} />
         <Route path="/edit/project/:id" element={<EditProject />} />
-        <Route path="/project/members/:id" element={<ProjectMembers />} />
+        <Route path="/project/members/:id" element={<Members />} />
 
         <Route path="/project/tasks/:id" element={<Tasks />} />
         <Route path="/project/task/:id" element={<Task />} />

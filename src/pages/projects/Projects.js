@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { Context } from "../../context/UserContext";
+import isAllowed from "../../middlewares/allow";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
 import { Link } from "react-router-dom";
@@ -18,6 +20,7 @@ const Projects = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const token = localStorage.getItem("authToken");
+  const { userData } = useContext(Context);
 
   useEffect(() => {
     axios
@@ -36,7 +39,9 @@ const Projects = () => {
       .catch((error) => {
         console.error("Error during api call:", error);
       });
+      
   }, [token]);
+
 
   const title = "Projects";
   const brad = [
@@ -176,6 +181,8 @@ const Projects = () => {
                         </OverlayTrigger>
                       </Link>
 
+                      {isAllowed(userData.role, userData._id, data.members, data.owner._id) ? (<b>true</b>) : (<b>false</b>)}
+
                       <Link to={`/edit/project/${data._id}`}>
                         <OverlayTrigger
                           placement="top"
@@ -192,6 +199,9 @@ const Projects = () => {
                           </button>
                         </OverlayTrigger>
                       </Link>
+
+
+
 
                       <Link to={`/project/tasks/${data._id}`}>
                         <OverlayTrigger

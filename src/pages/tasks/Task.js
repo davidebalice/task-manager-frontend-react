@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { Context } from "../../context/UserContext";
+import isAllowed from "../../middlewares/allow";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -9,6 +11,7 @@ import ButtonTask from "../../components/Tasks/ButtonTask/ButtonTask";
 import Activities from "../../components/Tasks/Activities/Activities";
 import Comments from "../../components/Tasks/Comments/Comments";
 import File from "../../components/Tasks/File/File";
+import Members from "../../components/Tasks/Members/Members";
 import Screenshots from "../../components/Tasks/Screenshots/Screenshots";
 import Spacer from "../../components/spacer/";
 import moment from "moment";
@@ -23,12 +26,12 @@ import {
   faComment,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import { queries } from "@testing-library/react";
 
 const Project = () => {
   const { id } = useParams();
   const [tab, setTab] = useState("activities");
   const token = localStorage.getItem("authToken");
+  const { userData } = useContext(Context);
   const [data, setData] = useState({
     loading: true,
     progress: 0,
@@ -70,6 +73,13 @@ const Project = () => {
     setData((prevData) => ({
       ...prevData,
       activities: newActivities,
+    }));
+  }
+
+  function updateMembers(newMembers) {
+    setData((prevData) => ({
+      ...prevData,
+      members: newMembers,
     }));
   }
 
@@ -137,7 +147,7 @@ const Project = () => {
           comments: response.data.comments,
           project: response.data.task.project_id,
           task: response.data.task,
-          members: response.data.members,
+          members: response.data.task.members,
           screenshots: response.data.screenshots,
           activities: response.data.activities,
           files: response.data.files,
@@ -347,6 +357,13 @@ const Project = () => {
                                 projectId={data.project._id}
                                 taskId={data.task._id}
                               />
+                            ) : tab === "members" ? (
+                              <Members
+                                members={data.members}
+                                onUpdateMembers={updateMembers}
+                                projectId={data.project._id}
+                                taskId={data.task._id}
+                              />
                             ) : (
                               <></>
                             )}
@@ -357,26 +374,40 @@ const Project = () => {
                           <div className="sideSection">
                             <div className="sideText">
                               <label>
-                                <b>Members</b>
+                                <b>Members:</b>
                               </label>
-
+                              <div>
                               {Array.isArray(data.members) &&
                               data.members.length > 0 ? (
                                 data.members.map((member) => (
-                                  <div key={member._id}>
-                                    {member.surname} {member.name}
+                                  <div key={member._id} className="membersRow memberSide">
+                                    <div className="imgThumbContainer">
+                                      <img
+                                        src={`${
+                                          process.env.REACT_APP_API_BASE_URL
+                                        }/api/user/img/${
+                                          member.photo && member.photo
+                                        }`}
+                                        class="imgThumb"
+                                        alt=""
+                                      />
+                                      <span className="text-primary bold">
+                                        {member.name} {member.surname}
+                                      </span>
+                                    </div>
                                   </div>
                                 ))
                               ) : (
                                 <div>No members</div>
                               )}
+                              </div>
                             </div>
                           </div>
 
-                          <div className="sideSection">
-                            <div className="sideText">
-                              {data.lastComment &&
-                                data.lastComment.comment !== "" && (
+                          {data.lastComment &&
+                            data.lastComment.comment !== "" && (
+                              <div className="sideSection">
+                                <div className="sideText">
                                   <>
                                     <p className="mb-2 bold">Last comment:</p>
 
@@ -414,26 +445,26 @@ const Project = () => {
                                     <br />
                                     <span>{data.lastComment.comment}</span>
                                   </>
-                                )}
-                            </div>
+                                </div>
 
-                            <div
-                              onClick={() => setTab("comments")}
-                              style={{ color: "#333" }}
-                              className="AllButton"
-                            >
-                              <FontAwesomeIcon
-                                icon={faComment}
-                                className="text-primary dataIcon"
-                              />
-                              All comments
-                            </div>
-                          </div>
+                                <div
+                                  onClick={() => setTab("comments")}
+                                  style={{ color: "#333" }}
+                                  className="AllButton"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faComment}
+                                    className="text-primary dataIcon"
+                                  />
+                                  All comments
+                                </div>
+                              </div>
+                            )}
 
-                          <div className="sideSection">
-                            <div className="sideText">
-                              {data.lastScreenshot &&
-                                data.lastScreenshot.comment !== "" && (
+                          {data.lastScreenshot &&
+                            data.lastScreenshot.comment !== "" && (
+                              <div className="sideSection">
+                                <div className="sideText">
                                   <>
                                     <p className="mb-2 bold">
                                       Last screenshot:
@@ -493,21 +524,21 @@ const Project = () => {
                                       }
                                     />
                                   </>
-                                )}
-                            </div>
+                                </div>
 
-                            <div
-                              onClick={() => setTab("comments")}
-                              style={{ color: "#333" }}
-                              className="AllButton"
-                            >
-                              <FontAwesomeIcon
-                                icon={faImage}
-                                className="text-primary dataIcon"
-                              />
-                              All screenshots
-                            </div>
-                          </div>
+                                <div
+                                  onClick={() => setTab("comments")}
+                                  style={{ color: "#333" }}
+                                  className="AllButton"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faImage}
+                                    className="text-primary dataIcon"
+                                  />
+                                  All screenshots
+                                </div>
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>

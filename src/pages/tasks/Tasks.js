@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { Context } from "../../context/UserContext";
+import isAllowed from "../../middlewares/allow";
 import Breadcrumb from "../../components/breadcrumb/index";
 import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
@@ -25,6 +27,7 @@ const Tasks = () => {
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(1);
   const token = localStorage.getItem("authToken");
+  const { userData } = useContext(Context);
   const [modalData, setModalData] = useState({
     show: false,
     name: "",
@@ -259,6 +262,9 @@ const Tasks = () => {
                                     flexDirection: "row",
                                   }}
                                 >
+
+
+                                {isAllowed(userData.role, userData._id, task.members, task.owner) ? (
                                   <Link to={`/project/edit/task/${task._id}`}>
                                     <OverlayTrigger
                                       placement="top"
@@ -279,6 +285,27 @@ const Tasks = () => {
                                       </button>
                                     </OverlayTrigger>
                                   </Link>
+                                  ) : (
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip className="tooltip">
+                                        Edit not allowed
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <button
+                                      onClick={() => null}
+                                      className="btn btn-primary btn-sm ms-1 taskButton taskButtonDisabled"
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faPenToSquare}
+                                        className="taskIcon"
+                                      />
+                                    </button>
+                                  </OverlayTrigger>)}
+
+
 
                                   <OverlayTrigger
                                     placement="top"
@@ -304,25 +331,45 @@ const Tasks = () => {
                                       />
                                     </button>
                                   </OverlayTrigger>
-
-                                  <OverlayTrigger
-                                    placement="top"
-                                    overlay={
-                                      <Tooltip className="tooltip">
-                                        Delete task
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <button
-                                      onClick={() => deleteTask(task._id)}
-                                      className="btn btn-danger btn-sm ms-1 taskButton"
+                                  
+                                  {isAllowed(userData.role, userData._id, task.members, task.owner) ? (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip className="tooltip">
+                                          Delete task
+                                        </Tooltip>
+                                      }
                                     >
-                                      <FontAwesomeIcon
-                                        icon={faTrash}
-                                        className="taskIcon taskIcon2"
-                                      />
-                                    </button>
-                                  </OverlayTrigger>
+                                      <button
+                                        onClick={() => deleteTask(task._id)}
+                                        className="btn btn-danger btn-sm ms-1 taskButton"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="taskIcon taskIcon2"
+                                        />
+                                      </button>
+                                    </OverlayTrigger>
+                                     ) : (
+                                      <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip className="tooltip">
+                                          Delete task not allowed
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <button
+                                        className="btn btn-danger btn-sm ms-1 taskButton taskButtonDisabled"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="taskIcon taskIcon2"
+                                        />
+                                      </button>
+                                    </OverlayTrigger>
+                                    )}
                                 </div>
                               </td>
                             </tr>

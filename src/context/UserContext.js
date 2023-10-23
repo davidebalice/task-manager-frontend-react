@@ -6,6 +6,7 @@ export const Context = createContext();
 export function UserProvider({ children }) {
   const token = localStorage.getItem("authToken");
   const [userData, setUserData] = useState(null);
+  const [demo, setDemo] = useState(false);
 
   const login = (userData) => {
     setUserData(userData);
@@ -32,6 +33,7 @@ export function UserProvider({ children }) {
       .then((response) => {
         console.log(response.data.user);
         setUserData(response.data.user);
+        setDemo(response.data.demo);
       })
       .catch((error) => {
         console.error("Error calling api:", error);
@@ -45,6 +47,7 @@ export function UserProvider({ children }) {
         setUserData,
         login,
         logout,
+        demo: demo,
       }}
     >
       {children}

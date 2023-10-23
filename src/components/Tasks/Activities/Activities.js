@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import EditModal from "../../../components/Modal/EditModal";
+import EditModal from "../../Modal/EditModal";
 import Table from "react-bootstrap/Table";
-import Loading from "../../../components/loading";
+import Loading from "../../loading";
 import moment from "moment";
-import Divider from "../../divider/";
+import Divider from "../../divider";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -250,7 +250,7 @@ const Activities = ({
                       {activity.lastUpdate !== null &&
                         moment(activity.lastUpdate).format("DD/MM/YYYY HH:mm")}
                     </td>
-                    
+
                     <td>
                       {activity.lastUpdateUser.name &&
                       activity.lastUpdateUser.surname ? (

@@ -1,14 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Context } from "../../context/UserContext";
 
-const ProjectMembers = () => {
+const Members = () => {
   const token = localStorage.getItem("authToken");
   const { id } = useParams();
   const title = "Project members";
+  const { userData, demo } = useContext(Context);
   const brad = [
     {
       name: "home",
@@ -49,7 +53,9 @@ const ProjectMembers = () => {
         console.log(response.data);
         const members = response.data.project.members;
         const users = response.data.users;
+        console.log("members");
         console.log(members);
+        console.log("users");
         console.log(users);
 
         const data = {
@@ -86,7 +92,12 @@ const ProjectMembers = () => {
         }
       )
       .then((response) => {
-        loadMembers();
+        //loadMembers();
+        const data = {
+          members: response.data.members,
+          users: response.data.users,
+        };
+        setData(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -109,7 +120,12 @@ const ProjectMembers = () => {
         }
       )
       .then((response) => {
-        loadMembers();
+        //loadMembers();
+        const data = {
+          members: response.data.members,
+          users: response.data.users,
+        };
+        setData(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -119,6 +135,7 @@ const ProjectMembers = () => {
   return (
     <>
       <div className="page">
+        {demo ? "true demo" : "false demo"}
         <Breadcrumb title={title} brad={brad} />
         <ButtonGroup projectId={id} selectedTab="members" />
         <div className="card pageContainer">
@@ -128,14 +145,31 @@ const ProjectMembers = () => {
                 <label for="name">
                   <b>Active members</b>
                 </label>
-
+                <br />
                 {Array.isArray(data.members) && data.members.length > 0 ? (
                   data.members.map((member) => (
-                    <div key={member._id}>
-                      <div onClick={() => removeToProject(member._id)}>
-                        Remove
-                      </div>{" "}
-                      {member.surname} {member.name}
+                    <div key={member._id} className="membersRow">
+                      <div
+                        onClick={() => removeToProject(member._id)}
+                        className="membersButtonDelete"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="membersButtonDeleteIcon"
+                        />
+                      </div>
+                      <div className="imgThumbContainer">
+                        <img
+                          src={`${
+                            process.env.REACT_APP_API_BASE_URL
+                          }/api/user/img/${member.photo && member.photo}`}
+                          class="imgThumb"
+                          alt=""
+                        />
+                        <span className="text-primary bold">
+                          {member.name} {member.surname}
+                        </span>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -146,12 +180,31 @@ const ProjectMembers = () => {
                 <label for="brand">
                   <b>Add members to project</b>
                 </label>
-
+                <br />
                 {Array.isArray(data.users) && data.users.length > 0 ? (
                   data.users.map((user) => (
-                    <div key={user.id}>
-                      <div onClick={() => addToProject(user._id)}>Add</div>{" "}
-                      {user.surname} {user.name} {user._id}
+                    <div key={user._id} className="membersRow">
+                      <div
+                        onClick={() => addToProject(user._id)}
+                        className="membersButtonAdd"
+                      >
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          className="membersButtonAddIcon"
+                        />
+                      </div>
+                      <div className="imgThumbContainer">
+                        <img
+                          src={`${
+                            process.env.REACT_APP_API_BASE_URL
+                          }/api/user/img/${user.photo && user.photo}`}
+                          class="imgThumb"
+                          alt=""
+                        />
+                        <span className="text-primary bold">
+                          {user.name} {user.surname}
+                        </span>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -166,4 +219,4 @@ const ProjectMembers = () => {
   );
 };
 
-export default ProjectMembers;
+export default Members;
