@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
@@ -7,6 +8,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 const EditTask = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
+  const { userData, demo } = useContext(Context);
   const title = "Edit task";
   const brad = [
     {
@@ -61,42 +63,52 @@ const EditTask = () => {
       });
   }, []);
 
-  const submitForm = () => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/edit/task/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
-        setResponseData(response.data.message);
-
-        Swal.fire({
-          title: "Taks updated",
-          text: "",
-          icon: "success",
-          showCancelButton: true,
-          confirmButtonText: "Back to tasks",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            if (response.data.status === "success") {
-              navigate(`/project/tasks/${projectId}`);
-            }
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/edit/task/${id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data");
+          console.log(response.data);
+          setResponseData(response.data.message);
+
+          Swal.fire({
+            title: "Taks updated",
+            text: "",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Back to tasks",
+            cancelButtonText: "Close",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (response.data.status === "success") {
+                navigate(`/project/tasks/${projectId}`);
+              }
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

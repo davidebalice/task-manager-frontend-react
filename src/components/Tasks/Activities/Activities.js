@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
@@ -30,6 +31,7 @@ const Activities = ({
   const [add, setAdd] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
+  const { userData, demo } = useContext(Context);
   const [formData, setFormData] = useState({
     name: "",
     owner: "",
@@ -76,58 +78,76 @@ const Activities = ({
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            process.env.REACT_APP_API_BASE_URL + "/api/delete/activity/",
-            { id: id, task_id: taskId },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("response.data.activities");
-            console.log(response.data.activities);
-            handleUpdateActivities(response.data.activities);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+        if (demo) {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
           });
+        } else {
+          axios
+            .post(
+              process.env.REACT_APP_API_BASE_URL + "/api/delete/activity/",
+              { id: id, task_id: taskId },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("response.data.activities");
+              console.log(response.data.activities);
+              handleUpdateActivities(response.data.activities);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     });
   };
 
   const submitForm = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/add/activity/",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response.data.activities");
-        console.log(response.data.activities);
-
-        setFormData({
-          ...formData,
-          name: "",
-        });
-        setAdd(false);
-        handleUpdateActivities(response.data.activities);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/add/activity/",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data.activities");
+          console.log(response.data.activities);
+
+          setFormData({
+            ...formData,
+            name: "",
+          });
+          setAdd(false);
+          handleUpdateActivities(response.data.activities);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

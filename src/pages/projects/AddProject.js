@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
@@ -13,6 +14,7 @@ import {
 const AddProject = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
+  const { userData, demo } = useContext(Context);
   const title = "Add project";
   const brad = [
     {
@@ -65,32 +67,46 @@ const AddProject = () => {
       });
   }, []);
 
-  const submitForm = () => {
-    axios
-      .post(process.env.REACT_APP_API_BASE_URL + "/api/add/project", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
-        setResponseData(response.data.message);
-        const owner = data.owner;
-        setFormData({
-          ...formData,
-          owner: owner,
-        });
-
-        if (response.data.create === "success") {
-          navigate("/projects");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/add/project",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data");
+          console.log(response.data);
+          setResponseData(response.data.message);
+          const owner = data.owner;
+          setFormData({
+            ...formData,
+            owner: owner,
+          });
+
+          if (response.data.create === "success") {
+            navigate("/projects");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

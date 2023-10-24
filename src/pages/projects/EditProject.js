@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
@@ -9,6 +10,7 @@ import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
 const EditProject = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
+  const { userData, demo } = useContext(Context);
   const title = "Edit project";
   const [file, setFile] = useState(null);
   const brad = [
@@ -65,53 +67,64 @@ const EditProject = () => {
       });
   }, []);
 
-  const submitForm = () => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
-
-        if (response.data.status === "success") {
-          Swal.fire({
-            title: "Project updated",
-            text: "",
-            icon: "success",
-            showCancelButton: true,
-            confirmButtonText: "Back to projects",
-            cancelButtonText: "Close",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              if (response.data.status === "success") {
-                navigate("/projects");
-              }
-            }
-          });
-        } else if (response.data.status === "demo") {
-          Swal.fire({
-            title: "Demo mode",
-            text: "Crud operations are not allowed",
-            icon: "error",
-            cancelButtonText: "Close",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/edit/project/${id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data");
+          console.log(response.data);
+
+          if (response.data.status === "success") {
+            Swal.fire({
+              title: "Project updated",
+              text: "",
+              icon: "success",
+              showCancelButton: true,
+              confirmButtonText: "Back to projects",
+              cancelButtonText: "Close",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                if (response.data.status === "success") {
+                  navigate("/projects");
+                }
+              }
+            });
+          } else if (response.data.status === "demo") {
+            Swal.fire({
+              title: "Demo mode",
+              text: "Crud operations are not allowed",
+              icon: "error",
+              cancelButtonText: "Close",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
-  const submitFormPhoto = () => {
+  const submitFormPhoto = (e) => {
+    e.preventDefault();
     axios
       .post(
         `${process.env.REACT_APP_API_BASE_URL}/api/project/photo/${id}`,

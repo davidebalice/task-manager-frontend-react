@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from "../../loading";
@@ -23,6 +24,7 @@ const Members = ({
 }) => {
   const token = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(true);
+  const { userData, demo } = useContext(Context);
   const [data, setData] = useState({
     name: "",
     owner: "",
@@ -72,62 +74,80 @@ const Members = ({
   };
 
   const addToTask = (member_id) => {
-    console.log(member_id);
-    console.log(taskId);
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/add/member/task",
-        { member_id, task_id: taskId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        setData({
-          ...data,
-          task_id: taskId,
-          project_id: projectId,
-          members: response.data.members,
-          users: response.data.users,
-        });
-        handleUpdateMembers(response.data.members);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      console.log(member_id);
+      console.log(taskId);
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/add/member/task",
+          { member_id, task_id: taskId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          setData({
+            ...data,
+            task_id: taskId,
+            project_id: projectId,
+            members: response.data.members,
+            users: response.data.users,
+          });
+          handleUpdateMembers(response.data.members);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const removeToTask = (member_id) => {
-    console.log(member_id);
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/remove/member/task",
-        { member_id, task_id: taskId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        setData({
-          ...data,
-          task_id: taskId,
-          project_id: projectId,
-          members: response.data.members,
-          users: response.data.users,
-        });
-        handleUpdateMembers(response.data.members);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      console.log(member_id);
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/remove/member/task",
+          { member_id, task_id: taskId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          setData({
+            ...data,
+            task_id: taskId,
+            project_id: projectId,
+            members: response.data.members,
+            users: response.data.users,
+          });
+          handleUpdateMembers(response.data.members);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

@@ -27,7 +27,7 @@ const Tasks = () => {
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(1);
   const token = localStorage.getItem("authToken");
-  const { userData } = useContext(Context);
+  const { userData, demo } = useContext(Context);
   const [modalData, setModalData] = useState({
     show: false,
     name: "",
@@ -82,28 +82,37 @@ const Tasks = () => {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            `${process.env.REACT_APP_API_BASE_URL}/api/task/delete/${id}`,
-            { id: id },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("response.data.user");
-            console.log(response.data.user);
-            if (response.data.status === "success") {
-              setReload((prevCount) => prevCount + 1);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+        if (demo) {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
           });
+        } else {
+          axios
+            .post(
+              `${process.env.REACT_APP_API_BASE_URL}/api/task/delete/${id}`,
+              { id: id },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("response.data.user");
+              console.log(response.data.user);
+              if (response.data.status === "success") {
+                setReload((prevCount) => prevCount + 1);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     });
   }
@@ -262,21 +271,44 @@ const Tasks = () => {
                                     flexDirection: "row",
                                   }}
                                 >
-
-
-                                {isAllowed(userData.role, userData._id, task.members, task.owner) ? (
-                                  <Link to={`/project/edit/task/${task._id}`}>
+                                  {isAllowed(
+                                    userData.role,
+                                    userData._id,
+                                    task.members,
+                                    task.owner
+                                  ) ? (
+                                    <Link to={`/project/edit/task/${task._id}`}>
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                          <Tooltip className="tooltip">
+                                            Edit
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <button
+                                          onClick={() => null}
+                                          className="btn btn-primary btn-sm ms-1 taskButton"
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faPenToSquare}
+                                            className="taskIcon"
+                                          />
+                                        </button>
+                                      </OverlayTrigger>
+                                    </Link>
+                                  ) : (
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
                                         <Tooltip className="tooltip">
-                                          Edit
+                                          Edit not allowed
                                         </Tooltip>
                                       }
                                     >
                                       <button
                                         onClick={() => null}
-                                        className="btn btn-primary btn-sm ms-1 taskButton"
+                                        className="btn btn-primary btn-sm ms-1 taskButton taskButtonDisabled"
                                       >
                                         <FontAwesomeIcon
                                           icon={faPenToSquare}
@@ -284,28 +316,7 @@ const Tasks = () => {
                                         />
                                       </button>
                                     </OverlayTrigger>
-                                  </Link>
-                                  ) : (
-                                  <OverlayTrigger
-                                    placement="top"
-                                    overlay={
-                                      <Tooltip className="tooltip">
-                                        Edit not allowed
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <button
-                                      onClick={() => null}
-                                      className="btn btn-primary btn-sm ms-1 taskButton taskButtonDisabled"
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faPenToSquare}
-                                        className="taskIcon"
-                                      />
-                                    </button>
-                                  </OverlayTrigger>)}
-
-
+                                  )}
 
                                   <OverlayTrigger
                                     placement="top"
@@ -331,8 +342,13 @@ const Tasks = () => {
                                       />
                                     </button>
                                   </OverlayTrigger>
-                                  
-                                  {isAllowed(userData.role, userData._id, task.members, task.owner) ? (
+
+                                  {isAllowed(
+                                    userData.role,
+                                    userData._id,
+                                    task.members,
+                                    task.owner
+                                  ) ? (
                                     <OverlayTrigger
                                       placement="top"
                                       overlay={
@@ -351,8 +367,8 @@ const Tasks = () => {
                                         />
                                       </button>
                                     </OverlayTrigger>
-                                     ) : (
-                                      <OverlayTrigger
+                                  ) : (
+                                    <OverlayTrigger
                                       placement="top"
                                       overlay={
                                         <Tooltip className="tooltip">
@@ -360,16 +376,14 @@ const Tasks = () => {
                                         </Tooltip>
                                       }
                                     >
-                                      <button
-                                        className="btn btn-danger btn-sm ms-1 taskButton taskButtonDisabled"
-                                      >
+                                      <button className="btn btn-danger btn-sm ms-1 taskButton taskButtonDisabled">
                                         <FontAwesomeIcon
                                           icon={faTrash}
                                           className="taskIcon taskIcon2"
                                         />
                                       </button>
                                     </OverlayTrigger>
-                                    )}
+                                  )}
                                 </div>
                               </td>
                             </tr>

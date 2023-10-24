@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext";
 import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
@@ -6,6 +7,7 @@ import Table from "react-bootstrap/Table";
 import Swal from "sweetalert2";
 import EmailModal from "../../components/Modal/EmailModal";
 import Pagination from "../../components/pagination/Pagination";
+import NotPermission from "../Auth/notPermission";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -18,6 +20,7 @@ import {
 
 const Clients = () => {
   const { id } = useParams();
+  const { userData, demo } = useContext(Context);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get("page");
@@ -71,28 +74,37 @@ const Clients = () => {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            `${process.env.REACT_APP_API_BASE_URL}/api/client/delete/${id}`,
-            { id: id },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("response.data.status");
-            console.log(response.data.status);
-            if (response.data.status === "success") {
-              setReload((prevCount) => prevCount + 1);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+        if (demo) {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
           });
+        } else {
+          axios
+            .post(
+              `${process.env.REACT_APP_API_BASE_URL}/api/client/delete/${id}`,
+              { id: id },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("response.data.status");
+              console.log(response.data.status);
+              if (response.data.status === "success") {
+                setReload((prevCount) => prevCount + 1);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     });
   }
@@ -109,102 +121,110 @@ const Clients = () => {
 
   return (
     <>
-      {id}
-      <EmailModal
-        show={modalData.show}
-        closeEmailModal={closeEmailModal}
-        modalData={modalData}
-      />
-      <div className="page">
-        <Breadcrumb title={title} brad={brad} />
-        <Link to={`/add/client/`}>
-          <div className="btn btn-info btn-sm text-white">+ Add Client</div>
-        </Link>
-        <div className="row my-3">
-          <div className="col-12">
-            <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-              <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                <h4>{title}</h4>
-              </div>
-              <div className="card-body">
-                <Table className="tableRow" hover bordered>
-                  <thead>
-                    <tr>
-                      <th>Photo</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
+      {userData && userData.role === "admin" ? (
+        <>
+          <EmailModal
+            show={modalData.show}
+            closeEmailModal={closeEmailModal}
+            modalData={modalData}
+          />
+          <div className="page">
+            <Breadcrumb title={title} brad={brad} />
+            <Link to={`/add/client/`}>
+              <div className="btn btn-info btn-sm text-white">+ Add Client</div>
+            </Link>
+            <div className="row my-3">
+              <div className="col-12">
+                <div
+                  className="card"
+                  style={{ borderTop: "2px solid #4723d9" }}
+                >
+                  <div className="card-header d-flex justify-content-between border-bottom pb-1">
+                    <h4>{title}</h4>
+                  </div>
+                  <div className="card-body">
+                    <Table className="tableRow" hover bordered>
+                      <thead>
+                        <tr>
+                          <th>Photo</th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
 
-                  <tbody>
-                    {data.map((client) => (
-                      <tr>
-                        <td>
-                          <img
-                            src={`${process.env.REACT_APP_API_BASE_URL}/api/client/img/${client.photo}`}
-                            class="userImg"
-                            alt=""
-                          />
-                        </td>
-                        <td>
-                          {client.companyName}
-                        </td>
-                        <td>{client.email}</td>
-                        <td>
-                          <Link to={`/edit/client/${client._id}`}>
-                            <button
-                              onClick={() => null}
-                              className="btn btn-primary btn-sm ms-1"
-                            >
-                              <FontAwesomeIcon icon={faPenToSquare} />
-                            </button>
-                          </Link>
+                      <tbody>
+                        {data.map((client) => (
+                          <tr>
+                            <td>
+                              <img
+                                src={`${process.env.REACT_APP_API_BASE_URL}/api/client/img/${client.photo}`}
+                                class="userImg"
+                                alt=""
+                              />
+                            </td>
+                            <td>{client.companyName}</td>
+                            <td>{client.email}</td>
+                            <td>
+                              <Link to={`/edit/client/${client._id}`}>
+                                <button
+                                  onClick={() => null}
+                                  className="btn btn-primary btn-sm ms-1"
+                                >
+                                  <FontAwesomeIcon icon={faPenToSquare} />
+                                </button>
+                              </Link>
 
-                          <Link to={`/photo/client/${client._id}`}>
-                            <button
-                              onClick={() => null}
-                              className="btn btn-primary btn-sm ms-1"
-                            >
-                              <FontAwesomeIcon icon={faCamera} />
-                            </button>
-                          </Link>
+                              <Link to={`/photo/client/${client._id}`}>
+                                <button
+                                  onClick={() => null}
+                                  className="btn btn-primary btn-sm ms-1"
+                                >
+                                  <FontAwesomeIcon icon={faCamera} />
+                                </button>
+                              </Link>
 
-                          <button
-                            onClick={() =>
-                              openEmailModal(
-                                client.email,
-                                client.name,
-                                client.surname
-                              )
-                            }
-                            className="btn btn-primary btn-sm ms-1"
-                          >
-                            <FontAwesomeIcon icon={faEnvelope} />
-                          </button>
+                              <button
+                                onClick={() =>
+                                  openEmailModal(
+                                    client.email,
+                                    client.name,
+                                    client.surname
+                                  )
+                                }
+                                className="btn btn-primary btn-sm ms-1"
+                              >
+                                <FontAwesomeIcon icon={faEnvelope} />
+                              </button>
 
-                          <button
-                            onClick={() => deleteClient(client._id)}
-                            className=" btn btn-danger btn-sm ms-1"
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                <Pagination
-                  pageName="clients"
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+                              <button
+                                onClick={() => deleteClient(client._id)}
+                                className=" btn btn-danger btn-sm ms-1"
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <Pagination
+                      pageName="clients"
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <NotPermission />
+        </>
+      )}
     </>
   );
 };

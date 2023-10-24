@@ -47,7 +47,7 @@ export function UserProvider({ children }) {
         setUserData,
         login,
         logout,
-        demo: demo,
+        demo,
       }}
     >
       {children}

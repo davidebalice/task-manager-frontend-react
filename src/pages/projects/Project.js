@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Breadcrumb from "../../components/breadcrumb/index";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { Context } from "../../context/UserContext";
 import Loading from "../../components/loading";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
@@ -17,6 +18,7 @@ import {
 const Project = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const { userData, demo } = useContext(Context);
   const [data, setData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [openTasksPercentage, setOpenTasksPercentage] = useState(0);

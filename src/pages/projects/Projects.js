@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Context } from "../../context/UserContext";
+import { Context } from "../../context/UserContext"; 
 import isAllowed from "../../middlewares/allow";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
@@ -20,7 +20,7 @@ const Projects = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const token = localStorage.getItem("authToken");
-  const { userData } = useContext(Context);
+  const { userData, demo } = useContext(Context);
 
   useEffect(() => {
     axios

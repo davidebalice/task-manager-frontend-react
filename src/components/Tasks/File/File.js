@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { Context } from "../../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
@@ -25,6 +26,7 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
   const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
   const [loading, setLoading] = useState(true);
+  const { userData, demo } = useContext(Context);
   const [formData, setFormData] = useState({
     name: "",
     file: [],
@@ -66,26 +68,35 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            process.env.REACT_APP_API_BASE_URL + "/api/delete/file/",
-            { id: id, task_id: taskId },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("response.data.files");
-            console.log(response.data.files);
-            handleUpdateFiles(response.data.files);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+        if (demo) {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
           });
+        } else {
+          axios
+            .post(
+              process.env.REACT_APP_API_BASE_URL + "/api/delete/file/",
+              { id: id, task_id: taskId },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("response.data.files");
+              console.log(response.data.files);
+              handleUpdateFiles(response.data.files);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     });
   }
@@ -100,32 +111,41 @@ const Files = ({ files, taskId, projectId, onUpdateFiles, updateFiles }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    axios
-      .post(process.env.REACT_APP_API_BASE_URL + "/api/add/file/", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log("response.data.files");
-        console.log(response.data.files);
-
-        setFormData({
-          ...formData,
-          file: "",
-          name: "",
-        });
-
-        if (inputFileRef.current) {
-          inputFileRef.current.value = "";
-        }
-
-        handleUpdateFiles(response.data.files);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(process.env.REACT_APP_API_BASE_URL + "/api/add/file/", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log("response.data.files");
+          console.log(response.data.files);
+
+          setFormData({
+            ...formData,
+            file: "",
+            name: "",
+          });
+
+          if (inputFileRef.current) {
+            inputFileRef.current.value = "";
+          }
+
+          handleUpdateFiles(response.data.files);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

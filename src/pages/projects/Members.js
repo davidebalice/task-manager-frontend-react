@@ -77,59 +77,77 @@ const Members = () => {
   }, []);
 
   const addToProject = (member_id) => {
-    console.log(member_id);
-    console.log(id);
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/add/member/project",
-        { member_id, project_id: id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        //loadMembers();
-        const data = {
-          members: response.data.members,
-          users: response.data.users,
-        };
-        setData(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      console.log(member_id);
+      console.log(id);
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/add/member/project",
+          { member_id, project_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          //loadMembers();
+          const data = {
+            members: response.data.members,
+            users: response.data.users,
+          };
+          setData(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const removeToProject = (member_id) => {
-    console.log(member_id);
-    console.log(id);
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/remove/member/project",
-        { member_id, project_id: id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        //loadMembers();
-        const data = {
-          members: response.data.members,
-          users: response.data.users,
-        };
-        setData(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      console.log(member_id);
+      console.log(id);
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/remove/member/project",
+          { member_id, project_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          //loadMembers();
+          const data = {
+            members: response.data.members,
+            users: response.data.users,
+          };
+          setData(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

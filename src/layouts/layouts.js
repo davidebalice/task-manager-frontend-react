@@ -235,27 +235,31 @@ export default function Layouts() {
                       <span className="nav_name">Projects</span>
                     </Link>
 
-                    <Link
-                      to="/users"
-                      onClick={updateActive}
-                      className={`nav_link ${
-                        pathname === "/users" && "active"
-                      }`}
-                    >
-                      <FontAwesomeIcon icon={faUser} />
-                      <span className="nav_name">Users</span>
-                    </Link>
+                    {userData && userData.role === "admin" && (
+                      <>
+                        <Link
+                          to="/users"
+                          onClick={updateActive}
+                          className={`nav_link ${
+                            pathname === "/users" && "active"
+                          }`}
+                        >
+                          <FontAwesomeIcon icon={faUser} />
+                          <span className="nav_name">Users</span>
+                        </Link>
 
-                    <Link
-                      to="/clients"
-                      onClick={updateActive}
-                      className={`nav_link ${
-                        pathname === "/clients" && "active"
-                      }`}
-                    >
-                      <FontAwesomeIcon icon={faUser} />
-                      <span className="nav_name">Clients</span>
-                    </Link>
+                        <Link
+                          to="/clients"
+                          onClick={updateActive}
+                          className={`nav_link ${
+                            pathname === "/clients" && "active"
+                          }`}
+                        >
+                          <FontAwesomeIcon icon={faUser} />
+                          <span className="nav_name">Clients</span>
+                        </Link>
+                      </>
+                    )}
 
                     <Link
                       onClick={updateActive}

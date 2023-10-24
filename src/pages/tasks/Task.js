@@ -31,7 +31,7 @@ const Project = () => {
   const { id } = useParams();
   const [tab, setTab] = useState("activities");
   const token = localStorage.getItem("authToken");
-  const { userData } = useContext(Context);
+  const { userData, demo } = useContext(Context);
   const [data, setData] = useState({
     loading: true,
     progress: 0,

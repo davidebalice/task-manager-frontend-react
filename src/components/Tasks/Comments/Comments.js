@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditModal from "../../../components/Modal/EditModal";
@@ -27,6 +28,7 @@ const Comments = ({
 }) => {
   const token = localStorage.getItem("authToken");
   const [add, setAdd] = useState(false);
+  const { userData, demo } = useContext(Context);
   const [editData, setEditData] = useState({ show: false, text: "", id: "" });
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -67,27 +69,36 @@ const Comments = ({
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            process.env.REACT_APP_API_BASE_URL + "/api/delete/comment/",
-            { id: id, task_id: taskId },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("response.data.comments");
-            console.log(response.data.comments);
-
-            handleUpdateComments(response.data.comments);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+        if (demo) {
+          Swal.fire({
+            title: "Demo mode",
+            text: "Crud operations are not allowed",
+            icon: "error",
+            cancelButtonText: "Close",
           });
+        } else {
+          axios
+            .post(
+              process.env.REACT_APP_API_BASE_URL + "/api/delete/comment/",
+              { id: id, task_id: taskId },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("response.data.comments");
+              console.log(response.data.comments);
+
+              handleUpdateComments(response.data.comments);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     });
   }
@@ -102,32 +113,41 @@ const Comments = ({
 
   const submitForm = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/add/comment/",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response.data.comments");
-        console.log(response.data.comments);
-
-        setFormData({
-          ...formData,
-          comment: "",
-        });
-
-        handleUpdateComments(response.data.comments);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          process.env.REACT_APP_API_BASE_URL + "/api/add/comment/",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data.comments");
+          console.log(response.data.comments);
+
+          setFormData({
+            ...formData,
+            comment: "",
+          });
+
+          handleUpdateComments(response.data.comments);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (
@@ -210,7 +230,6 @@ const Comments = ({
                         </span>
                       ) : null}
                     </td>
-                    
 
                     <td className="cell">
                       <p>{comment.comment}</p>
@@ -221,10 +240,7 @@ const Comments = ({
                         <OverlayTrigger
                           placement="top"
                           overlay={
-                            <Tooltip className="tooltip">
-                              {" "}
-                              Edit comment
-                            </Tooltip>
+                            <Tooltip className="tooltip"> Edit comment</Tooltip>
                           }
                         >
                           <div

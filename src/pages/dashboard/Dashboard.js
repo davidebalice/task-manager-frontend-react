@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext"; 
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,6 +23,7 @@ import db from "../../assets/img/logo.png";
 
 export default function Hero() {
   const token = localStorage.getItem("authToken");
+  const { userData, demo } = useContext(Context);
   const [data, setData] = useState({
     projects: 0,
     tasks: 0,

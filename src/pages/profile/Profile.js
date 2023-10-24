@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Context } from "../../context/UserContext";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { userData, setUserData } = useContext(Context);
+  const { userData, setUserData, demo } = useContext(Context);
   const [file, setFile] = useState(null);
   const token = localStorage.getItem("authToken");
   const title = "Profile";
@@ -51,125 +51,161 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        setFormData(response.data.user);
-        setUserData(response.data.user);
-        console.log(response.data.user);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        Swal.fire("Error", error, "error");
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          setFormData(response.data.user);
+          setUserData(response.data.user);
+          console.log(response.data.user);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          Swal.fire("Error", error, "error");
+        });
+    }
   }, []);
 
   const submitForm = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/profile/update`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response.data");
-        console.log(response.data);
-        setUserData(response.data.user);
-        Swal.fire({
-          title: "Data updated",
-          text: "",
-          icon: "success",
-          cancelButtonText: "Close",
-        }).then((result) => {
-          if (result.isConfirmed) {
-          }
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/profile/update`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("response.data");
+          console.log(response.data);
+          setUserData(response.data.user);
+          Swal.fire({
+            title: "Data updated",
+            text: "",
+            icon: "success",
+            cancelButtonText: "Close",
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const submitPassword = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/profile/password`,
-        passwordData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        if (response.data.message === "success") {
-          Swal.fire({
-            title: "Password updated",
-            text: "",
-            icon: "success",
-            cancelButtonText: "Close",
-          }).then((result) => {
-            if (result.isConfirmed) {
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/profile/password`,
+          passwordData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.message === "success") {
+            Swal.fire({
+              title: "Password updated",
+              text: "",
+              icon: "success",
+              cancelButtonText: "Close",
+            }).then((result) => {
+              if (result.isConfirmed) {
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const submitPhoto = (e) => {
     e.preventDefault();
-
-    const formPhoto2 = new FormData();
-    formPhoto2.append("photo", file);
-
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/profile/photo`,
-        formPhoto2,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        setFormData({ photo: response.data.photo });
-        setUserData({ photo: response.data.photo });
-        if (response.data.message === "success") {
-          Swal.fire({
-            title: "Photo updated",
-            text: "",
-            icon: "success",
-            cancelButtonText: "Close",
-          }).then((result) => {
-            if (result.isConfirmed) {
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+
+      const formPhoto2 = new FormData();
+      formPhoto2.append("photo", file);
+
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/profile/photo`,
+          formPhoto2,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((response) => {
+          setFormData({ photo: response.data.photo });
+          setUserData({ photo: response.data.photo });
+          if (response.data.message === "success") {
+            Swal.fire({
+              title: "Photo updated",
+              text: "",
+              icon: "success",
+              cancelButtonText: "Close",
+            }).then((result) => {
+              if (result.isConfirmed) {
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

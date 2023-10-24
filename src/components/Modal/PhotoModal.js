@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { Context } from "../../context/UserContext";
 
 const PhotoModal = ({ show, imgUrl, title, closePhotoModal }) => {
+  const { userData, demo } = useContext(Context);
   return (
     <>
       <Modal show={show} className="photoModal" size="lg" centered>

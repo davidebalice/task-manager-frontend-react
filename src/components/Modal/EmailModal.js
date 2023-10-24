@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import { Context } from "../../context/UserContext";
 import Swal from "sweetalert2";
 
 const EmailModal = ({ modalData, closeEmailModal }) => {
   const token = localStorage.getItem("authToken");
   const [message, setMessage] = useState("");
+  const { userData, demo } = useContext(Context);
   const [data, setData] = useState({
     text: "",
     subject: "",
@@ -18,30 +20,39 @@ const EmailModal = ({ modalData, closeEmailModal }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/send/email/user`,
-        { data },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        //closeEmailModal();
-        setMessage(response.data.message);
-        setData({
-          text: "",
-          subject: "",
-          email: modalData.email,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/send/email/user`,
+          { data },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          //closeEmailModal();
+          setMessage(response.data.message);
+          setData({
+            text: "",
+            subject: "",
+            email: modalData.email,
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   const handleInput = (event) => {
