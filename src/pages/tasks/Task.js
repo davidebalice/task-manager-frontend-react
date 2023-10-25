@@ -335,6 +335,7 @@ const Project = () => {
                                 onUpdateActivities={updateActivities}
                                 projectId={data.project._id}
                                 taskId={data.task._id}
+                                task={data.task}
                               />
                             ) : tab === "comments" ? (
                               <Comments
@@ -342,6 +343,7 @@ const Project = () => {
                                 onUpdateComments={updateComments}
                                 projectId={data.project._id}
                                 taskId={data.task._id}
+                                task={data.task}
                               />
                             ) : tab === "file" ? (
                               <File
@@ -349,6 +351,7 @@ const Project = () => {
                                 onUpdateFiles={updateFiles}
                                 projectId={data.project._id}
                                 taskId={data.task._id}
+                                task={data.task}
                               />
                             ) : tab === "screenshots" ? (
                               <Screenshots
@@ -356,6 +359,7 @@ const Project = () => {
                                 onUpdateScreenshots={updateScreenshots}
                                 projectId={data.project._id}
                                 taskId={data.task._id}
+                                task={data.task}
                               />
                             ) : tab === "members" ? (
                               <Members
@@ -363,6 +367,7 @@ const Project = () => {
                                 onUpdateMembers={updateMembers}
                                 projectId={data.project._id}
                                 taskId={data.task._id}
+                                task={data.task}
                               />
                             ) : (
                               <></>
@@ -377,29 +382,32 @@ const Project = () => {
                                 <b>Members:</b>
                               </label>
                               <div>
-                              {Array.isArray(data.members) &&
-                              data.members.length > 0 ? (
-                                data.members.map((member) => (
-                                  <div key={member._id} className="membersRow memberSide">
-                                    <div className="imgThumbContainer">
-                                      <img
-                                        src={`${
-                                          process.env.REACT_APP_API_BASE_URL
-                                        }/api/user/img/${
-                                          member.photo && member.photo
-                                        }`}
-                                        class="imgThumb"
-                                        alt=""
-                                      />
-                                      <span className="text-primary bold">
-                                        {member.name} {member.surname}
-                                      </span>
+                                {Array.isArray(data.members) &&
+                                data.members.length > 0 ? (
+                                  data.members.map((member) => (
+                                    <div
+                                      key={member._id}
+                                      className="membersRow memberSide"
+                                    >
+                                      <div className="imgThumbContainer">
+                                        <img
+                                          src={`${
+                                            process.env.REACT_APP_API_BASE_URL
+                                          }/api/user/img/${
+                                            member.photo && member.photo
+                                          }`}
+                                          class="imgThumb"
+                                          alt=""
+                                        />
+                                        <span className="text-primary bold">
+                                          {member.name} {member.surname}
+                                        </span>
+                                      </div>
                                     </div>
-                                  </div>
-                                ))
-                              ) : (
-                                <div>No members</div>
-                              )}
+                                  ))
+                                ) : (
+                                  <div>No members</div>
+                                )}
                               </div>
                             </div>
                           </div>

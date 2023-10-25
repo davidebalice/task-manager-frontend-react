@@ -8,6 +8,7 @@ import Loading from "../../../components/loading";
 import Table from "react-bootstrap/Table";
 import Divider from "../../divider/";
 import Spacer from "../../spacer/";
+import isAllowed from "../../../middlewares/allow";
 import moment from "moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -27,6 +28,7 @@ const Screenshots = ({
   projectId,
   onUpdateScreenshots,
   updateScreenshots,
+  task,
 }) => {
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("authToken");
@@ -176,18 +178,37 @@ const Screenshots = ({
         </>
       ) : (
         <>
-          <div
-            className="addButton col-sm-4 col-md-4 col-lg-3"
-            onClick={() => setAdd(!add)}
-          >
-            <FontAwesomeIcon
-              icon={add ? faCircleXmark : faCirclePlus}
-              className="addButtonIcon"
-            />
-            <div className="card-body d-flex px-1">
-              {add ? "Close" : "Add screenshot"}
+          {userData &&
+          formData &&
+          isAllowed(
+            userData.role,
+            userData._id,
+            task.members,
+            task.owner._id
+          ) ? (
+            <div
+              className="addButton col-sm-4 col-md-4 col-lg-3"
+              onClick={() => setAdd(!add)}
+            >
+              <FontAwesomeIcon
+                icon={add ? faCircleXmark : faCirclePlus}
+                className="addButtonIcon"
+              />
+              <div className="card-body d-flex px-1">
+                {add ? "Close" : "Add screenshot"}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="addButton col-sm-4 col-md-4 col-lg-3 disabledBg">
+              <FontAwesomeIcon
+                icon={add ? faCircleXmark : faCirclePlus}
+                className="addButtonIcon"
+              />
+              <div className="card-body d-flex px-1">
+                {add ? "Close" : "Add screenshot"}
+              </div>
+            </div>
+          )}
 
           {add && (
             <form enctype="multipart/form-data" method="post" id="formUpload">
@@ -274,42 +295,95 @@ const Screenshots = ({
                       <div className="screenshotCardHeader">
                         <p>{screenshot.name}</p>
                         <div className="activityButton">
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={
-                              <Tooltip className="tooltip">
-                                {" "}
-                                Edit description of screenshot
-                              </Tooltip>
-                            }
-                          >
-                            <div
-                              onClick={() =>
-                                openEditModal(screenshot.name, screenshot._id)
+                          {userData &&
+                          formData &&
+                          isAllowed(
+                            userData.role,
+                            userData._id,
+                            task.members,
+                            task.owner._id
+                          ) ? (
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip className="tooltip">
+                                  {" "}
+                                  Edit description of screenshot
+                                </Tooltip>
                               }
                             >
-                              <FontAwesomeIcon
-                                icon={faPenToSquare}
-                                className="activityButtonEdit"
-                              />
-                            </div>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={
-                              <Tooltip className="tooltip">
-                                {" "}
-                                Delete screenshot
-                              </Tooltip>
-                            }
-                          >
-                            <div onClick={() => removeFile(screenshot._id)}>
-                              <FontAwesomeIcon
-                                icon={faTrash}
-                                className="activityButtonDelete"
-                              />
-                            </div>
-                          </OverlayTrigger>
+                              <div
+                                onClick={() =>
+                                  openEditModal(screenshot.name, screenshot._id)
+                                }
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPenToSquare}
+                                  className="activityButtonEdit"
+                                />
+                              </div>
+                            </OverlayTrigger>
+                          ) : (
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip className="tooltip">
+                                  {" "}
+                                  Edit description of screenshot not allowed
+                                </Tooltip>
+                              }
+                            >
+                              <div>
+                                <FontAwesomeIcon
+                                  icon={faPenToSquare}
+                                  className="activityButtonEdit disabledColor"
+                                />
+                              </div>
+                            </OverlayTrigger>
+                          )}
+
+                          {userData &&
+                          formData &&
+                          isAllowed(
+                            userData.role,
+                            userData._id,
+                            task.members,
+                            task.owner._id
+                          ) ? (
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip className="tooltip">
+                                  {" "}
+                                  Delete screenshot
+                                </Tooltip>
+                              }
+                            >
+                              <div onClick={() => removeFile(screenshot._id)}>
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="activityButtonDelete"
+                                />
+                              </div>
+                            </OverlayTrigger>
+                          ) : (
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={
+                                <Tooltip className="tooltip">
+                                  {" "}
+                                  Delete screenshot not allowed
+                                </Tooltip>
+                              }
+                            >
+                              <div>
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="activityButtonDelete disabledColor"
+                                />
+                              </div>
+                            </OverlayTrigger>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -4,7 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from "../../loading";
 import moment from "moment";
-import Divider from "../../divider";
+import isAllowed from "../../../middlewares/allow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -21,6 +21,7 @@ const Members = ({
   taskId,
   projectId,
   onUpdateMembers,
+  task,
 }) => {
   const token = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(true);
@@ -169,15 +170,31 @@ const Members = ({
                   {Array.isArray(data.members) && data.members.length > 0 ? (
                     data.members.map((member) => (
                       <div key={member._id} className="membersRow">
-                        <div
-                          onClick={() => removeToTask(member._id)}
-                          className="membersButtonDelete"
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            className="membersButtonDeleteIcon"
-                          />
-                        </div>
+                        {userData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <div
+                            onClick={() => removeToTask(member._id)}
+                            className="membersButtonDelete"
+                          >
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="membersButtonDeleteIcon"
+                            />
+                          </div>
+                        ) : (
+                          <div className="membersButtonDelete disabledBg">
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="membersButtonDeleteIcon"
+                            />
+                          </div>
+                        )}
+
                         <div className="imgThumbContainer">
                           <img
                             src={`${
@@ -204,15 +221,31 @@ const Members = ({
                   {Array.isArray(data.users) && data.users.length > 0 ? (
                     data.users.map((user) => (
                       <div key={user._id} className="membersRow">
-                        <div
-                          onClick={() => addToTask(user._id)}
-                          className="membersButtonAdd"
-                        >
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            className="membersButtonAddIcon"
-                          />
-                        </div>
+                        {userData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <div
+                            onClick={() => addToTask(user._id)}
+                            className="membersButtonAdd"
+                          >
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              className="membersButtonAddIcon"
+                            />
+                          </div>
+                        ) : (
+                          <div className="membersButtonAdd disabledBg">
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              className="membersButtonAddIcon"
+                            />
+                          </div>
+                        )}
+
                         <div className="imgThumbContainer">
                           <img
                             src={`${

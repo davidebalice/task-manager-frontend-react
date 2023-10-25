@@ -9953,6 +9953,14 @@ span.select2-container.select2-container--default.select2-container--open {
   margin-bottom: 7px;
 }
 
+.disabledColor {
+  color: #999 !important;
+}
+
+.disabledBg {
+  background: #999 !important;
+}
+
 .projectCardIcon {
   font-size: 17px;
   color: #333;
@@ -10387,9 +10395,36 @@ label {
 
 .memberSide {
   float: left !important;
-  width:220px;
-  margin-bottom:6px;
+  width: 220px;
+  margin-bottom: 6px;
   overflow: hidden;
+}
+
+.saveButton {
+  display: flex;
+  flex-direction: row;
+  background: #25a50b;
+  color: #fff;
+  gap: 10px;
+  align-items: center;
+  width: fit-content;
+  justify-content: start;
+  height: 40px;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.saveButton:hover {
+  background: #238a0f;
+}
+
+.saveButtonIcon {
+  font-size: 18px;
 }
 
 /*# sourceMappingURL=style.css.map */

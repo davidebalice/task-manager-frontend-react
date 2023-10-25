@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
 import Table from "react-bootstrap/Table";
 import Loading from "../../loading";
+import isAllowed from "../../../middlewares/allow";
 import moment from "moment";
 import Divider from "../../divider";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -26,6 +27,7 @@ const Activities = ({
   projectId,
   onUpdateActivities,
   updateActivities,
+  task,
 }) => {
   const token = localStorage.getItem("authToken");
   const [add, setAdd] = useState(false);
@@ -58,6 +60,14 @@ const Activities = ({
 
   const handleUpdateActivities = (newActivities) => {
     onUpdateActivities(newActivities);
+  };
+
+  const handleNotPermission = (e) => {
+    Swal.fire({
+      title: "User not allowed",
+      text: "",
+      icon: "warning",
+    });
   };
 
   const openEditModal = (text, id) => {
@@ -167,18 +177,37 @@ const Activities = ({
             type="activities"
           />
           <div>
-            <div
-              className="addButton col-sm-4 col-md-4 col-lg-3"
-              onClick={() => setAdd(!add)}
-            >
-              <FontAwesomeIcon
-                icon={add ? faCircleXmark : faCirclePlus}
-                className="addButtonIcon"
-              />
-              <div className="card-body d-flex px-1">
-                {add ? "Close" : "Add activity"}
+            {userData &&
+            formData &&
+            isAllowed(
+              userData.role,
+              userData._id,
+              task.members,
+              task.owner._id
+            ) ? (
+              <div
+                className="addButton col-sm-4 col-md-4 col-lg-3"
+                onClick={() => setAdd(!add)}
+              >
+                <FontAwesomeIcon
+                  icon={add ? faCircleXmark : faCirclePlus}
+                  className="addButtonIcon"
+                />
+                <div className="card-body d-flex px-1">
+                  {add ? "Close" : "Add activity"}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="addButton col-sm-4 col-md-4 col-lg-3 disabledBg">
+                <FontAwesomeIcon
+                  icon={add ? faCircleXmark : faCirclePlus}
+                  className="addButtonIcon "
+                />
+                <div className="card-body d-flex px-1">
+                  {add ? "Close" : "Add activity"}
+                </div>
+              </div>
+            )}
 
             {add && (
               <form>
@@ -191,7 +220,7 @@ const Activities = ({
                   className="form-control"
                   name="name"
                   required
-                  value={formData.name}
+                  value={formData && formData.name}
                   onChange={handleInput}
                 ></textarea>
                 <button
@@ -229,16 +258,37 @@ const Activities = ({
             </thead>
 
             <tbody>
-              {Array.isArray(activities) && activities.length > 0 ? (
+              {activities &&
+              Array.isArray(activities) &&
+              activities.length > 0 ? (
                 activities.map((activity) => (
                   <tr key={activity._id}>
                     <td className="text-center">
-                      <input
-                        type="checkbox"
-                        checked={activity.status === "Done"}
-                        onChange={(event) => handleStatus(event, activity._id)}
-                        className="activityCheckbox"
-                      />
+                      {userData &&
+                      formData &&
+                      isAllowed(
+                        userData.role,
+                        userData._id,
+                        task.members,
+                        task.owner._id
+                      ) ? (
+                        <input
+                          type="checkbox"
+                          checked={activity.status === "Done"}
+                          onChange={(event) =>
+                            handleStatus(event, activity._id)
+                          }
+                          className="activityCheckbox"
+                        />
+                      ) : (
+                        <input
+                          type="checkbox"
+                          checked={activity.status === "Done"}
+                          className="activityCheckbox"
+                          readonly
+                          onChange={(event) => handleNotPermission(event)}
+                        />
+                      )}
                     </td>
 
                     <td className="cell">
@@ -249,7 +299,7 @@ const Activities = ({
                             : "activityName"
                         }
                       >
-                        {activity.name}
+                        {activity && activity.name}
                       </p>
                     </td>
 
@@ -272,7 +322,8 @@ const Activities = ({
                     </td>
 
                     <td>
-                      {activity.lastUpdateUser.name &&
+                      {activity.lastUpdateUser &&
+                      activity.lastUpdateUser.name &&
                       activity.lastUpdateUser.surname ? (
                         <span>
                           {activity.lastUpdateUser.name}{" "}
@@ -283,42 +334,95 @@ const Activities = ({
 
                     <td>
                       <div className="activityButton">
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              {" "}
-                              Edit activity
-                            </Tooltip>
-                          }
-                        >
-                          <div
-                            onClick={() =>
-                              openEditModal(activity.name, activity._id)
+                        {userData &&
+                        formData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Edit activity
+                              </Tooltip>
                             }
                           >
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              className="activityButtonEdit"
-                            />
-                          </div>
-                        </OverlayTrigger>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              {" "}
-                              Delete activity
-                            </Tooltip>
-                          }
-                        >
-                          <div onClick={() => removeActivity(activity._id)}>
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className="activityButtonDelete"
-                            />
-                          </div>
-                        </OverlayTrigger>
+                            <div
+                              onClick={() =>
+                                openEditModal(activity.name, activity._id)
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="activityButtonEdit"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        ) : (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Edit activity is not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <div>
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="activityButtonEdit disabledColor"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        )}
+
+                        {userData &&
+                        formData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Delete activity
+                              </Tooltip>
+                            }
+                          >
+                            <div onClick={() => removeActivity(activity._id)}>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="activityButtonDelete"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        ) : (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Delete activity is not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <div>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="activityButtonDelete disabledColor"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        )}
                       </div>
                     </td>
                   </tr>

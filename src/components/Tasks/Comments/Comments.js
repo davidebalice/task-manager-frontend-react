@@ -6,6 +6,7 @@ import EditModal from "../../../components/Modal/EditModal";
 import Loading from "../../../components/loading";
 import Table from "react-bootstrap/Table";
 import Divider from "../../divider/";
+import isAllowed from "../../../middlewares/allow";
 import moment from "moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -25,6 +26,7 @@ const Comments = ({
   projectId,
   onUpdateComments,
   updateComments,
+  task,
 }) => {
   const token = localStorage.getItem("authToken");
   const [add, setAdd] = useState(false);
@@ -158,18 +160,38 @@ const Comments = ({
         </>
       ) : (
         <>
-          <div
-            className="addButton col-sm-4 col-md-4 col-lg-3"
-            onClick={() => setAdd(!add)}
-          >
-            <FontAwesomeIcon
-              icon={add ? faCircleXmark : faCirclePlus}
-              className="addButtonIcon"
-            />
-            <div className="card-body d-flex px-1">
-              {add ? "Close" : "Add comment"}
+          {userData &&
+          formData &&
+          isAllowed(
+            userData.role,
+            userData._id,
+            task.members,
+            task.owner._id
+          ) ? (
+            <div
+              className="addButton col-sm-4 col-md-4 col-lg-3"
+              onClick={() => setAdd(!add)}
+            >
+              <FontAwesomeIcon
+                icon={add ? faCircleXmark : faCirclePlus}
+                className="addButtonIcon"
+              />
+              <div className="card-body d-flex px-1">
+                {add ? "Close" : "Add comment"}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="addButton col-sm-4 col-md-4 col-lg-3 disabledBg">
+              <FontAwesomeIcon
+                icon={add ? faCircleXmark : faCirclePlus}
+                className="addButtonIcon"
+              />
+              <div className="card-body d-flex px-1">
+                {add ? "Close" : "Add comment"}
+              </div>
+            </div>
+          )}
+
           {add && (
             <form>
               <label for="name">
@@ -237,39 +259,95 @@ const Comments = ({
 
                     <td>
                       <div className="activityButton">
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip"> Edit comment</Tooltip>
-                          }
-                        >
-                          <div
-                            onClick={() =>
-                              openEditModal(comment.comment, comment._id)
+                        {userData &&
+                        formData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Edit comment
+                              </Tooltip>
                             }
                           >
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              className="activityButtonEdit"
-                            />
-                          </div>
-                        </OverlayTrigger>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              {" "}
-                              Delete comment
-                            </Tooltip>
-                          }
-                        >
-                          <div onClick={() => removeComment(comment._id)}>
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className="activityButtonDelete"
-                            />
-                          </div>
-                        </OverlayTrigger>
+                            <div
+                              onClick={() =>
+                                openEditModal(comment.comment, comment._id)
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="activityButtonEdit"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        ) : (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Edit comment not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <div>
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="activityButtonEdit disabledColor"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        )}
+
+                        {userData &&
+                        formData &&
+                        isAllowed(
+                          userData.role,
+                          userData._id,
+                          task.members,
+                          task.owner._id
+                        ) ? (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Delete comment
+                              </Tooltip>
+                            }
+                          >
+                            <div onClick={() => removeComment(comment._id)}>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="activityButtonDelete"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        ) : (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                {" "}
+                                Delete comment not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <div>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="activityButtonDelete disabledColor"
+                              />
+                            </div>
+                          </OverlayTrigger>
+                        )}
                       </div>
                     </td>
                   </tr>

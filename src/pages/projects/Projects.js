@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Context } from "../../context/UserContext"; 
+import { Context } from "../../context/UserContext";
 import isAllowed from "../../middlewares/allow";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
@@ -39,9 +39,7 @@ const Projects = () => {
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-      
   }, [token]);
-
 
   const title = "Projects";
   const brad = [
@@ -180,29 +178,52 @@ const Projects = () => {
                           </button>
                         </OverlayTrigger>
                       </Link>
-
-                      {isAllowed(userData.role, userData._id, data.members, data.owner._id) ? (<b>true</b>) : (<b>false</b>)}
-
-                      <Link to={`/edit/project/${data._id}`}>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">Edit project</Tooltip>
-                          }
-                        >
-                          <button className="btn btn-primary btn-sm projectCardButton">
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              className="projectCardIcon"
-                            />
-                            <p className="projectCardButtonTitle">Edit</p>
-                          </button>
-                        </OverlayTrigger>
-                      </Link>
-
-
-
-
+                      {isAllowed(
+                        userData.role,
+                        userData._id,
+                        data.members,
+                        data.owner._id
+                      ) ? (
+                        <Link to={`/edit/project/${data._id}`}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Edit project
+                              </Tooltip>
+                            }
+                          >
+                            <button className="btn btn-primary btn-sm projectCardButton">
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="projectCardIcon"
+                              />
+                              <p className="projectCardButtonTitle">Edit</p>
+                            </button>
+                          </OverlayTrigger>
+                        </Link>
+                      ) : (
+                        <Link to={null}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Edit project not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <button className="btn btn-primary btn-sm projectCardButton ">
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="projectCardIcon disabledColor"
+                              />
+                              <p className="projectCardButtonTitle disabledColor">
+                                Edit
+                              </p>
+                            </button>
+                          </OverlayTrigger>
+                        </Link>
+                      )}
                       <Link to={`/project/tasks/${data._id}`}>
                         <OverlayTrigger
                           placement="top"
@@ -222,25 +243,50 @@ const Projects = () => {
                           </button>
                         </OverlayTrigger>
                       </Link>
-
-                      <Link to={`/project/delete/${data._id}`}>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              Delete project
-                            </Tooltip>
-                          }
-                        >
-                          <button className="btn btn-primary btn-sm projectCardButton bg-red">
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className="projectCardIcon"
-                            />
-                            <p className="projectCardButtonTitle">Delete</p>
-                          </button>
-                        </OverlayTrigger>
-                      </Link>
+                      {isAllowed(
+                        userData.role,
+                        userData._id,
+                        data.members,
+                        data.owner._id
+                      ) ? (
+                        <Link to={`/project/delete/${data._id}`}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Delete project
+                              </Tooltip>
+                            }
+                          >
+                            <button className="btn btn-primary btn-sm projectCardButton bg-red">
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="projectCardIcon"
+                              />
+                              <p className="projectCardButtonTitle">Delete</p>
+                            </button>
+                          </OverlayTrigger>
+                        </Link>
+                      ) : (
+                        <Link to={null}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Delete project not allowed
+                              </Tooltip>
+                            }
+                          >
+                            <button className="btn btn-primary btn-sm projectCardButton bg-red">
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="projectCardIcon disabledColor"
+                              />
+                              <p className="projectCardButtonTitle disabledColor">Delete</p>
+                            </button>
+                          </OverlayTrigger>
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

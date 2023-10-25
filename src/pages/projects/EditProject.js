@@ -3,9 +3,16 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
+import isAllowed from "../../middlewares/allow";
+import NotPermission from "../Auth/notPermission";
 import Breadcrumb from "../../components/breadcrumb/index";
+import Spacer from "../../components/spacer/index";
+import Divider from "../../components/divider/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleChevronLeft,
+  faFloppyDisk,
+} from "@fortawesome/free-solid-svg-icons";
 
 const EditProject = () => {
   const navigate = useNavigate();
@@ -58,6 +65,7 @@ const EditProject = () => {
       .then((response) => {
         setFormData(response.data.project);
         setClients(response.data.clients);
+        console.log("response.data");
         console.log(response.data);
       })
       .catch((error) => {
@@ -149,141 +157,163 @@ const EditProject = () => {
 
   return (
     <>
-      <div className="page">
-        {formData.imageCover}
-        <Breadcrumb title={title} brad={brad} />
-        <div class="row">
-          <Link to={`/projects`}>
-            <div class="addButton col-sm-4 col-md-4 col-lg-3">
-              <FontAwesomeIcon
-                icon={faCircleChevronLeft}
-                className="addButtonIcon"
-              />
-              <div class="card-body d-flex px-1">Back</div>
-            </div>
-          </Link>
-        </div>
-        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-          <div className="card-header d-flex justify-content-between border-bottom pb-1">
-            <div className="">{title} </div>
+      {userData &&
+      formData &&
+      isAllowed(
+        userData.role,
+        userData._id,
+        formData.members,
+        formData.owner
+      ) ? (
+        <div className="page">
+          <Breadcrumb title={title} brad={brad} />
+          <div class="row">
+            <Link to={`/projects`}>
+              <div class="addButton col-sm-4 col-md-4 col-lg-3">
+                <FontAwesomeIcon
+                  icon={faCircleChevronLeft}
+                  className="addButtonIcon"
+                />
+                <div class="card-body d-flex px-1">Back</div>
+              </div>
+            </Link>
           </div>
-          <div className="card-body">
-            <div className="row justify-content-center">
-              <div className="col-md-6 mt-3">
-                <label for="name">
-                  <b>Project name</b>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleInput}
-                />
-              </div>
-              <div className="col-md-6 mt-3">
-                <label for="budget">
-                  <b>Budget</b>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleInput}
-                />
-              </div>
-              <div className="col-md-6 mt-3">
-                <label for="client">
-                  <b>Client</b>
-                </label>
-                <select
-                  className="form-control"
-                  name="client"
-                  value={formData.client}
-                  required
-                  onChange={handleInput}
-                >
-                  {clients ? (
-                    clients.map((client) => (
-                      <option key={client._id} value={client._id}>
-                        {client.companyName}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="">Loading clients...</option>
-                  )}
-                  <option value=""> - Select client - </option>
-                </select>
-              </div>
-              <div className="col-md-6 mt-3"></div>
-
-              <div className="col-md-12">
-                <label for="summary">
-                  <b>Summary</b>
-                </label>
-                <textarea
-                  className="form-control"
-                  name="summary"
-                  value={formData.summary}
-                  onChange={handleInput}
-                ></textarea>
-              </div>
-
-              <div className="col-md-12">
-                <label for="description">
-                  <b>Full description</b>
-                </label>
-                <textarea
-                  className="form-control"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInput}
-                ></textarea>
-              </div>
-            </div>
-            <button
-              onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
-            >
-              Save
-            </button>
-
+          <div className="card">
             <div className="card-body">
               <div className="row justify-content-center">
                 <div className="col-md-6 mt-3">
-                  <img
-                    src={`${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${formData.imageCover}`}
-                    class="userImg"
-                    alt=""
-                  />
-
-                  <label for="photo">
-                    <b>Select file</b>
+                  <label for="name">
+                    <b>Project name</b>
                   </label>
-
                   <input
-                    type="file"
+                    type="text"
                     className="form-control"
-                    name="imageCover"
+                    name="name"
                     required
-                    onChange={handleFile}
+                    value={formData.name}
+                    onChange={handleInput}
                   />
                 </div>
+                <div className="col-md-6 mt-3">
+                  <label for="budget">
+                    <b>Budget</b>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleInput}
+                  />
+                </div>
+                <div className="col-md-6 mt-3">
+                  <label for="client">
+                    <b>Client</b>
+                  </label>
+                  <select
+                    className="form-control"
+                    name="client"
+                    value={formData.client}
+                    required
+                    onChange={handleInput}
+                  >
+                    {clients ? (
+                      clients.map((client) => (
+                        <option key={client._id} value={client._id}>
+                          {client.companyName}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">Loading clients...</option>
+                    )}
+                    <option value=""> - Select client - </option>
+                  </select>
+                </div>
                 <div className="col-md-6 mt-3"></div>
+
+                <Spacer height={20} />
+
+                <div className="col-md-12">
+                  <label for="summary">
+                    <b>Summary</b>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    name="summary"
+                    value={formData.summary}
+                    onChange={handleInput}
+                  ></textarea>
+                </div>
+
+                <Spacer height={20} />
+
+                <div className="col-md-12">
+                  <label for="description">
+                    <b>Full description</b>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInput}
+                  ></textarea>
+                </div>
               </div>
+              <button
+                onClick={submitForm}
+                className="btn btn-sm saveButton mt-3"
+              >
+                <FontAwesomeIcon
+                  icon={faFloppyDisk}
+                  className="saveButtonIcon"
+                />{" "}
+                Save
+              </button>
+
+              <Divider
+                marginTop={80}
+                marginBottom={60}
+                borderSize={1}
+                borderType={"solid"}
+                borderColor={"#ddd"}
+              />
+
+              <div>
+                <img
+                  src={`${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${formData.imageCover}`}
+                  class="userImg"
+                  alt=""
+                />
+                <br /> <br />
+                <label for="photo">
+                  <b>Select file</b>
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="imageCover"
+                  required
+                  onChange={handleFile}
+                />
+              </div>
+              <div className="col-md-6 mt-3"></div>
 
               <button
                 onClick={submitFormPhoto}
-                className="btn btn-primary btn-sm mt-3"
+                className="btn btn-sm saveButton mt-3"
               >
+                <FontAwesomeIcon
+                  icon={faFloppyDisk}
+                  className="saveButtonIcon"
+                />{" "}
                 Save
               </button>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <NotPermission />
+      )}
     </>
   );
 };
