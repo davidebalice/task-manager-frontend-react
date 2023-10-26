@@ -7,6 +7,7 @@ import { Context } from "../../context/UserContext";
 import Loading from "../../components/loading";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
+import Spacer from "../../components/spacer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -40,6 +41,7 @@ const Project = () => {
         setTasks(response.data.tasks);
         setMembers(response.data.project.members);
         setLoading(false);
+        console.log("response.data.project");
         console.log(response.data.project);
         console.log(response.data.tasks);
         console.log(response.data.project.members);
@@ -95,20 +97,31 @@ const Project = () => {
                         <div>
                           <b className="projectDetailTitle">{data.name}</b>
                           <div className="projectDetailData">
-                            <p>
+                            <p className="projectDetailColumn">
                               <p className="projectDetailMidTitle">
                                 Creation date:
                               </p>
                               {moment(data.createdAt).format("DD/MM/YYYY")}
                             </p>
-                            <p>
-                              <p className="projectDetailMidTitle">
-                                Creation by:
+                            <p className="projectDetailColumn">
+                              <p className="projectDetailMidTitle mb-0">
+                                Created by:
                               </p>
                               {data.owner ? data.owner.name : ""}{" "}
                               {data.owner ? data.owner.surname : ""}
+                              <div className="imgThumbContainer mt-2">
+                                <img
+                                  src={`${
+                                    process.env.REACT_APP_API_BASE_URL
+                                  }/api/user/img/${
+                                    data.owner.photo && data.owner.photo
+                                  }`}
+                                  class="imgThumb"
+                                  alt=""
+                                />
+                              </div>
                             </p>
-                            <p>
+                            <p className="projectDetailColumn">
                               <p className="projectDetailMidTitle">
                                 Last update:
                               </p>
@@ -146,16 +159,34 @@ const Project = () => {
                             <label>
                               <b>Members</b>
                             </label>
+                            <br />
 
                             {Array.isArray(members) && members.length > 0 ? (
                               members.map((member) => (
-                                <div key={member._id}>
-                                  {member.surname} {member.name}
+                                <div
+                                  key={member._id}
+                                  className="membersRow memberSide"
+                                >
+                                  <div className="imgThumbContainer">
+                                    <img
+                                      src={`${
+                                        process.env.REACT_APP_API_BASE_URL
+                                      }/api/user/img/${
+                                        member.photo && member.photo
+                                      }`}
+                                      class="imgThumb"
+                                      alt=""
+                                    />
+                                    <span className="text-primary bold">
+                                      {member.name} {member.surname}
+                                    </span>
+                                  </div>
                                 </div>
                               ))
                             ) : (
                               <div>No members</div>
                             )}
+                            <Spacer height={1} />
                           </div>
 
                           <div className="projectSection">
@@ -174,9 +205,11 @@ const Project = () => {
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faUser} />
                             </div>
-                            <label>
+                            <label className="sideSectionCol">
                               <b>Client</b>
-                              <p className="sideSectionTitle">aaaa</p>
+                              <p className="sideSectionTitle">
+                                {data.client.companyName}
+                              </p>
                             </label>
                           </div>
 
@@ -184,33 +217,40 @@ const Project = () => {
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faSackDollar} />
                             </div>
-                            <label>
+                            <label className="sideSectionCol">
                               <b>Budget</b>
-                              <p className="sideSectionTitle">aaaa</p>
+                              <p className="sideSectionTitle">
+                                € {data.budget}
+                              </p>
                             </label>
                           </div>
 
-                          <div className="sideSectionItem">
+                          <div
+                            className="sideSectionItem"
+                            style={{ alignItems: "flex-start" }}
+                          >
                             <div className="sideSectionIcon">
                               <FontAwesomeIcon icon={faListCheck} />
                             </div>
-                            <label>
+                            <label className="sideSectionCol">
                               <b>Tasks</b>
                               <p>
                                 Total:{" "}
-                                <b className="sideSectionNumber">
+                                <b className="sideSectionNumber text-primary">
                                   {tasks.length}
-                                </b>{" "}
-                                - Completed:{" "}
-                                <b className="sideSectionNumber">
+                                </b>
+                                <br />
+                                Completed:{" "}
+                                <b className="sideSectionNumber text-primary">
                                   {
                                     tasks.filter(
                                       (task) => task.status === "Open"
                                     ).length
                                   }
-                                </b>{" "}
-                                - Opened:{" "}
-                                <b className="sideSectionNumber">
+                                </b>
+                                <br />
+                                Opened:{" "}
+                                <b className="sideSectionNumber text-primary">
                                   {tasks.length -
                                     tasks.filter(
                                       (task) => task.status === "Open"

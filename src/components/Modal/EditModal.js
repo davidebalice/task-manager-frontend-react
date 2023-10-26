@@ -69,15 +69,11 @@ const EditModal = ({
     <>
       <Modal show={editData.show} centered>
         <Modal.Header>
-          <Modal.Title>Status</Modal.Title>
-
-          <Button variant="secondary" onClick={closeEditModal}>
-            Close
-          </Button>
+        
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <textarea name="text" onChange={handleTextChange}>
+            <textarea name="text" className="form-control" onChange={handleTextChange}>
               {editData.text}
             </textarea>
           </Form>

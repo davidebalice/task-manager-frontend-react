@@ -133,26 +133,35 @@ const EditProject = () => {
 
   const submitFormPhoto = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/project/photo/${id}`,
-        { imageCover: file },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        setFormData({
-          ...formData,
-          imageCover: response.data.imageCover,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    if (demo) {
+      Swal.fire({
+        title: "Demo mode",
+        text: "Crud operations are not allowed",
+        icon: "error",
+        cancelButtonText: "Close",
       });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/project/photo/${id}`,
+          { imageCover: file },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((response) => {
+          setFormData({
+            ...formData,
+            imageCover: response.data.imageCover,
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   return (

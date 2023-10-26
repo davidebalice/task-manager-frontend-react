@@ -10105,6 +10105,15 @@ label {
   gap: 14px;
   color: #444;
   margin-bottom: 12px;
+  justify-content:start;
+}
+
+.sideSectionCol {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content:start;
+  gap: 1px;
 }
 
 .sideSectionIcon {
@@ -10128,6 +10137,9 @@ label {
 .sideSectionTitle {
   color: #18b0e9;
   font-weight: bold;
+  font-size: 18px;
+  margin-top: 3px;
+  text-align: left;
 }
 
 .taskIcon {
@@ -10181,9 +10193,16 @@ label {
   flex-wrap: wrap;
 }
 
+.projectDetailColumn{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
 .projectDetailMidTitle {
   font-weight: bold;
-  padding-bottom: 10px;
+  padding-bottom: 10px !important;
 }
 
 .taskSection {
@@ -10421,10 +10440,24 @@ label {
 
 .saveButton:hover {
   background: #238a0f;
+  color: #f1f1f1;
 }
 
 .saveButtonIcon {
   font-size: 18px;
+}
+
+.commentContainer{
+  display: flex;
+  gap:20px;
+  margin-bottom:10px;
+  margin-top:10px
+}
+
+.commentRow{
+  white-space: wrap !important;
+  padding-top:30px !important;
+  padding-bottom: 30px !important;
 }
 
 /*# sourceMappingURL=style.css.map */

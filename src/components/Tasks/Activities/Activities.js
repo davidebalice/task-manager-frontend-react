@@ -248,11 +248,9 @@ const Activities = ({
             <thead>
               <tr>
                 <th className="text-center">Complete</th>
-                <th>Activity</th>
-                <th>Data creation</th>
-                <th>Created by</th>
-                <th>Data update</th>
-                <th>Updated by</th>
+                <th style={{ width: "60%" }}>Activity</th>
+                <th>Creation</th>
+                <th>Update</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -304,32 +302,54 @@ const Activities = ({
                     </td>
 
                     <td>
-                      {activity.createdAt !== null &&
-                        moment(activity.createdAt).format("DD/MM/YYYY")}
-                    </td>
-
-                    <td>
+                      <i>
+                        {activity.createdAt !== null &&
+                          moment(activity.createdAt).format("DD/MM/YYYY")}
+                      </i>
+                      <br />
                       {activity.owner.name && activity.owner.surname ? (
-                        <span>
+                        <div className="text-primary bold mt-1">
                           {activity.owner.name} {activity.owner.surname}
-                        </span>
+                        </div>
                       ) : null}
+                      <div className="header_img mt-2">
+                        <img
+                          src={`${
+                            process.env.REACT_APP_API_BASE_URL
+                          }/api/user/img/${activity && activity.owner.photo}`}
+                          class="userImg"
+                          alt=""
+                        />
+                      </div>
                     </td>
 
                     <td>
-                      {activity.lastUpdate !== null &&
-                        moment(activity.lastUpdate).format("DD/MM/YYYY HH:mm")}
-                    </td>
-
-                    <td>
+                      <i>
+                        {activity.lastUpdate !== null &&
+                          moment(activity.lastUpdate).format(
+                            "DD/MM/YYYY HH:mm"
+                          )}
+                      </i>
+                      <br />
                       {activity.lastUpdateUser &&
                       activity.lastUpdateUser.name &&
                       activity.lastUpdateUser.surname ? (
-                        <span>
+                        <div className="text-primary bold mt-1">
                           {activity.lastUpdateUser.name}{" "}
                           {activity.lastUpdateUser.surname}
-                        </span>
+                        </div>
                       ) : null}
+                      <div className="header_img mt-2">
+                        <img
+                          src={`${
+                            process.env.REACT_APP_API_BASE_URL
+                          }/api/user/img/${
+                            activity && activity.lastUpdateUser.photo
+                          }`}
+                          class="userImg"
+                          alt=""
+                        />
+                      </div>
                     </td>
 
                     <td>

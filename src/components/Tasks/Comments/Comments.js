@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faCircleXmark,
-  faNoteSticky,
+  faCalendar,
   faTrash,
   faPenToSquare,
   faPlus,
@@ -226,12 +226,10 @@ const Comments = ({
             </form>
           )}
 
-          <Table className="tableRow" hover bordered>
+          <Table bordered>
             <thead>
               <tr>
-                <th>Data creation</th>
-                <th>Created by</th>
-                <th>Comment</th>
+                <th style={{ width: "80%" }}>Comment</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -240,20 +238,36 @@ const Comments = ({
               {Array.isArray(comments) && comments.length > 0 ? (
                 comments.map((comment) => (
                   <tr key={comment._id}>
-                    <td>
-                      {comment.createdAt !== null &&
-                        moment(comment.createdAt).format("DD/MM/YYYY")}
-                    </td>
+                    <td className="commentRow">
+                      <div className="commentContainer">
+                        <div className="imgThumbContainer">
+                          <img
+                            src={`${
+                              process.env.REACT_APP_API_BASE_URL
+                            }/api/user/img/${
+                              comment.owner.photo && comment.owner.photo
+                            }`}
+                            class="imgThumb"
+                            alt=""
+                          />{" "}
+                          <span className="text-primary bold">
+                            {comment.owner.name} {comment.owner.surname}
+                          </span>
+                        </div>
 
-                    <td>
-                      {comment.owner.name && comment.owner.surname ? (
-                        <span>
-                          {comment.owner.name} {comment.owner.surname}
-                        </span>
-                      ) : null}
-                    </td>
+                        <div className="dataContainer">
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="text-primary dataIcon"
+                          />
+                          <span>
+                            {moment(comment.createdAt).format(
+                              "DD/MM/YYYY HH:mm"
+                            )}
+                          </span>
+                        </div>
+                      </div>
 
-                    <td className="cell">
                       <p>{comment.comment}</p>
                     </td>
 
@@ -264,7 +278,7 @@ const Comments = ({
                         isAllowed(
                           userData.role,
                           userData._id,
-                          task.members,
+                          null,
                           task.owner._id
                         ) ? (
                           <OverlayTrigger

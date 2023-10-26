@@ -3,7 +3,13 @@ import { Context } from "../../context/UserContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import Spacer from "../../components/spacer";
+import Divider from "../../components/divider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleChevronLeft,
+  faFloppyDisk,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Profile = () => {
   const { userData, setUserData, demo } = useContext(Context);
@@ -51,32 +57,23 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (demo) {
-      Swal.fire({
-        title: "Demo mode",
-        text: "Crud operations are not allowed",
-        icon: "error",
-        cancelButtonText: "Close",
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        setFormData(response.data.user);
+        setUserData(response.data.user);
+        console.log(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        Swal.fire("Error", error, "error");
       });
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/api/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        })
-        .then((response) => {
-          setFormData(response.data.user);
-          setUserData(response.data.user);
-          console.log(response.data.user);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          Swal.fire("Error", error, "error");
-        });
-    }
   }, []);
 
   const submitForm = (e) => {
@@ -172,7 +169,6 @@ const Profile = () => {
         cancelButtonText: "Close",
       });
     } else {
-
       const formPhoto2 = new FormData();
       formPhoto2.append("photo", file);
 
@@ -212,12 +208,12 @@ const Profile = () => {
     <>
       <div className="page">
         <Breadcrumb title={title} brad={brad} />
-        <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-          <div className="card-header d-flex justify-content-between border-bottom pb-1">
-            <div className="">{title} </div>
-          </div>
+        <div className="card">
           <div className="card-body">
             <div className="row ">
+              <h4>Personal data</h4>
+              <br />
+              <br />
               <div className="col-md-6 mt-3">
                 <label for="name">
                   <b>Surname</b>
@@ -258,16 +254,14 @@ const Profile = () => {
                 />
               </div>
             </div>
-            <button
-              onClick={submitForm}
-              className="btn btn-primary btn-sm mt-3"
-            >
-              Update
+            <button onClick={submitForm} className="btn saveButton btn-sm mt-3">
+              <FontAwesomeIcon icon={faFloppyDisk} className="saveButtonIcon" />{" "}
+              Save
             </button>
-            <br />
-            <br />
-            update password
-            <br />
+
+            <Divider marginTop={40} marginBottom={40} />
+
+            <h4>Update password</h4>
             <br />
             <div className="row ">
               <div className="col-md-6 mt-3">
@@ -297,17 +291,21 @@ const Profile = () => {
                 />
               </div>
             </div>
+
             <button
               onClick={submitPassword}
-              className="btn btn-primary btn-sm mt-3"
+              className="btn saveButton btn-sm mt-3"
             >
-              Update
+              <FontAwesomeIcon icon={faFloppyDisk} className="saveButtonIcon" />{" "}
+              Save
             </button>
+
+            <Divider marginTop={50} marginBottom={30} />
+
             <div className="row ">
               <div className="mt-3">
-                <p className="mb-0">
-                  <b>Upload Profile Picture</b>
-                </p>
+                <h4>Profile photo</h4>
+                <br /> <br />
                 <img
                   src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${
                     formData && formData.photo
@@ -329,11 +327,13 @@ const Profile = () => {
                 />
               </div>
             </div>
+
             <button
               onClick={submitPhoto}
-              className="btn btn-primary btn-sm mt-3"
+              className="btn saveButton btn-sm mt-3"
             >
-              Update
+              <FontAwesomeIcon icon={faFloppyDisk} className="saveButtonIcon" />{" "}
+              Save
             </button>
           </div>
         </div>
