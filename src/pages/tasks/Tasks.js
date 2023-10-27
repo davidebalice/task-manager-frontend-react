@@ -25,6 +25,7 @@ const Tasks = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [client, setClient] = useState([]);
   const [reload, setReload] = useState(1);
   const token = localStorage.getItem("authToken");
   const { userData, demo } = useContext(Context);
@@ -53,9 +54,13 @@ const Tasks = () => {
         },
       })
       .then((response) => {
+        console.log("response.data.tasks");
         console.log(response.data.tasks);
+        console.log("response.data.client");
+        console.log(response.data.client);
         setLoading(false);
         setData(response.data.tasks);
+        setClient(response.data.client);
       })
       .catch((error) => {
         console.error("Error during api call:", error);
@@ -328,10 +333,11 @@ const Tasks = () => {
                                   >
                                     <button
                                       onClick={() =>
+                                        client.email &&
                                         openEmailModal(
-                                          task.project_id.client.email,
-                                          task.project_id.client.name,
-                                          task.project_id.client.surname
+                                          client.email,
+                                          client.companyName,
+                                          null
                                         )
                                       }
                                       className="btn btn-primary btn-sm ms-1 taskButton"

@@ -4,7 +4,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import NotPermission from "../Auth/notPermission";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, Link } from "react-router-dom";
 
 const AddUser = () => {
   const navigate = useNavigate();
@@ -74,14 +76,21 @@ const AddUser = () => {
       {userData && userData.role === "admin" ? (
         <>
           <div className="page">
+            <div class="row">
+              <Link to={`/users`}>
+                <div class="backButton col-sm-4 col-md-4 col-lg-3">
+                  <FontAwesomeIcon
+                    icon={faCircleChevronLeft}
+                    className="backButtonIcon"
+                  />
+                  <div class="card-body d-flex px-1">Back</div>
+                </div>
+              </Link>
+            </div>
             <Breadcrumb title={title} brad={brad} />
-            {responseData}
-            <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-              <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                <div className="">{title}</div>
-              </div>
+            <div className="card">
               <div className="card-body">
-                <div className="row justify-content-center">
+                <div className="row justify-content-center formContainer">
                   <div className="col-md-6 mt-3">
                     <label for="name">
                       <b>Surname</b>
@@ -167,8 +176,9 @@ const AddUser = () => {
 
                 <button
                   onClick={submitForm}
-                  className="btn btn-primary btn-sm mt-3"
+                  className="btn saveButton btn-sm mt-5"
                 >
+                  <FontAwesomeIcon icon={faPlus} className="saveButtonIcon" />{" "}
                   Add User
                 </button>
               </div>

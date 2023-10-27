@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faCircleXmark,
-  faNoteSticky,
+  faCircleDown,
   faTrash,
   faPenToSquare,
   faPlus,
@@ -185,9 +185,7 @@ const Files = ({
               </div>
             </div>
           ) : (
-            <div
-              className="addButton col-sm-4 col-md-4 col-lg-3 disabledBg"
-            >
+            <div className="addButton col-sm-4 col-md-4 col-lg-3 disabledBg">
               <FontAwesomeIcon
                 icon={add ? faCircleXmark : faCirclePlus}
                 className="addButtonIcon"
@@ -263,9 +261,20 @@ const Files = ({
 
                     <td>
                       {file.owner.name && file.owner.surname ? (
-                        <span>
-                          {file.owner.name} {file.owner.surname}
-                        </span>
+                        <div className="imgThumbContainer">
+                          <img
+                            src={`${
+                              process.env.REACT_APP_API_BASE_URL
+                            }/api/user/img/${
+                              file.owner.photo && file.owner.photo
+                            }`}
+                            class="imgThumb"
+                            alt=""
+                          />{" "}
+                          <span className="text-primary bold">
+                            {file.owner.name} {file.owner.surname}
+                          </span>
+                        </div>
                       ) : null}
                     </td>
 
@@ -278,7 +287,10 @@ const Files = ({
                         {" "}
                         {file.name}
                         <br />
-                        <u>{file.file}</u>
+                        <div className="fileContainer">
+                          <FontAwesomeIcon icon={faCircleDown} style={{color:'#333'}} />
+                          <u>{file.file}</u>
+                        </div>
                       </a>
                     </td>
 

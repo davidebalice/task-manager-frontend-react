@@ -112,21 +112,21 @@ const AddProject = () => {
   return (
     <>
       <div className="page">
-        <Breadcrumb title={title} brad={brad} />
         <div class="row">
           <Link to={`/projects`}>
-            <div class="addButton col-sm-4 col-md-4 col-lg-3">
+            <div class="backButton col-sm-4 col-md-4 col-lg-3">
               <FontAwesomeIcon
                 icon={faCircleChevronLeft}
-                className="addButtonIcon"
+                className="backButtonIcon"
               />
               <div class="card-body d-flex px-1">Back</div>
             </div>
           </Link>
         </div>
+        <Breadcrumb title={title} brad={brad} />
         <div className="card pageContainerFull">
           <div className="card-body">
-            <div className="row justify-content-center">
+            <div className="row justify-content-center formContainer">
               <div className="col-md-6 mt-3">
                 <label for="name">
                   <b>Project name</b>
@@ -202,6 +202,7 @@ const AddProject = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleInput}
+                  style={{ height: "150px" }}
                 ></textarea>
               </div>
             </div>

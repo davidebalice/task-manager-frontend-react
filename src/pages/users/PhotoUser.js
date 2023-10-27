@@ -5,6 +5,11 @@ import Swal from "sweetalert2";
 import Breadcrumb from "../../components/breadcrumb/index";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import NotPermission from "../Auth/notPermission";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleChevronLeft,
+  faFloppyDisk,
+} from "@fortawesome/free-solid-svg-icons";
 
 const PhotoUser = () => {
   const navigate = useNavigate();
@@ -39,33 +44,24 @@ const PhotoUser = () => {
   };
 
   useEffect(() => {
-    if (demo) {
-      Swal.fire({
-        title: "Demo mode",
-        text: "Crud operations are not allowed",
-        icon: "error",
-        cancelButtonText: "Close",
-      });
-    } else {
-      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/api/user/photo/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response.data.user);
-          setFormData({
-            ...response.data.user,
-          });
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          Swal.fire("Error", error, "error");
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/api/user/photo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.user);
+        setFormData({
+          ...response.data.user,
         });
-    }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        Swal.fire("Error", error, "error");
+      });
   }, []);
 
   const submitForm = (e) => {
@@ -118,13 +114,19 @@ const PhotoUser = () => {
       {userData && userData.role === "admin" ? (
         <>
           <div className="page">
-            formanta.name:{formData.name}
+            <div class="row">
+              <Link to={`/users`}>
+                <div class="addButtonSm col-sm-4 col-md-4 col-lg-3">
+                  <FontAwesomeIcon
+                    icon={faCircleChevronLeft}
+                    className="addButtonIcon"
+                  />
+                  <div class="card-body d-flex px-1">Back</div>
+                </div>
+              </Link>
+            </div>
             <Breadcrumb title={title} brad={brad} />
-            {responseData}
-            <div className="card" style={{ borderTop: "2px solid #4723d9" }}>
-              <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                <div className="">{title}</div>
-              </div>
+            <div className="card">
               <div className="card-body">
                 <div className="row justify-content-center">
                   <div className="col-md-6 mt-3">
@@ -132,10 +134,10 @@ const PhotoUser = () => {
                       src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${formData.photo}`}
                       class="userImg"
                       alt=""
-                    />
-                    <label for="photo">
-                      <b>Select file</b>
-                    </label>
+                    />{" "}
+                    <br />
+                    <br />
+                    <br />
                     <input
                       type="file"
                       className="form-control"
@@ -147,12 +149,21 @@ const PhotoUser = () => {
                   <div className="col-md-6 mt-3"></div>
                 </div>
 
-                <button
-                  onClick={submitForm}
-                  className="btn btn-primary btn-sm mt-3"
-                >
-                  Save
-                </button>
+
+
+                <div className="col-md-6 mt-3">
+                    <button
+                      onClick={submitForm}
+                      className="btn btn-sm saveButton mt-3"
+                    >
+                      <FontAwesomeIcon
+                        icon={faFloppyDisk}
+                        className="saveButtonIcon"
+                      />{" "}
+                      Save
+                    </button>
+                  </div>
+
               </div>
             </div>
           </div>

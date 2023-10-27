@@ -256,11 +256,12 @@ const Project = () => {
                       <div className="row">
                         <div className="col-md-8 " style={{ color: "#333" }}>
                           <div style={{ padding: "20px" }}>
+                            
                             <Link to={`/project/tasks/${data.project._id}`}>
-                              <div className="backButton col-sm-4 col-md-4 col-lg-3">
+                              <div className="backButton col-sm-4 col-md-4 col-lg-3 mb-5" >
                                 <FontAwesomeIcon
                                   icon={faChevronLeft}
-                                  className="addButtonIcon"
+                                  className="backButtonIcon"
                                 />
                                 <div className="card-body d-flex px-1">
                                   Back to Tasks

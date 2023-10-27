@@ -91,12 +91,12 @@ const AddTask = () => {
         <Breadcrumb title={title} brad={brad} />
         <ButtonGroup projectId={id} selectedTab="tasks" />
         <div className="card pageContainer">
-          <div className="card-body">
+          <div className="card-body formContainer">
             <Link to={`/project/tasks/${id}`}>
-              <div class="addButtonSm col-sm-4 col-md-4 col-lg-3">
+              <div class="backButton col-sm-4 col-md-4 col-lg-3">
                 <FontAwesomeIcon
                   icon={faCircleChevronLeft}
-                  className="addButtonIconSm"
+                  className="backButtonIcon"
                 />
                 Back
               </div>

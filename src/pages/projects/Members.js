@@ -153,7 +153,6 @@ const Members = () => {
   return (
     <>
       <div className="page">
-        {demo ? "true demo" : "false demo"}
         <Breadcrumb title={title} brad={brad} />
         <ButtonGroup projectId={id} selectedTab="members" />
         <div className="card pageContainer">

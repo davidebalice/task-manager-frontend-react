@@ -3,6 +3,8 @@ import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { Context } from "../../context/UserContext";
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 
 const EditModal = ({
   editData,
@@ -68,23 +70,31 @@ const EditModal = ({
   return (
     <>
       <Modal show={editData.show} centered>
-        <Modal.Header>
-        
+        <Modal.Header className="modalHeader">
+          <Modal.Title></Modal.Title>
+          <FontAwesomeIcon
+            icon={faCircleXmark}
+            onClick={closeEditModal}
+            className="modalClose"
+          />
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <textarea name="text" className="form-control" onChange={handleTextChange}>
+            <textarea
+              name="text"
+              className="form-control"
+              style={{ height: "200px" }}
+              onChange={handleTextChange}
+            >
               {editData.text}
             </textarea>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeEditModal}>
-            Close
-          </Button>
-          <Button variant="primary" className="btn btn-sm" onClick={submitForm}>
-            Update
-          </Button>
+          <button onClick={submitForm} className="btn btn-sm saveButton mt-3">
+            <FontAwesomeIcon icon={faFloppyDisk} className="saveButtonIcon" />{" "}
+            Save
+          </button>
         </Modal.Footer>
       </Modal>
     </>

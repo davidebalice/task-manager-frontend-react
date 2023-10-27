@@ -302,6 +302,11 @@ div#global-loader,
   color: #18b0e9 !important;
 }
 
+.bg-primary {
+  background: #18b0e9 !important;
+  background-color: #18b0e9 !important;
+}
+
 .bg-red {
   background: #ff0000 !important;
   background-color: #ff0000 !important;
@@ -9816,28 +9821,31 @@ span.select2-container.select2-container--default.select2-container--open {
 .backButton {
   display: flex;
   flex-direction: row;
-  background: #c1c1c1;
+  background: #18b0e9 !important;
+  border-color: #18b0e9 !important;
   color: #fff;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
   width: fit-content;
   justify-content: start;
-  height: 40px;
+  min-height: 40px;
+  max-height: 54px;
   border-radius: 4px;
   padding: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  height:22px !important;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .backButton:hover {
-  background: #b1b1b1;
+  background: #3bb722;
 }
 
 .backButtonIcon {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .porjectCard {
@@ -10056,6 +10064,11 @@ span.select2-container.select2-container--default.select2-container--open {
   background: #f9f9f9;
 }
 
+.formContainer {
+  width: 100%;
+  max-width: 1000px;
+}
+
 label {
   margin-bottom: 4px !important;
 }
@@ -10105,14 +10118,14 @@ label {
   gap: 14px;
   color: #444;
   margin-bottom: 12px;
-  justify-content:start;
+  justify-content: start;
 }
 
 .sideSectionCol {
   display: flex;
   flex-direction: column;
   align-items: start;
-  justify-content:start;
+  justify-content: start;
   gap: 1px;
 }
 
@@ -10193,7 +10206,7 @@ label {
   flex-wrap: wrap;
 }
 
-.projectDetailColumn{
+.projectDetailColumn {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -10447,19 +10460,56 @@ label {
   font-size: 18px;
 }
 
-.commentContainer{
+.commentContainer {
   display: flex;
-  gap:20px;
-  margin-bottom:10px;
-  margin-top:10px
+  gap: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-.commentRow{
+.commentRow {
   white-space: wrap !important;
-  padding-top:30px !important;
+  padding-top: 30px !important;
   padding-bottom: 30px !important;
 }
 
+.modalHeader {
+  background: #222;
+}
+
+.modalClose {
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.modalSend {
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sendButton {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  width: fit-content;
+  justify-content: center;
+}
+
+.modal-dialog {
+  max-width: 800px !important;
+}
+
+.fileContainer{
+  display: flex;
+  gap:6px;
+  align-items: center;
+  color: #18b0e9 !important;
+  font-size:13px;
+  font-weight:bold;
+}
 /*# sourceMappingURL=style.css.map */
 
 /* end  dashboard css */

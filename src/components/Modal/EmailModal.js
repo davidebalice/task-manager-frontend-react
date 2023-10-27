@@ -3,6 +3,8 @@ import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { Context } from "../../context/UserContext";
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const EmailModal = ({ modalData, closeEmailModal }) => {
   const token = localStorage.getItem("authToken");
@@ -41,7 +43,6 @@ const EmailModal = ({ modalData, closeEmailModal }) => {
           }
         )
         .then((response) => {
-          //closeEmailModal();
           setMessage(response.data.message);
           setData({
             text: "",
@@ -67,45 +68,61 @@ const EmailModal = ({ modalData, closeEmailModal }) => {
   return (
     <>
       <Modal show={modalData.show} centered>
-        message:{message}
-        <br />
-        text: {data.text}
-        <br />
-        email: {modalData.email}
-        <br />
-        email: {data.email}
-        <br />
-        subject: {data.subject}
-        <br />
-        <Modal.Header>
-          <Modal.Title>Status</Modal.Title>
-
-          <Button variant="secondary" onClick={closeEmailModal}>
-            Close
-          </Button>
+        <Modal.Header className="modalHeader">
+          <Modal.Title></Modal.Title>
+          <FontAwesomeIcon
+            icon={faCircleXmark}
+            onClick={closeEmailModal}
+            className="modalClose"
+          />
         </Modal.Header>
         <Modal.Body>
+          <p>
+            Send email to{" "}
+            <b>
+              {modalData.companyName && modalData.companyName}{" "}
+              {modalData.name && modalData.name}{" "}
+              {modalData.surname && modalData.surname}
+            </b>{" "}
+            at <b>{modalData && modalData.email}</b>
+          </p>
           {!message && (
             <Form>
+              <label>Subject:</label>
               <input
                 type="text"
                 name="subject"
                 onChange={handleInput}
                 value={data.subject}
                 required
+                className="form-control"
               />
-              <textarea name="text" onChange={handleInput} required>
+              <br />
+              <label>Message:</label>
+              <textarea
+                name="text"
+                onChange={handleInput}
+                className="form-control"
+                required
+                style={{ height: "100px" }}
+              >
                 {data.text}
               </textarea>
             </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeEmailModal}>
-            Close
-          </Button>
-          <Button variant="primary" className="btn btn-sm" onClick={submitForm}>
-            Update
+          <Button
+            variant="primary"
+            className="btn btn-sm sendButton"
+            onClick={submitForm}
+          >
+            <FontAwesomeIcon
+              icon={faPaperPlane}
+              onClick={closeEmailModal}
+              className="modalSend"
+            />{" "}
+            Send
           </Button>
         </Modal.Footer>
       </Modal>

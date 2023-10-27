@@ -175,21 +175,21 @@ const EditProject = () => {
         formData.owner
       ) ? (
         <div className="page">
-          <Breadcrumb title={title} brad={brad} />
           <div class="row">
             <Link to={`/projects`}>
-              <div class="addButton col-sm-4 col-md-4 col-lg-3">
+              <div class="backButton col-sm-4 col-md-4 col-lg-3">
                 <FontAwesomeIcon
                   icon={faCircleChevronLeft}
-                  className="addButtonIcon"
+                  className="backButtonIcon"
                 />
                 <div class="card-body d-flex px-1">Back</div>
               </div>
             </Link>
           </div>
+          <Breadcrumb title={title} brad={brad} />
           <div className="card">
             <div className="card-body">
-              <div className="row justify-content-center">
+              <div className="row justify-content-center formContainer">
                 <div className="col-md-6 mt-3">
                   <label for="name">
                     <b>Project name</b>
@@ -265,6 +265,7 @@ const EditProject = () => {
                     name="description"
                     value={formData.description}
                     onChange={handleInput}
+                    style={{ height: "150px" }}
                   ></textarea>
                 </div>
               </div>
@@ -287,7 +288,7 @@ const EditProject = () => {
                 borderColor={"#ddd"}
               />
 
-              <div>
+              <div className="formContainer">
                 <img
                   src={`${process.env.REACT_APP_API_BASE_URL}/api/project/cover/${formData.imageCover}`}
                   class="userImg"

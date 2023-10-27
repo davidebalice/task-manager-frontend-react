@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 import EmailModal from "../../components/Modal/EmailModal";
 import Pagination from "../../components/pagination/Pagination";
 import NotPermission from "../Auth/notPermission";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -181,43 +183,83 @@ const Users = () => {
                             <td>progress</td>
                             <td>{user.formattedDeadline}</td>
                             <td>
-                              <Link to={`/edit/user/${user._id}`}>
-                                <button
-                                  onClick={() => null}
-                                  className="btn btn-primary btn-sm ms-1"
-                                >
-                                  <FontAwesomeIcon icon={faPenToSquare} />
-                                </button>
-                              </Link>
-
-                              <Link to={`/photo/user/${user._id}`}>
-                                <button
-                                  onClick={() => null}
-                                  className="btn btn-primary btn-sm ms-1"
-                                >
-                                  <FontAwesomeIcon icon={faCamera} />
-                                </button>
-                              </Link>
-
-                              <button
-                                onClick={() =>
-                                  openEmailModal(
-                                    user.email,
-                                    user.name,
-                                    user.surname
-                                  )
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Edit user
+                                  </Tooltip>
                                 }
-                                className="btn btn-primary btn-sm ms-1"
                               >
-                                <FontAwesomeIcon icon={faEnvelope} />
-                              </button>
+                                <Link to={`/edit/user/${user._id}`}>
+                                  <button
+                                    onClick={() => null}
+                                    className="btn btn-primary btn-sm ms-1"
+                                  >
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                  </button>
+                                </Link>
+                              </OverlayTrigger>
 
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Photo profile
+                                  </Tooltip>
+                                }
+                              >
+                                <Link to={`/photo/user/${user._id}`}>
+                                  <button
+                                    onClick={() => null}
+                                    className="btn btn-primary btn-sm ms-1"
+                                  >
+                                    <FontAwesomeIcon icon={faCamera} />
+                                  </button>
+                                </Link>
+                              </OverlayTrigger>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Send email to user
+                                  </Tooltip>
+                                }
+                              >
+                                <button
+                                  onClick={() =>
+                                    openEmailModal(
+                                      user.email,
+                                      user.name,
+                                      user.surname
+                                    )
+                                  }
+                                  className="btn btn-primary btn-sm ms-1"
+                                >
+                                  <FontAwesomeIcon icon={faEnvelope} />
+                                </button>
+                              </OverlayTrigger>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                   Delete user
+                                  </Tooltip>
+                                }
+                              >    
                               <button
                                 onClick={() => deleteUser(user._id)}
                                 className=" btn btn-danger btn-sm ms-1"
                               >
                                 <FontAwesomeIcon icon={faTrash} />
                               </button>
+                              </OverlayTrigger>
                             </td>
                           </tr>
                         ))}

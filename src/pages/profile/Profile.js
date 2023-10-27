@@ -209,7 +209,7 @@ const Profile = () => {
       <div className="page">
         <Breadcrumb title={title} brad={brad} />
         <div className="card">
-          <div className="card-body">
+          <div className="card-body formContainer">
             <div className="row ">
               <h4>Personal data</h4>
               <br />

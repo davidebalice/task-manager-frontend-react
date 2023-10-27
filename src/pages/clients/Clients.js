@@ -8,13 +8,14 @@ import Swal from "sweetalert2";
 import EmailModal from "../../components/Modal/EmailModal";
 import Pagination from "../../components/pagination/Pagination";
 import NotPermission from "../Auth/notPermission";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
   faTrash,
   faEnvelope,
-  faCopy,
-  faListCheck,
+  faCirclePlus,
   faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -131,17 +132,17 @@ const Clients = () => {
           <div className="page">
             <Breadcrumb title={title} brad={brad} />
             <Link to={`/add/client/`}>
-              <div className="btn btn-info btn-sm text-white">+ Add Client</div>
+              <div className="addButton col-sm-4 col-md-4 col-lg-3">
+                <FontAwesomeIcon
+                  icon={faCirclePlus}
+                  className="addButtonIcon"
+                />
+                <div className="card-body d-flex px-1">Add client</div>
+              </div>
             </Link>
             <div className="row my-3">
               <div className="col-12">
-                <div
-                  className="card"
-                  style={{ borderTop: "2px solid #4723d9" }}
-                >
-                  <div className="card-header d-flex justify-content-between border-bottom pb-1">
-                    <h4>{title}</h4>
-                  </div>
+                <div className="card">
                   <div className="card-body">
                     <Table className="tableRow" hover bordered>
                       <thead>
@@ -166,43 +167,83 @@ const Clients = () => {
                             <td>{client.companyName}</td>
                             <td>{client.email}</td>
                             <td>
-                              <Link to={`/edit/client/${client._id}`}>
-                                <button
-                                  onClick={() => null}
-                                  className="btn btn-primary btn-sm ms-1"
-                                >
-                                  <FontAwesomeIcon icon={faPenToSquare} />
-                                </button>
-                              </Link>
-
-                              <Link to={`/photo/client/${client._id}`}>
-                                <button
-                                  onClick={() => null}
-                                  className="btn btn-primary btn-sm ms-1"
-                                >
-                                  <FontAwesomeIcon icon={faCamera} />
-                                </button>
-                              </Link>
-
-                              <button
-                                onClick={() =>
-                                  openEmailModal(
-                                    client.email,
-                                    client.name,
-                                    client.surname
-                                  )
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Edit client
+                                  </Tooltip>
                                 }
-                                className="btn btn-primary btn-sm ms-1"
                               >
-                                <FontAwesomeIcon icon={faEnvelope} />
-                              </button>
+                                <Link to={`/edit/client/${client._id}`}>
+                                  <button
+                                    onClick={() => null}
+                                    className="btn btn-primary btn-sm ms-1"
+                                  >
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                  </button>
+                                </Link>
+                              </OverlayTrigger>
 
-                              <button
-                                onClick={() => deleteClient(client._id)}
-                                className=" btn btn-danger btn-sm ms-1"
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Logo client
+                                  </Tooltip>
+                                }
                               >
-                                <FontAwesomeIcon icon={faTrash} />
-                              </button>
+                                <Link to={`/photo/client/${client._id}`}>
+                                  <button
+                                    onClick={() => null}
+                                    className="btn btn-primary btn-sm ms-1"
+                                  >
+                                    <FontAwesomeIcon icon={faCamera} />
+                                  </button>
+                                </Link>
+                              </OverlayTrigger>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Send email to client
+                                  </Tooltip>
+                                }
+                              >
+                                <button
+                                  onClick={() =>
+                                    openEmailModal(
+                                      client.email,
+                                      client.companyName,
+                                      null
+                                    )
+                                  }
+                                  className="btn btn-primary btn-sm ms-1"
+                                >
+                                  <FontAwesomeIcon icon={faEnvelope} />
+                                </button>
+                              </OverlayTrigger>
+
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                  <Tooltip className="tooltip">
+                                    {" "}
+                                    Delete client
+                                  </Tooltip>
+                                }
+                              >
+                                <button
+                                  onClick={() => deleteClient(client._id)}
+                                  className=" btn btn-danger btn-sm ms-1"
+                                >
+                                  <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                              </OverlayTrigger>
                             </td>
                           </tr>
                         ))}
