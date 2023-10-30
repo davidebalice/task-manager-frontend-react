@@ -26,6 +26,7 @@ const Project = () => {
   const token = localStorage.getItem("authToken");
   const [members, setMembers] = useState([]);
   const navigate = useNavigate();
+  let backgroundProgress = "#36c20b";
 
   useEffect(() => {
     axios
@@ -59,6 +60,16 @@ const Project = () => {
     setOpenTasksPercentage(openTasksPercentage);
   }, [tasks]);
 
+  useEffect(() => {
+    if (openTasksPercentage < 25) {
+      backgroundProgress = "red";
+    } else if (openTasksPercentage < 55) {
+      backgroundProgress = "orange";
+    } else {
+      backgroundProgress = "#36c20b";
+    }
+  }, [openTasksPercentage]);
+
   const title = "Project";
   const brad = [
     {
@@ -81,7 +92,7 @@ const Project = () => {
         ) : (
           <>
             <ButtonGroup projectId={id} selectedTab="project" />
-            <div className="row">
+            <div className="row projectRow">
               <div className="card pageContainer">
                 <div className="tab-content paymentSetting_content mx-2">
                   <div
@@ -140,6 +151,7 @@ const Project = () => {
                                     className="progressBar"
                                     style={{
                                       width: `${openTasksPercentage}%`,
+                                      backgroundColor: `${backgroundProgress}`,
                                     }}
                                   >
                                     &nbsp;
@@ -208,7 +220,7 @@ const Project = () => {
                             <label className="sideSectionCol">
                               <b>Client</b>
                               <p className="sideSectionTitle">
-                                {data.client.companyName}
+                                {data.client && data.client.companyName}
                               </p>
                             </label>
                           </div>

@@ -256,9 +256,8 @@ const Project = () => {
                       <div className="row">
                         <div className="col-md-8 " style={{ color: "#333" }}>
                           <div style={{ padding: "20px" }}>
-                            
                             <Link to={`/project/tasks/${data.project._id}`}>
-                              <div className="backButton col-sm-4 col-md-4 col-lg-3 mb-5" >
+                              <div className="backButton col-sm-4 col-md-4 col-lg-3 mb-5">
                                 <FontAwesomeIcon
                                   icon={faChevronLeft}
                                   className="backButtonIcon"
@@ -311,7 +310,15 @@ const Project = () => {
                                   <div className="progressBarContainer">
                                     <div
                                       className="progressBar"
-                                      style={{ width: `${data.progress}%` }}
+                                      style={{
+                                        width: `${data.progress}%`,
+                                        backgroundColor:
+                                          data.progress <= 25
+                                            ? "red"
+                                            : data.progress <= 55
+                                            ? "orange"
+                                            : "#36c20b",
+                                      }}
                                     >
                                       &nbsp;
                                     </div>

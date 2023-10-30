@@ -9577,6 +9577,7 @@ span.select2-container.select2-container--default.select2-container--open {
   border: 1px solid #ccc;
   height: 22px;
   overflow: hidden;
+  border-radius:3px
 }
 
 .progressBarPercentage {
@@ -9619,6 +9620,7 @@ span.select2-container.select2-container--default.select2-container--open {
   color: #fff;
   align-items: center;
   justify-content: flex-end;
+  line-height: 1px;
 }
 
 .btnTask {
@@ -9846,6 +9848,10 @@ span.select2-container.select2-container--default.select2-container--open {
 
 .backButtonIcon {
   font-size: 20px;
+}
+
+.projectRow{
+  padding:0 12px;
 }
 
 .porjectCard {

@@ -123,6 +123,9 @@ const Activities = ({
 
   const submitForm = (e) => {
     e.preventDefault();
+    console.log('demo2');
+    console.log(typeof demo);
+    console.log(demo);
     if (demo) {
       Swal.fire({
         title: "Demo mode",

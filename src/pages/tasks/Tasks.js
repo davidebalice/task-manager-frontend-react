@@ -233,6 +233,12 @@ const Tasks = () => {
                                     className="progressBarSm"
                                     style={{
                                       width: `${completionPercentage}%`,
+                                      backgroundColor:
+                                        completionPercentage <= 25
+                                          ? "red"
+                                          : completionPercentage <= 55
+                                          ? "orange"
+                                          : "#36c20b",
                                     }}
                                   >
                                     {completionPercentage} %&nbsp;{"  "}
