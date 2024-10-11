@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import EditModal from "../../Modal/EditModal";
 import PhotoModal from "../../Modal/PhotoModal";
 import Loading from "../../../components/loading";
-import Table from "react-bootstrap/Table";
 import Divider from "../../divider/";
 import Spacer from "../../spacer/";
 import isAllowed from "../../../middlewares/allow";
@@ -16,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faCircleXmark,
-  faNoteSticky,
   faTrash,
   faPenToSquare,
   faPlus,

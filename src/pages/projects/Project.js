@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import {
+  faListCheck,
+  faSackDollar,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import Breadcrumb from "../../components/breadcrumb/index";
 import moment from "moment";
-import { Link } from "react-router-dom";
-import { Context } from "../../context/UserContext";
-import Loading from "../../components/loading";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Breadcrumb from "../../components/breadcrumb/index";
+import Loading from "../../components/loading";
 import ButtonGroup from "../../components/Projects/ButtonGroup/ButtonGroup";
 import Spacer from "../../components/spacer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faSackDollar,
-  faListCheck,
-  faTableList,
-} from "@fortawesome/free-solid-svg-icons";
+import { Context } from "../../context/UserContext";
 
 const Project = () => {
   const { id } = useParams();
@@ -53,7 +51,7 @@ const Project = () => {
   }, [token]);
 
   useEffect(() => {
-    const openTasks = tasks.filter((task) => task.status === "Open").length;
+    const openTasks = tasks.filter((task) => task.status === "Close").length;
     const totalTasks = tasks.length;
     const openTasksPercentage =
       totalTasks > 0 ? (openTasks / totalTasks) * 100 : 0;

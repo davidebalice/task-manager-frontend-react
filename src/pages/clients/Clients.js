@@ -10,6 +10,7 @@ import Pagination from "../../components/pagination/Pagination";
 import NotPermission from "../Auth/notPermission";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Spacer from "../../components/spacer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -249,12 +250,15 @@ const Clients = () => {
                         ))}
                       </tbody>
                     </Table>
-                    <Pagination
-                      pageName="clients"
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={setCurrentPage}
-                    />
+                    <Spacer height={20} />
+                    {data && (
+                      <Pagination
+                        pageName="users"
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

@@ -1,10 +1,10 @@
-import "./App.css";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { isAuthenticated } from "./middlewares/auth";
-import Layouts from "./layouts/layouts";
-import Footer from "./layouts/footer";
+import "./App.css";
 import { UserProvider } from "./context/UserContext";
+import Footer from "./layouts/footer";
+import Layouts from "./layouts/layouts";
+import { isAuthenticated } from "./middlewares/auth";
 import NotAuth from "./pages/Auth/notAuth";
 import { AdminRoutes } from "./route/index";
 
@@ -37,13 +37,11 @@ function App() {
   }, [pathname, userIsAuthenticated]);
 
   return (
-    <div id="">
-      <UserProvider>
-        {layout && <Layouts />}
-        {auth ? <AdminRoutes /> : <NotAuth />}
-        {footer && <Footer />}
-      </UserProvider>
-    </div>
+    <UserProvider>
+      {layout && <Layouts />}
+      {auth ? <AdminRoutes /> : <NotAuth />}
+      {footer && <Footer />}
+    </UserProvider>
   );
 }
 

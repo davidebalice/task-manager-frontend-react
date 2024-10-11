@@ -1,25 +1,22 @@
-import { useState, useEffect, useContext } from "react";
-import { Context } from "../../context/UserContext"; 
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faDatabase,
   faListCheck,
-  faEyeLowVision,
-  faBuildingColumns,
   faTableList,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import CountUp from "react-countup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
+import CountUp from "react-countup";
 import Swal from "sweetalert2";
 import "../../App.css";
 import cover from "../../assets/img/cover.jpg";
-import react_node from "../../assets/img/react_node.png";
-import react from "../../assets/img/react.jpg";
-import node from "../../assets/img/node.jpg";
 import github from "../../assets/img/github.png";
 import db from "../../assets/img/logo.png";
+import node from "../../assets/img/node.jpg";
+import react from "../../assets/img/react.jpg";
+import react_node from "../../assets/img/react_node.png";
+import { Context } from "../../context/UserContext";
 
 export default function Hero() {
   const token = localStorage.getItem("authToken");
@@ -82,7 +79,7 @@ export default function Hero() {
                       <div className="dashboardDescription">
                         <b className="dashboardText1">Task manager</b>
                         <p className="dashboardText2">
-                          Task manager developer in Node and React, with basic
+                          Task manager developed in Node and React, with basic
                           functions: Projects, tasks, activities, comments,
                           file, users, clients.
                         </p>
@@ -286,9 +283,13 @@ export default function Hero() {
                           return (
                             <tr key={activity._id} value={activity._id}>
                               <td>
-                                {formattedDate}<br />{formattedTime}
+                                {formattedDate}
+                                <br />
+                                {formattedTime}
                               </td>
-                              <td className="cell">{activity.task_id.project_id.name}</td>
+                              <td className="cell">
+                                {activity.task_id.project_id.name}
+                              </td>
                               <td className="cell">{activity.task_id.name}</td>
                               <td className="cell">{activity.name}</td>
                               <td>

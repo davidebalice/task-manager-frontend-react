@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+#root {
+  width: 100%;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -3242,6 +3246,14 @@ body[data-layout-mode="dark"] .alertify .ajs-content .ajs-input {
   font-size: 22px !important;
 }
 
+.swal2-confirm {
+  background-image: url("./assets/img/bgSide.jpg") !important;
+}
+
+.swal2-confirm:hover {
+  opacity: 0.7;
+}
+
 .timeline {
   position: relative;
   list-style: none;
@@ -4026,25 +4038,28 @@ table.dataTable > thead .sorting_desc_disabled:before {
 
 .custom-select {
   min-width: 80px;
-  /* background: url(../img/icons/dropdown.svg) no-repeat 95% 50%; */
 }
 
 .pagination li {
   margin: 0 5px;
 }
-.pagination li a {
-  border-radius: 5px;
-  background: #637381;
+
+.paginationItem {
+  border-radius: 3px;
+  width: 34px;
+  height: 34px;
+  background-color: #444;
+  border: 1px solid #ccc;
   color: #fff;
+  font-weight: bold;
 }
-.pagination li a:hover {
-  background: #ff9f43;
-  color: #fff;
+
+.paginationItemActive {
+  background-color: #18b0e9;
 }
-.pagination li.active a.page-link {
-  background: #ff9f43;
-  border-color: #ff9f43;
-  border-radius: 5px;
+
+.paginationItem:hover {
+  background: #777;
 }
 
 .dataTables_length,
@@ -9577,7 +9592,7 @@ span.select2-container.select2-container--default.select2-container--open {
   border: 1px solid #ccc;
   height: 22px;
   overflow: hidden;
-  border-radius:3px
+  border-radius: 3px;
 }
 
 .progressBarPercentage {
@@ -9766,7 +9781,7 @@ span.select2-container.select2-container--default.select2-container--open {
 .addButton {
   display: flex;
   flex-direction: row;
-  background: #24a50b;
+  background-image: url("./assets/img/bgSide.jpg");
   color: #fff;
   gap: 12px;
   align-items: center;
@@ -9784,7 +9799,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .addButton:hover {
-  background: #3bb722;
+  opacity: 0.7;
 }
 
 .addButtonIcon {
@@ -9794,8 +9809,8 @@ span.select2-container.select2-container--default.select2-container--open {
 .addButtonSm {
   display: flex;
   flex-direction: row;
-  background: #24a50b !important;
-  border-color: #24a50b !important;
+  background-image: url("./assets/img/bgSide.jpg");
+  border: none;
   color: #fff;
   gap: 12px;
   align-items: center;
@@ -9813,7 +9828,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .addButtonSm:hover {
-  background: #3bb722;
+  opacity: 0.7;
 }
 
 .addButtonSmIcon {
@@ -9823,8 +9838,8 @@ span.select2-container.select2-container--default.select2-container--open {
 .backButton {
   display: flex;
   flex-direction: row;
-  background: #18b0e9 !important;
-  border-color: #18b0e9 !important;
+  background-image: url("./assets/img/bgSide.jpg");
+  border: none;
   color: #fff;
   gap: 12px;
   align-items: center;
@@ -9835,7 +9850,7 @@ span.select2-container.select2-container--default.select2-container--open {
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 20px;
-  height:22px !important;
+  height: 22px !important;
   cursor: pointer;
   font-weight: bold;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -9843,15 +9858,15 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .backButton:hover {
-  background: #3bb722;
+  opacity: 0.7;
 }
 
 .backButtonIcon {
   font-size: 20px;
 }
 
-.projectRow{
-  padding:0 12px;
+.projectRow {
+  padding: 0 12px;
 }
 
 .porjectCard {
@@ -9893,12 +9908,13 @@ span.select2-container.select2-container--default.select2-container--open {
 .projectCardTitle {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   padding: 18px;
   height: 150px;
+  background-color: white;
   flex-direction: column;
   text-align: center;
 }
@@ -10046,7 +10062,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .projectTabSelected {
-  background: #18b0e9;
+  background-image: url("./assets/img/bgSide.jpg");
   color: #fff;
 }
 
@@ -10441,7 +10457,8 @@ label {
 .saveButton {
   display: flex;
   flex-direction: row;
-  background: #25a50b;
+  background-image: url("./assets/img/bgSide.jpg");
+  border: none;
   color: #fff;
   gap: 10px;
   align-items: center;
@@ -10458,8 +10475,7 @@ label {
 }
 
 .saveButton:hover {
-  background: #238a0f;
-  color: #f1f1f1;
+  opacity: 0.7;
 }
 
 .saveButtonIcon {
@@ -10508,14 +10524,64 @@ label {
   max-width: 800px !important;
 }
 
-.fileContainer{
+.fileContainer {
   display: flex;
-  gap:6px;
+  gap: 6px;
   align-items: center;
   color: #18b0e9 !important;
-  font-size:13px;
-  font-weight:bold;
+  font-size: 13px;
+  font-weight: bold;
 }
+
+.loginBackground {
+  width: 100vw;
+  left: 0;
+  top: 0;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("./assets/img/bg.jpg");
+  background-size: cover;
+}
+
+.loginBox {
+  width: 94%;
+  max-width: 400px;
+}
+
+.loginLogo {
+  max-width: 100px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.loginButton {
+  background-image: url("./assets/img/bgSide.jpg");
+  background-size: cover;
+  width: 100%;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.loginButton:hover {
+  opacity: 0.7;
+}
+
+.demoData{
+  width:100%;
+  border:2px dashed #ddd;
+  border-radius: 10px;
+  padding:10px;
+  margin-top:12px;
+}
+
+.manubar .l-navbar {
+  background-image: url("./assets/img/bgSide.jpg");
+  background-size: cover;
+}
+
 /*# sourceMappingURL=style.css.map */
 
 /* end  dashboard css */
